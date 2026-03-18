@@ -1106,6 +1106,14 @@
       <input type="text" id="firstName" placeholder="Jean" />
     </div>
     <div class="form-group">
+      <label>Last Name</label>
+      <input type="text" id="lastName" placeholder="Hardy" />
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="phone" placeholder="(555) 123-4567" />
+    </div>
+    <div class="form-group">
       <label>Email Address</label>
       <input type="email" id="email" placeholder="you@company.com" />
     </div>
@@ -1156,12 +1164,14 @@
 
   function submitForm() {
     var firstName = document.getElementById('firstName').value;
+    var lastName = document.getElementById('lastName').value;
+    var phone = document.getElementById('phone').value;
     var email = document.getElementById('email').value;
     var revenue = document.getElementById('revenue').value;
     var goal = document.getElementById('goal').value;
 
-    if (!firstName || !email) {
-      alert('Please fill in your name and email.');
+    if (!firstName || !lastName || !email || !phone) {
+      alert('Please fill in all fields.');
       return;
     }
 
@@ -1192,6 +1202,8 @@
       headers: ghlHeaders,
       body: JSON.stringify({
         firstName: firstName,
+        lastName: lastName,
+        phone: phone,
         email: email,
         locationId: '2POUoPWRXgWKwsN61Q5g',
         source: 'Arena VSL Page',
@@ -1210,7 +1222,7 @@
         body: JSON.stringify({
           pipelineId: 'VB9qD0EnpfiGueAJ5EEP',
           locationId: '2POUoPWRXgWKwsN61Q5g',
-          name: firstName + ' - VSL Lead',
+          name: firstName + ' ' + lastName + ' - VSL Lead',
           pipelineStageId: '879c42fe-8ed5-489c-b1eb-4f3e8a9cab5a',
           contactId: contactId,
           status: 'open',
@@ -1251,7 +1263,7 @@
         method: 'POST',
         headers: ghlHeaders,
         body: JSON.stringify({
-          body: 'NEW VSL LEAD\\nName: ' + firstName + '\\nEmail: ' + email + '\\nRevenue: ' + (revenueLabels[revenue] || 'N/A') + '\\nGoal: ' + (goalLabels[goal] || 'N/A') + '\\nSource: Arena VSL Page\\nTime: ' + new Date().toLocaleString('en-US', {timeZone: 'America/Chicago'})
+          body: 'NEW VSL LEAD\\nName: ' + firstName + ' ' + lastName + '\\nPhone: ' + phone + '\\nEmail: ' + email + '\\nRevenue: ' + (revenueLabels[revenue] || 'N/A') + '\\nGoal: ' + (goalLabels[goal] || 'N/A') + '\\nSource: Arena VSL Page\\nTime: ' + new Date().toLocaleString('en-US', {timeZone: 'America/Chicago'})
         })
       }).catch(function(err) { console.error('Note error:', err); });
     })
