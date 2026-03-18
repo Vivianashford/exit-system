@@ -1180,35 +1180,7 @@
       succession: 'Succession / Transition', explore: 'Exploring Options'
     };
 
-    // 1. Send to formsubmit.co for email notifications (both Jean + lead auto-reply)
-    var formData = new FormData();
-    formData.append('name', firstName);
-    formData.append('email', email);
-    formData.append('revenue', revenueLabels[revenue] || 'Not specified');
-    formData.append('goal', goalLabels[goal] || 'Not specified');
-    formData.append('_subject', 'New VSL Lead: ' + firstName + ' (' + (revenueLabels[revenue] || 'N/A') + ')');
-    formData.append('_autoresponse',
-      'Hey ' + firstName + ',\n\n' +
-      'Thanks for requesting access to the Transferable Exit System training.\n\n' +
-      'Here is your link to watch it now:\n' +
-      'https://vivianashford.github.io/arena-vsl-page/\n\n' +
-      'In this training, you will learn how service-based business owners at $5M-$50M in revenue ' +
-      'are removing owner dependency and building businesses that buyers pay full price for.\n\n' +
-      'If you have questions or want to discuss your situation directly, just reply to this email.\n\n' +
-      'Jean Louis Hardy\n' +
-      'The Arena Partners\n' +
-      '3555 Timmons Lane, Suite 1140\n' +
-      'Houston, TX 77027'
-    );
-    formData.append('_template', 'table');
-    formData.append('_captcha', 'false');
-
-    fetch('https://formsubmit.co/ajax/SeanHardy@Trek1Capital.com', {
-      method: 'POST',
-      body: formData
-    }).catch(function(err) { console.error('FormSubmit error:', err); });
-
-    // 2. Create contact in GHL + opportunity in pipeline
+    // GHL API - create contact, opportunity, and send emails
     var ghlHeaders = {
       'Authorization': 'Bearer pit-690b376c-5ac2-48a3-b38c-b4be0ab4a42f',
       'Version': '2021-07-28',
@@ -1245,6 +1217,43 @@
           source: 'Arena VSL Page'
         })
       }).catch(function(err) { console.error('Opportunity error:', err); });
+
+      // Send confirmation email to the lead via GHL
+      var leadEmailHtml = '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0a0a0a;color:#f5f0e8;padding:40px;">' +
+        '<div style="text-align:center;margin-bottom:30px;">' +
+        '<h1 style="font-family:Georgia,serif;color:#c9a84c;font-size:28px;margin:0;">The Arena Partners</h1>' +
+        '</div>' +
+        '<p style="font-size:18px;line-height:1.6;">Hey ' + firstName + ',</p>' +
+        '<p style="font-size:16px;line-height:1.7;color:#9a9590;">Your access to the <strong style="color:#f5f0e8;">Transferable Exit System\u2122</strong> training is ready.</p>' +
+        '<p style="font-size:16px;line-height:1.7;color:#9a9590;">In this training, you\'ll learn how service-based business owners at $5M-$50M in revenue are removing owner dependency and building businesses that buyers pay full price for.</p>' +
+        '<div style="text-align:center;margin:35px 0;">' +
+        '<a href="https://vivianashford.github.io/arena-vsl-page/watch.html" style="display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#c9a84c,#e3c96e);color:#0a0a0a;font-weight:700;text-decoration:none;border-radius:6px;font-size:16px;letter-spacing:1px;">WATCH THE TRAINING NOW</a>' +
+        '</div>' +
+        '<p style="font-size:16px;line-height:1.7;color:#9a9590;">If you have questions or want to discuss your situation directly, reply to this email.</p>' +
+        '<p style="font-size:16px;line-height:1.7;color:#f5f0e8;">\u2014 Jean Louis Hardy<br><span style="color:#9a9590;">The Arena Partners</span></p>' +
+        '<hr style="border:none;border-top:1px solid rgba(201,168,76,0.12);margin:30px 0;">' +
+        '<p style="font-size:12px;color:#6b6560;text-align:center;">The Arena Partners / Arena Business Advisors, LLC<br>3555 Timmons Lane, Suite 1140, Houston, TX 77027</p>' +
+        '</div>';
+
+      fetch('https://services.leadconnectorhq.com/conversations/messages', {
+        method: 'POST',
+        headers: ghlHeaders,
+        body: JSON.stringify({
+          type: 'Email',
+          contactId: contactId,
+          subject: 'Your Free Training: The Transferable Exit System\u2122',
+          html: leadEmailHtml
+        })
+      }).catch(function(err) { console.error('Lead email error:', err); });
+
+      // Send notification email to Jean (internal notification via GHL note)
+      fetch('https://services.leadconnectorhq.com/contacts/' + contactId + '/notes', {
+        method: 'POST',
+        headers: ghlHeaders,
+        body: JSON.stringify({
+          body: 'NEW VSL LEAD\\nName: ' + firstName + '\\nEmail: ' + email + '\\nRevenue: ' + (revenueLabels[revenue] || 'N/A') + '\\nGoal: ' + (goalLabels[goal] || 'N/A') + '\\nSource: Arena VSL Page\\nTime: ' + new Date().toLocaleString('en-US', {timeZone: 'America/Chicago'})
+        })
+      }).catch(function(err) { console.error('Note error:', err); });
     })
     .catch(function(err) { console.error('GHL error:', err); });
 
