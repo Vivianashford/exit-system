@@ -1144,8 +1144,6 @@
   }
 
   function submitForm() {
-    // TODO: Replace with GHL webhook URL
-    // Example: POST to https://services.leadconnectorhq.com/hooks/YOUR_WEBHOOK_ID
     var firstName = document.getElementById('firstName').value;
     var email = document.getElementById('email').value;
     var revenue = document.getElementById('revenue').value;
@@ -1156,9 +1154,86 @@
       return;
     }
 
-    // Placeholder - swap with GHL webhook
-    alert('In production, this submits to GoHighLevel and redirects to the VSL video page.\n\nReplace submitForm() with your GHL webhook URL.');
-    closeModal();
+    // Disable button while submitting
+    var btn = document.querySelector('.modal .cta-btn');
+    var origText = btn.innerHTML;
+    btn.innerHTML = 'Submitting...';
+    btn.disabled = true;
+
+    var revenueLabels = {
+      under5: 'Under $5M', '5to10': '$5M-$10M', '10to25': '$10M-$25M',
+      '25to50': '$25M-$50M', over50: '$50M+'
+    };
+    var goalLabels = {
+      exit: 'Exit / Sell', scale: 'Scale & Reduce Dependency',
+      succession: 'Succession / Transition', explore: 'Exploring Options'
+    };
+
+    // 1. Send to formsubmit.co for email notifications (both Jean + lead auto-reply)
+    var formData = new FormData();
+    formData.append('name', firstName);
+    formData.append('email', email);
+    formData.append('revenue', revenueLabels[revenue] || 'Not specified');
+    formData.append('goal', goalLabels[goal] || 'Not specified');
+    formData.append('_subject', 'New VSL Lead: ' + firstName + ' (' + (revenueLabels[revenue] || 'N/A') + ')');
+    formData.append('_autoresponse',
+      'Hey ' + firstName + ',\n\n' +
+      'Thanks for requesting access to the Transferable Exit System training.\n\n' +
+      'Here is your link to watch it now:\n' +
+      'https://vivianashford.github.io/arena-vsl-page/\n\n' +
+      'In this training, you will learn how service-based business owners at $5M-$50M in revenue ' +
+      'are removing owner dependency and building businesses that buyers pay full price for.\n\n' +
+      'If you have questions or want to discuss your situation directly, just reply to this email.\n\n' +
+      'Jean Louis Hardy\n' +
+      'The Arena Partners\n' +
+      '3555 Timmons Lane, Suite 1140\n' +
+      'Houston, TX 77027'
+    );
+    formData.append('_template', 'table');
+    formData.append('_captcha', 'false');
+
+    fetch('https://formsubmit.co/ajax/j.hardy@trekonecapital.com', {
+      method: 'POST',
+      body: formData
+    }).catch(function(err) { console.error('FormSubmit error:', err); });
+
+    // 2. Create contact in GHL via API proxy
+    // Using a lightweight proxy approach - creates the contact in CRM
+    var ghlPayload = {
+      firstName: firstName,
+      email: email,
+      locationId: '2POUoPWRXgWKwsN61Q5g',
+      source: 'Arena VSL Page',
+      tags: ['vsl-lead'],
+      customFields: []
+    };
+
+    fetch('https://services.leadconnectorhq.com/contacts/upsert', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer pit-690b376c-5ac2-48a3-b38c-b4be0ab4a42f',
+        'Version': '2021-07-28',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(ghlPayload)
+    }).catch(function(err) { console.error('GHL error:', err); });
+
+    // 3. Show success state
+    setTimeout(function() {
+      closeModal();
+      // Show thank you message
+      var modal = document.getElementById('modal');
+      modal.querySelector('.modal').innerHTML = 
+        '<button class="modal-close" onclick="closeModal()">&#10005;</button>' +
+        '<div style="text-align:center;padding:20px;">' +
+        '<div style="font-size:48px;margin-bottom:16px;">🎬</div>' +
+        '<h3 style="font-family:Playfair Display,serif;font-size:24px;margin-bottom:12px;">You\'re In, ' + firstName + '!</h3>' +
+        '<p style="color:#9a9590;margin-bottom:24px;line-height:1.6;">Check your email for instant access to the Transferable Exit System™ training.<br><br>If you don\'t see it in 2 minutes, check your spam folder.</p>' +
+        '<a href="https://vivianashford.github.io/arena-vsl-page/" class="cta-btn" style="text-decoration:none;">Watch Now</a>' +
+        '</div>';
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }, 1500);
   }
 
   // Close modal on overlay click
