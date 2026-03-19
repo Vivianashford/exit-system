@@ -1258,6 +1258,19 @@
         })
       }).catch(function(err) { console.error('Lead email error:', err); });
 
+      // Send SMS to the lead with training link
+      if (phone) {
+        fetch('https://services.leadconnectorhq.com/conversations/messages', {
+          method: 'POST',
+          headers: ghlHeaders,
+          body: JSON.stringify({
+            type: 'SMS',
+            contactId: contactId,
+            message: 'Jean Louis Hardy here. Really glad you took the step to learn about how to get the most out of your business. Here\'s the link for the training video: https://vivianashford.github.io/exit-system/watch.html — If you don\'t want to hear from me, just reply STOP.'
+          })
+        }).catch(function(err) { console.error('Lead SMS error:', err); });
+      }
+
       // Send notification to Jean via GHL note + email with LinkedIn outreach info
       var leadNote = 'NEW VSL LEAD\nName: ' + firstName + ' ' + lastName + '\nPhone: ' + phone + '\nEmail: ' + email + '\nRevenue: ' + (revenueLabels[revenue] || 'N/A') + '\nGoal: ' + (goalLabels[goal] || 'N/A') + '\nSource: Arena VSL Page\nTime: ' + new Date().toLocaleString('en-US', {timeZone: 'America/Chicago'}) + '\n\nLINKEDIN OUTREACH:\nSearch: ' + firstName + ' ' + lastName + '\nMessage: "Hi ' + firstName + ', I saw you checked out our training on exit strategy. Looking forward to connecting. — Jean"';
 
@@ -1291,7 +1304,7 @@
         body: JSON.stringify({
           firstName: 'Jean',
           lastName: 'Hardy',
-          email: 'jhardy@trekonecapital.com',
+          email: 'jean@eng2.ca',
           locationId: 'LSvdgiiT7ManCRx9CCwE',
           tags: ['internal-notify'],
           source: 'System'
