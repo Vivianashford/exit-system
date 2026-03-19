@@ -1177,6 +1177,8 @@
 
     // Disable button while submitting
     var btn = document.querySelector('.modal .cta-btn');
+    var arenaSignature = '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,sans-serif;max-width:520px;border-collapse:collapse;margin-top:30px;"><tr><td colspan="2" style="padding:0 0 18px 0;"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="border-top:2px solid #C9A84C;font-size:1px;line-height:1px;">&nbsp;</td></tr></table></td></tr><tr><td style="vertical-align:top;padding-right:18px;width:80px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="width:72px;height:72px;background-color:#C9A84C;border-radius:6px;text-align:center;vertical-align:middle;font-family:Georgia,serif;font-size:28px;font-weight:bold;color:#0A0A0A;">JH</td></tr></table></td><td style="vertical-align:top;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A1A1A;line-height:22px;padding-bottom:2px;">Jean Hardy</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#C9A84C;line-height:16px;padding-bottom:8px;letter-spacing:0.5px;">Co-Founder &amp; Operations Lead</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#1A1A1A;line-height:18px;padding-bottom:10px;">The Arena Partners</td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="border-top:1px solid #E5E0D8;font-size:1px;line-height:1px;padding-bottom:10px;">&nbsp;</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6B655E;line-height:20px;"><span style="color:#9A9590;">E:</span>&nbsp;&nbsp;<a href="mailto:support@thearenapartners.com" style="color:#1A1A1A;text-decoration:none;">support@thearenapartners.com</a></td></tr><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6B655E;line-height:20px;"><span style="color:#9A9590;">P:</span>&nbsp;&nbsp;<a href="tel:7133447420" style="color:#1A1A1A;text-decoration:none;">713-344-7420</a></td></tr><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6B655E;line-height:20px;"><span style="color:#9A9590;">W:</span>&nbsp;&nbsp;<a href="https://thearenapartners.com" style="color:#1A1A1A;text-decoration:none;">thearenapartners.com</a></td></tr><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6B655E;line-height:20px;"><span style="color:#9A9590;">A:</span>&nbsp;&nbsp;<span style="color:#1A1A1A;">3555 Timmons Ln, Ste 1140, Houston, TX 77027</span></td></tr></table></td></tr><tr><td colspan="2" style="padding-top:16px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#C9A84C;border-radius:4px;"><a href="https://api.leadconnectorhq.com/widget/booking/52NbvBqsD5pdRT7Y3vxn" style="display:inline-block;padding:9px 22px;font-family:Arial,sans-serif;font-size:11px;font-weight:bold;color:#0A0A0A;text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;">Book a Diagnostic Call</a></td></tr></table></td></tr><tr><td colspan="2" style="padding-top:14px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Georgia,serif;font-size:11px;color:#9A9590;font-style:italic;line-height:16px;">The more valuable you are to your business, the less valuable your business is.</td></tr></table></td></tr><tr><td colspan="2" style="padding-top:14px;"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="border-top:1px solid #E5E0D8;font-size:1px;line-height:1px;">&nbsp;</td></tr></table></td></tr><tr><td colspan="2" style="padding-top:10px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Arial,sans-serif;font-size:11px;line-height:16px;padding-right:14px;"><a href="https://www.linkedin.com/in/jeanlouishardy/" style="color:#C9A84C;text-decoration:none;">LinkedIn</a></td><td style="font-family:Arial,sans-serif;font-size:11px;color:#E5E0D8;padding-right:14px;">|</td><td style="font-family:Arial,sans-serif;font-size:11px;line-height:16px;"><a href="https://www.instagram.com/jlouishardy/" style="color:#C9A84C;text-decoration:none;">Instagram</a></td></tr></table></td></tr></table>';
+
     var origText = btn.innerHTML;
     btn.innerHTML = 'Submitting...';
     btn.disabled = true;
@@ -1242,10 +1244,7 @@
         '<a href="https://vivianashford.github.io/arena-vsl-page/watch.html" style="display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#c9a84c,#e3c96e);color:#0a0a0a;font-weight:700;text-decoration:none;border-radius:6px;font-size:16px;letter-spacing:1px;">WATCH THE TRAINING NOW</a>' +
         '</div>' +
         '<p style="font-size:16px;line-height:1.7;color:#9a9590;">If you have questions or want to discuss your situation directly, reply to this email.</p>' +
-        '<p style="font-size:16px;line-height:1.7;color:#f5f0e8;">\u2014 Jean Louis Hardy<br><span style="color:#9a9590;">The Arena Partners</span></p>' +
-        '<hr style="border:none;border-top:1px solid rgba(201,168,76,0.12);margin:30px 0;">' +
-        '<p style="font-size:12px;color:#6b6560;text-align:center;">The Arena Partners / Arena Business Advisors, LLC<br>3555 Timmons Lane, Suite 1140, Houston, TX 77027</p>' +
-        '</div>';
+        '</div>' + arenaSignature;
 
       fetch('https://services.leadconnectorhq.com/conversations/messages', {
         method: 'POST',
@@ -1254,7 +1253,8 @@
           type: 'Email',
           contactId: contactId,
           subject: 'Your Free Training: The Transferable Exit System\u2122',
-          html: leadEmailHtml
+          html: leadEmailHtml,
+          emailFrom: 'The Arena Partners <support@thearenapartners.com>'
         })
       }).catch(function(err) { console.error('Lead email error:', err); });
 
@@ -1307,6 +1307,7 @@
               type: 'Email',
               contactId: jeanContactId,
               subject: 'New VSL Lead: ' + firstName + ' ' + lastName + ' (' + (revenueLabels[revenue] || 'N/A') + ')',
+              emailFrom: 'The Arena Partners <support@thearenapartners.com>',
               html: jeanNotifyHtml
             })
           });
