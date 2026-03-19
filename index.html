@@ -214,12 +214,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #0d0d0d 0%, #1a1611 100%);
+    background: linear-gradient(rgba(10,10,10,0.3), rgba(10,10,10,0.4)), url('jean-hero.webp') center 30% / cover no-repeat;
     transition: all 0.3s ease;
   }
 
   .vsl-wrapper:hover .vsl-placeholder {
-    background: linear-gradient(135deg, #0f0f0f 0%, #1d1914 100%);
+    background: linear-gradient(rgba(10,10,10,0.2), rgba(10,10,10,0.3)), url('jean-hero.webp') center 30% / cover no-repeat;
   }
 
   .play-btn {
@@ -916,7 +916,7 @@
   <!-- VSL VIDEO -->
   <div class="vsl-container">
     <div class="vsl-wrapper" onclick="openModal()">
-      <div class="vsl-placeholder" style="background: linear-gradient(rgba(10,10,10,0.35), rgba(10,10,10,0.45)), url('jean-hero.webp') center 30% / cover no-repeat;">
+      <div class="vsl-placeholder">
         <div class="play-btn">
           <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
         </div>
