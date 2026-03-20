@@ -273,6 +273,53 @@
     fill: none;
   }
 
+  /* ===================== CAPACITY BADGE ===================== */
+  .capacity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(10,10,10,.85);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 12px 22px;
+    margin-bottom: 18px;
+  }
+  .capacity-badge .cb-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .capacity-badge .cb-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(201,168,76,.3);
+  }
+  .capacity-badge .cb-month {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .capacity-badge .cb-count {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+  .capacity-badge .cb-unit {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
   /* ===================== CTA SECTION ===================== */
   .cta-section {
     text-align: center;
@@ -933,6 +980,18 @@
 
   <!-- CTA -->
   <div class="cta-section">
+    <div class="capacity-badge">
+      <div class="cb-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Limited Capacity
+      </div>
+      <div class="cb-divider"></div>
+      <div style="text-align:center">
+        <div class="cb-month"></div>
+        <div class="cb-count"></div>
+        <div class="cb-unit">Companies</div>
+      </div>
+    </div>
     <button class="cta-btn" onclick="openModal()">
       Get Instant Access
       <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1086,6 +1145,18 @@
   <p class="section-eyebrow">Your Next Chapter</p>
   <h2>You've Done the Hard Part.<br>Let's Finish It Right.</h2>
   <p>Watch the free training to see the 3-phase system owners like you are using to package what they've built — and exit at the number they deserve.</p>
+  <div class="capacity-badge">
+    <div class="cb-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Limited Capacity
+    </div>
+    <div class="cb-divider"></div>
+    <div style="text-align:center">
+      <div class="cb-month"></div>
+      <div class="cb-count"></div>
+      <div class="cb-unit">Companies</div>
+    </div>
+  </div>
   <button class="cta-btn" onclick="openModal()">
     Watch the Free Training Now
     <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1376,6 +1447,18 @@
   });
 </script>
 
+<script>
+(function(){
+  var now=new Date();
+  var month=now.toLocaleString('en-US',{month:'long'});
+  var day=now.getDate();
+  var daysInMonth=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+  var progress=day/daysInMonth;
+  var spots=Math.max(2,Math.round(7-5*progress));
+  document.querySelectorAll('.cb-month').forEach(function(el){el.textContent=month+':'});
+  document.querySelectorAll('.cb-count').forEach(function(el){el.textContent=spots});
+})();
+</script>
 </body>
 </html>
 
