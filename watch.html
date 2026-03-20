@@ -1071,6 +1071,11 @@
         </div>
       </div>
 
+      <!-- Capacity Badge -->
+      <div class="capacity-badge" style="display:inline-flex;align-items:center;gap:10px;background:rgba(10,10,10,.85);border:1px solid #c9a84c;border-radius:6px;padding:10px 20px;margin-bottom:14px;">
+        <span class="cb-text" style="font-family:'DM Sans',sans-serif;font-size:13px;color:#d4cfc8;"></span>
+      </div>
+
       <a href="#booking" class="vcta-btn">
         Book the Call + Get the Book
         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1202,6 +1207,12 @@
           <span><strong>TRANSFERABLE (book)</strong> — 180+ pages, unpublished, sent immediately</span>
         </a>
       </div>
+    </div>
+
+    <!-- Capacity Badge -->
+    <div class="capacity-badge" style="display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(10,10,10,.85);border:1px solid #c9a84c;border-radius:6px;padding:12px 24px;margin:0 auto 20px;max-width:420px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span class="cb-text" style="font-family:'DM Sans',sans-serif;font-size:14px;color:#d4cfc8;"></span>
     </div>
 
     <!-- LIVE GHL CALENDAR -->
@@ -1336,6 +1347,19 @@
       }
     });
   });
+</script>
+
+<script>
+(function(){
+  var now=new Date();
+  var month=now.toLocaleString('en-US',{month:'long'});
+  var day=now.getDate();
+  var daysInMonth=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+  var progress=day/daysInMonth;
+  var spots=Math.max(2,Math.round(7-5*progress));
+  var text='We can only work with '+spots+' companies this '+month+'.';
+  document.querySelectorAll('.cb-text').forEach(function(el){el.textContent=text});
+})();
 </script>
 
 </body>
