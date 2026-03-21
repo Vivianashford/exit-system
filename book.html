@@ -306,14 +306,16 @@ fetch('book-content.json')
     // Page 1: Welcome (dedication) + TOC
     pages.push({ type: 'welcome-toc', chapters: filtered.slice(1) }); // skip title entry
 
-    // Pages 2+: All chapters
+    // Pages 2+: All chapters (skip standalone part dividers - merge into next chapter)
+    let pendingPart = null;
     filtered.slice(1).forEach(ch => {
       const isPart = ch.title.toLowerCase().startsWith('part ');
       const words = ch.content.reduce((a, p) => a + p.split(' ').length, 0);
       if (isPart && words < 50) {
-        pages.push({ type: 'part', title: ch.title });
+        pendingPart = ch.title; // hold it, prepend to next chapter
       } else {
-        pages.push({ type: 'chapter', title: ch.title, content: ch.content });
+        pages.push({ type: 'chapter', title: ch.title, content: ch.content, partHeader: pendingPart || null });
+        pendingPart = null;
       }
     });
 
@@ -425,6 +427,12 @@ function renderPage() {
       barHtml += '</div>';
 
       html = barHtml;
+      if (pg.partHeader) {
+        const parts = pg.partHeader.split(':');
+        html += `<p class="chapter-label" style="margin-bottom:4px;font-size:10px;letter-spacing:4px;">${parts[0].trim()}</p>`;
+        if (parts.length > 1) html += `<p style="font-family:'Playfair Display',serif;font-size:20px;color:var(--ink);font-weight:700;margin-bottom:20px;">${parts.slice(1).join(':').trim()}</p>`;
+        html += `<div class="chapter-divider" style="margin-bottom:24px;"></div>`;
+      }
       html += `${label ? `<p class="chapter-label">${label}</p>` : ''}<h1 class="chapter-title">${heading}</h1><div class="chapter-divider"></div>`;
       pg.content.forEach(p => {
         if (p.startsWith('---') || p.startsWith('Word Count:') || p.startsWith('[End Of') || p.startsWith('End Of Part')) return;
