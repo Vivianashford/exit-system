@@ -1038,7 +1038,7 @@
   <div class="video-container" id="videoSection">
     <div class="video-frame">
       <div class="video-embed">
-        <iframe src="https://www.youtube.com/embed/ZkjCTC0JX-g?rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div id="yt-player"></div>
       </div>
     </div>
 
@@ -1365,6 +1365,146 @@
   var spots=Math.max(2,Math.round(7-5*progress));
   var text='We can only work with '+spots+' companies this '+month+'.';
   document.querySelectorAll('.cb-text').forEach(function(el){el.textContent=text});
+})();
+</script>
+
+<!-- YouTube iFrame API + Watch-Time Milestone Tracking -->
+<script>
+(function() {
+  // Get contact info from URL params (passed from landing page)
+  var params = new URLSearchParams(window.location.search);
+  var contactId = params.get('cid') || '';
+  var contactEmail = params.get('email') || '';
+  var contactName = params.get('name') || '';
+
+  // GHL API config
+  var GHL_TOKEN = 'pit-8db4722a-0d8f-41c0-8cc0-1d17de5bff3d';
+  var GHL_BASE = 'https://services.leadconnectorhq.com';
+  var GHL_HEADERS = {
+    'Authorization': 'Bearer ' + GHL_TOKEN,
+    'Version': '2021-07-28',
+    'Content-Type': 'application/json'
+  };
+
+  // Tag IDs
+  var TAGS = {
+    25: '7aZ9gYMjKlq8iIW7MFpV',
+    50: 'LmGuyzCVfrVCfhJhXAI3',
+    75: '1rfhvV8ONfJIT9oRaAPy',
+    100: 'lh3rcasSB4xtH0AHqwdo'
+  };
+
+  // Custom field IDs
+  var FIELD_WATCH_PCT = 'WTte3IGpNaX0cxVxzAqB';
+  var FIELD_LEAD_SCORE = 'eCWYLWe2vmd6t7J7fM15';
+  var FIELD_SEGMENT = 'IAsnpV5GUycawVqAPCnI';
+
+  // Score values per milestone
+  var SCORES = { 25: 10, 50: 20, 75: 30, 100: 40 };
+  var SEGMENTS = { 25: '0-25%', 50: '25-50%', 75: '50-75%', 100: '75-100%' };
+
+  // Track which milestones have been fired
+  var firedMilestones = { 25: false, 50: false, 75: false, 100: false };
+
+  function fireMilestone(pct) {
+    if (!contactId || firedMilestones[pct]) return;
+    firedMilestones[pct] = true;
+
+    console.log('[Arena] Video milestone: ' + pct + '% for contact ' + contactId);
+
+    // 1. Add tag
+    fetch(GHL_BASE + '/contacts/' + contactId + '/tags', {
+      method: 'POST',
+      headers: GHL_HEADERS,
+      body: JSON.stringify({ tags: [TAGS[pct]] })
+    }).catch(function(e) { console.error('Tag error:', e); });
+
+    // 2. Update custom fields (watch %, segment, lead score)
+    var segment = pct >= 75 ? '75-100%' : pct >= 50 ? '50-75%' : pct >= 25 ? '25-50%' : '0-25%';
+    fetch(GHL_BASE + '/contacts/' + contactId, {
+      method: 'PUT',
+      headers: GHL_HEADERS,
+      body: JSON.stringify({
+        customFields: [
+          { id: FIELD_WATCH_PCT, value: pct },
+          { id: FIELD_SEGMENT, value: segment }
+        ]
+      })
+    }).catch(function(e) { console.error('Custom field error:', e); });
+
+    // 3. Add note for tracking
+    fetch(GHL_BASE + '/contacts/' + contactId + '/notes', {
+      method: 'POST',
+      headers: GHL_HEADERS,
+      body: JSON.stringify({
+        body: 'VIDEO MILESTONE: ' + pct + '% watched\nTimestamp: ' + new Date().toLocaleString('en-US', {timeZone: 'America/Chicago'}) + '\nVideo: Training VSL'
+      })
+    }).catch(function(e) { console.error('Note error:', e); });
+  }
+
+  // Load YouTube iFrame API
+  var tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  var firstScript = document.getElementsByTagName('script')[0];
+  firstScript.parentNode.insertBefore(tag, firstScript);
+
+  var player;
+  var checkInterval;
+
+  window.onYouTubeIframeAPIReady = function() {
+    player = new YT.Player('yt-player', {
+      videoId: 'ZkjCTC0JX-g',
+      playerVars: {
+        rel: 0,
+        modestbranding: 1,
+        playsinline: 1
+      },
+      events: {
+        onReady: function() {
+          console.log('[Arena] YouTube player ready');
+        },
+        onStateChange: function(event) {
+          if (event.data === YT.PlayerState.PLAYING) {
+            // Start polling for milestones
+            if (!checkInterval) {
+              checkInterval = setInterval(function() {
+                if (!player || !player.getDuration) return;
+                var duration = player.getDuration();
+                var current = player.getCurrentTime();
+                if (duration <= 0) return;
+                var pct = Math.floor((current / duration) * 100);
+
+                [25, 50, 75, 100].forEach(function(milestone) {
+                  if (pct >= milestone && !firedMilestones[milestone]) {
+                    fireMilestone(milestone);
+                  }
+                });
+              }, 2000); // Check every 2 seconds
+            }
+          }
+          // Video ended
+          if (event.data === YT.PlayerState.ENDED) {
+            if (!firedMilestones[100]) fireMilestone(100);
+            if (checkInterval) { clearInterval(checkInterval); checkInterval = null; }
+          }
+        }
+      }
+    });
+  };
+
+  // Fire 0-25% segment if they leave the page early
+  window.addEventListener('beforeunload', function() {
+    if (contactId && !firedMilestones[25]) {
+      // They watched less than 25% - update segment only
+      var segment = '0-25%';
+      navigator.sendBeacon && navigator.sendBeacon(
+        GHL_BASE + '/contacts/' + contactId + '/notes',
+        new Blob([JSON.stringify({
+          body: 'VIDEO: Watched <25%\nTimestamp: ' + new Date().toISOString()
+        })], { type: 'application/json' })
+      );
+    }
+  });
 })();
 </script>
 

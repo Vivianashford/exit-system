@@ -1418,9 +1418,10 @@
     })
     .catch(function(err) { console.error('GHL error:', err); });
 
-    // 3. Redirect to training page after short delay
+    // 3. Redirect to training page after short delay (pass contact info for video tracking)
     setTimeout(function() {
-      window.location.href = 'https://thearenapartners.com/watch.html';
+      var watchUrl = 'https://thearenapartners.com/watch.html?cid=' + encodeURIComponent(contactId) + '&email=' + encodeURIComponent(email) + '&name=' + encodeURIComponent(firstName);
+      window.location.href = watchUrl;
     }, 1500);
   }
 
