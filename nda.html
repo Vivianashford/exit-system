@@ -713,6 +713,7 @@ function clearSig() { ctx.clearRect(0, 0, canvas.width, canvas.height); hasSig =
 
 // ── Generate NDA PDF with jsPDF ─────────────────────────────────────────────
 async function generateNDAPdf(name, company, title, email, sigDataUrl, signedAt) {
+  if (!window.jspdf) throw new Error('jsPDF library not loaded. Check your connection.');
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'letter' });
   const W = 215.9, H = 279.4;
@@ -1047,7 +1048,7 @@ async function submitNDA() {
       result.doc.save(`NDA - The Arena Partners x ${company}.pdf`);
     } catch(pdfErr) {
       console.error('PDF generation error:', pdfErr);
-      // Non-blocking - NDA is still signed even if PDF fails
+      alert('PDF generation issue: ' + pdfErr.message + '. Your NDA is still signed - we will email you a copy.');
     }
 
     // Show success
