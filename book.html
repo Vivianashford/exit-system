@@ -82,6 +82,65 @@ body{
 }
 .cover-page img{width:100%;height:100%;object-fit:cover}
 
+/* Premium front cover */
+.front-cover{
+  padding:0!important;overflow:hidden;
+  background:linear-gradient(160deg,#C9A84C 0%,#B8943E 30%,#A07E2E 60%,#8B6D1F 100%)!important;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.front-cover::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1;
+}
+.front-cover::after{
+  content:'';position:absolute;inset:16px;
+  border:1px solid rgba(10,10,10,0.15);
+  pointer-events:none;z-index:2;
+}
+.fc-inner{
+  position:relative;z-index:3;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;height:100%;width:100%;padding:48px 32px;
+}
+.fc-author-top{
+  font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:5px;
+  text-transform:uppercase;color:rgba(10,10,10,0.55);font-weight:600;
+  margin-bottom:auto;padding-top:24px;
+}
+.fc-center{display:flex;flex-direction:column;align-items:center;margin:auto 0}
+.fc-big-t{
+  font-family:'Playfair Display',serif;font-size:180px;font-weight:700;
+  color:#0A0A0A;line-height:0.85;margin-bottom:0;
+  text-shadow:2px 3px 6px rgba(0,0,0,0.08);
+}
+.fc-tagline{
+  font-family:'Source Serif 4',serif;font-size:13px;line-height:1.6;
+  color:rgba(10,10,10,0.6);font-style:italic;
+  margin-top:4px;letter-spacing:0.3px;
+}
+.fc-tagline .plus{color:#0A0A0A;font-style:normal;font-weight:600;margin-right:2px}
+.fc-tagline .minus{color:#0A0A0A;font-style:normal;font-weight:600;margin-right:2px}
+.fc-bottom{margin-top:auto;padding-bottom:24px;text-align:center}
+.fc-rule{width:40px;height:1px;background:rgba(10,10,10,0.2);margin:0 auto 16px}
+.fc-title{
+  font-family:'Playfair Display',serif;font-size:28px;font-weight:700;
+  color:#0A0A0A;letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.fc-imprint{
+  font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:4px;
+  text-transform:uppercase;color:rgba(10,10,10,0.4);font-weight:500;
+}
+
+@media(max-width:768px){
+  .fc-big-t{font-size:120px}
+  .fc-title{font-size:22px;letter-spacing:2px}
+  .fc-tagline{font-size:11px}
+  .fc-inner{padding:32px 24px}
+}
+
 /* Title page */
 .title-page-inner{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -264,8 +323,8 @@ fetch('book-content.json?v=' + Date.now())
     let pageData = [];
     let pendingPart = null;
 
-    // Front cover (image)
-    pageData.push({ type: 'cover', src: 'book-cover.png', hard: true });
+    // Front cover (premium HTML)
+    pageData.push({ type: 'front-cover', hard: true });
 
     // Title page (premium interior)
     pageData.push({ type: 'title-page', hard: false });
@@ -304,7 +363,23 @@ fetch('book-content.json?v=' + Date.now())
       div.className = 'book-page' + (pg.hard ? ' hard' : '');
       if (pg.hard) div.setAttribute('data-density', 'hard');
 
-      if (pg.type === 'cover') {
+      if (pg.type === 'front-cover') {
+        div.classList.add('front-cover');
+        div.innerHTML = `<div class="fc-inner">
+          <p class="fc-author-top">Jean Louis Hardy</p>
+          <div class="fc-center">
+            <div class="fc-big-t">T</div>
+            <p class="fc-tagline"><span class="plus">+</span>Valuable You Are</p>
+            <p class="fc-tagline"><span class="minus">&minus;</span>Valuable Your Business</p>
+          </div>
+          <div class="fc-bottom">
+            <div class="fc-rule"></div>
+            <h1 class="fc-title">Transferable</h1>
+            <p class="fc-imprint">Arena Partners</p>
+          </div>
+        </div>`;
+
+      } else if (pg.type === 'cover') {
         div.classList.add('cover-page');
         div.innerHTML = `<img src="${pg.src}" alt="Cover">`;
 
