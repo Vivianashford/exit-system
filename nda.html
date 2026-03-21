@@ -830,7 +830,7 @@ async function generateNDAPdf(name, company, title, email, sigDataUrl, signedAt)
 
   // Signature image
   try {
-    doc.addImage(sigDataUrl, 'PNG', ml, y, 50, 15);
+    doc.addImage(sigDataUrl, 'JPEG', ml, y, 50, 15);
     y += 18;
   } catch(e) { y += 5; }
 
@@ -873,7 +873,15 @@ async function submitNDA() {
   submitBtn.disabled    = true;
   submitBtn.textContent = 'Submitting...';
 
-  const sigDataUrl = canvas.toDataURL('image/png');
+  // Export signature with white background (canvas is transparent by default)
+  const sigCanvas = document.createElement('canvas');
+  sigCanvas.width = canvas.width;
+  sigCanvas.height = canvas.height;
+  const sigCtx = sigCanvas.getContext('2d');
+  sigCtx.fillStyle = '#ffffff';
+  sigCtx.fillRect(0, 0, sigCanvas.width, sigCanvas.height);
+  sigCtx.drawImage(canvas, 0, 0);
+  const sigDataUrl = sigCanvas.toDataURL('image/jpeg', 0.95);
   const signedAt   = new Date().toISOString();
   const contactId  = window._ghlContactId || '';
 
