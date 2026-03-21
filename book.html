@@ -518,8 +518,8 @@ function renderPage() {
   const isTitle = !isDedication && !isBackCover && (currentPage === 0 || (readerName && currentPage === 1));
   
   if (isBackCover) {
-    html = `<div class="title-page" style="padding:0;overflow:hidden;">
-      <img src="book-back-cover.png" alt="TRANSFERABLE - Back Cover" style="width:100%;height:100%;object-fit:contain;">
+    html = `<div style="position:absolute;inset:0;overflow:hidden;">
+      <img src="book-back-cover.png" alt="TRANSFERABLE - Back Cover" style="width:100%;height:100%;object-fit:cover;">
     </div>`;
   } else if (isDedication) {
     // Personalized dedication page
@@ -533,8 +533,8 @@ function renderPage() {
     </div>`;
   } else if (isTitle) {
     // Title page - show the actual book cover
-    html = `<div class="title-page" style="padding:0;overflow:hidden;">
-      <img src="book-cover.png" alt="TRANSFERABLE by Jean Louis Hardy" style="width:100%;height:100%;object-fit:contain;">
+    html = `<div style="position:absolute;inset:0;overflow:hidden;">
+      <img src="book-cover.png" alt="TRANSFERABLE by Jean Louis Hardy" style="width:100%;height:100%;object-fit:cover;">
     </div>`;
   } else if (isPart) {
     // Part divider page
