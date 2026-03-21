@@ -105,35 +105,63 @@ body{
   border-radius:inherit;
 }
 
-/* Page turn animations */
-.page{transform-origin:left center;transition:transform 0.6s cubic-bezier(0.4,0,0.2,1),opacity 0.4s ease,box-shadow 0.6s ease}
-.page.exit-left{
-  transform:perspective(1800px) rotateY(-90deg);
-  opacity:0;
-  box-shadow:-8px 4px 30px rgba(0,0,0,0.2);
+/* Page turn animations - realistic book flip */
+.page{
+  transform-origin:left center;
+  transition:transform 0.7s cubic-bezier(0.645,0.045,0.355,1.000), opacity 0.5s ease, box-shadow 0.7s ease;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
 }
-.page.exit-right{
-  transform:perspective(1800px) rotateY(45deg);
+
+/* Forward: page lifts from right edge and folds over to the left like turning a real page */
+.page.flip-out-forward{
+  transform-origin:left center;
+  transform:perspective(2000px) rotateY(-120deg) scale(0.95);
   opacity:0;
-  box-shadow:8px 4px 30px rgba(0,0,0,0.15);
+  box-shadow:-20px 0 40px rgba(0,0,0,0.15), -5px 0 15px rgba(0,0,0,0.08);
+}
+
+/* Backward: page lifts from left edge and folds back to the right */
+.page.flip-out-backward{
   transform-origin:right center;
+  transform:perspective(2000px) rotateY(120deg) scale(0.95);
+  opacity:0;
+  box-shadow:20px 0 40px rgba(0,0,0,0.15), 5px 0 15px rgba(0,0,0,0.08);
 }
+
+/* New page coming in from the right (forward navigation) */
+.page.flip-in-forward{
+  transform-origin:right center;
+  transform:perspective(2000px) rotateY(90deg) scale(0.95);
+  opacity:0;
+}
+
+/* New page coming in from the left (backward navigation) */
+.page.flip-in-backward{
+  transform-origin:left center;
+  transform:perspective(2000px) rotateY(-90deg) scale(0.95);
+  opacity:0;
+}
+
+/* Settled state */
 .page.enter{
-  transform:perspective(1800px) rotateY(0deg);
+  transform:perspective(2000px) rotateY(0deg) scale(1);
   opacity:1;
   box-shadow:4px 4px 20px var(--page-shadow),1px 0 0 rgba(0,0,0,0.05),inset -2px 0 8px rgba(0,0,0,0.02);
 }
-/* Entering from the left (going back) */
-.page.enter-from-left{
-  transform:perspective(1800px) rotateY(-45deg);
-  opacity:0;
-  transform-origin:left center;
+
+/* Page fold shadow overlay during flip */
+.page-shadow-overlay{
+  position:absolute;inset:0;pointer-events:none;z-index:10;
+  background:linear-gradient(to right,rgba(0,0,0,0.08) 0%,transparent 15%,transparent 85%,rgba(0,0,0,0.03) 100%);
+  opacity:0;transition:opacity 0.5s;border-radius:inherit;
 }
-/* Entering from the right (going forward) */
-.page.enter-from-right{
-  transform:perspective(1800px) rotateY(45deg);
-  opacity:0;
-  transform-origin:right center;
+.page.flip-out-forward .page-shadow-overlay,
+.page.flip-out-backward .page-shadow-overlay{opacity:1}
+
+/* Subtle page curl hint on hover */
+.page.enter:hover{
+  box-shadow:4px 4px 20px var(--page-shadow),1px 0 0 rgba(0,0,0,0.05),inset -2px 0 8px rgba(0,0,0,0.02),-2px 2px 8px rgba(0,0,0,0.04);
 }
 
 /* ── Typography ── */
@@ -395,6 +423,7 @@ body{
 
     <div class="book">
       <div class="page enter" id="pageEl">
+        <div class="page-shadow-overlay"></div>
         <div class="page-content" id="pageContent"></div>
       </div>
     </div>
@@ -603,50 +632,61 @@ function updateUI() {
   });
 }
 
+function clearFlipClasses(el) {
+  el.classList.remove('enter','flip-out-forward','flip-out-backward','flip-in-forward','flip-in-backward');
+}
+
 function nextPage() {
   if (currentPage >= chapters.length - 1 || isFlipping) return;
   isFlipping = true;
   const page = document.getElementById('pageEl');
-  page.style.transformOrigin = 'left center';
-  page.classList.remove('enter');
-  page.classList.add('exit-left');
+  
+  // Current page flips away to the left (like turning a real page)
+  clearFlipClasses(page);
+  page.classList.add('flip-out-forward');
+  
   setTimeout(() => {
     currentPage++;
     renderPage();
-    page.classList.remove('exit-left');
-    page.style.transformOrigin = 'right center';
-    page.classList.add('enter-from-right');
+    
+    // New page swings in from the right
+    clearFlipClasses(page);
+    page.classList.add('flip-in-forward');
+    
+    // Force reflow then settle
+    void page.offsetWidth;
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        page.classList.remove('enter-from-right');
-        page.classList.add('enter');
-        setTimeout(() => { isFlipping = false; }, 300);
-      });
+      clearFlipClasses(page);
+      page.classList.add('enter');
+      setTimeout(() => { isFlipping = false; }, 400);
     });
-  }, 350);
+  }, 400);
 }
 
 function prevPage() {
   if (currentPage <= 0 || isFlipping) return;
   isFlipping = true;
   const page = document.getElementById('pageEl');
-  page.style.transformOrigin = 'right center';
-  page.classList.remove('enter');
-  page.classList.add('exit-right');
+  
+  // Current page flips away to the right
+  clearFlipClasses(page);
+  page.classList.add('flip-out-backward');
+  
   setTimeout(() => {
     currentPage--;
     renderPage();
-    page.classList.remove('exit-right');
-    page.style.transformOrigin = 'left center';
-    page.classList.add('enter-from-left');
+    
+    // New page swings in from the left
+    clearFlipClasses(page);
+    page.classList.add('flip-in-backward');
+    
+    void page.offsetWidth;
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        page.classList.remove('enter-from-left');
-        page.classList.add('enter');
-        setTimeout(() => { isFlipping = false; }, 300);
-      });
+      clearFlipClasses(page);
+      page.classList.add('enter');
+      setTimeout(() => { isFlipping = false; }, 400);
     });
-  }, 350);
+  }, 400);
 }
 
 function goToPage(i) {
