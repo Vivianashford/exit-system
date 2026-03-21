@@ -205,18 +205,19 @@ body{
 
 /* -- Bottom Bar -- */
 .bottom-bar{
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:center;justify-content:center;gap:24px;
   padding:8px 20px;background:var(--spine);
   border-top:1px solid rgba(184,148,62,0.15);flex-shrink:0;
 }
 .page-info{font-family:'DM Sans',sans-serif;font-size:11px;color:#6a6560}
-.nav-btns{display:flex;gap:8px}
-.nav-btn{
-  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
-  color:#8a8078;border-radius:4px;padding:6px 14px;cursor:pointer;
-  font-family:'DM Sans',sans-serif;font-size:11px;transition:all 0.2s;
+.arrow-btn{
+  background:none;border:none;cursor:pointer;
+  padding:8px;display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;opacity:0.5;
 }
-.nav-btn:hover{color:var(--gold);border-color:var(--gold)}
+.arrow-btn:hover{opacity:1}
+.arrow-btn svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.arrow-btn:disabled{opacity:0.15;cursor:default}
 
 /* -- TOC Overlay -- */
 .toc-overlay{
@@ -274,11 +275,13 @@ body{
 </div>
 
 <div class="bottom-bar">
+  <button class="arrow-btn" id="prevArrow" onclick="flipPrev()">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
   <span class="page-info" id="pageInfo">Page 1</span>
-  <div class="nav-btns">
-    <button class="nav-btn" onclick="flipPrev()">&larr; Prev</button>
-    <button class="nav-btn" onclick="flipNext()">Next &rarr;</button>
-  </div>
+  <button class="arrow-btn" id="nextArrow" onclick="flipNext()">
+    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
 </div>
 
 <!-- TOC Overlay -->
@@ -516,6 +519,8 @@ function updateUI(pageNum) {
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressPct').textContent = pct + '%';
   document.getElementById('pageInfo').textContent = `Page ${pageNum + 1} of ${totalPages}`;
+  document.getElementById('prevArrow').disabled = pageNum === 0;
+  document.getElementById('nextArrow').disabled = pageNum === totalPages - 1;
 }
 
 function flipNext() { if (pageFlip) pageFlip.flipNext(); }
