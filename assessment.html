@@ -1,0 +1,2681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>The Arena — Exit Risk Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;0,900;1,600;1,700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --navy:   #0D1B2A;
+  --navy2:  #132336;
+  --navy3:  #1A3050;
+  --gold:   #B8821A;
+  --gold2:  #D4A033;
+  --gold3:  #EDD47A;
+  --cream:  #F5EFE0;
+  --paper:  #FAF6EE;
+  --ink:    #1A1A1A;
+  --ink2:   #3D3D3D;
+  --muted:  #7A7060;
+  --smoke:  #B0A898;
+  --rule:   rgba(184,130,26,0.18);
+  --green:  #1A6B3C;
+  --red:    #8B2020;
+  --amber:  #7A5010;
+  --card-gap: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: linear-gradient(160deg, #0D1B2A 0%, #1A3050 60%, #0E2A1E 100%);
+  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.header {
+  padding: 24px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.header-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold2);
+}
+.header-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  padding: 20px 40px 0;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.progress-step-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold2);
+}
+.progress-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.3);
+}
+.progress-bar-bg {
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--gold), var(--gold2));
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+
+/* ── FORM CARD ── */
+.form-outer {
+  max-width: 760px;
+  margin: 32px auto 60px;
+  padding: 0 20px;
+}
+
+.form-card {
+  background: var(--paper);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 4px 20px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+/* ── STEP PANELS ── */
+.step-panel {
+  display: none;
+  animation: slideIn 0.35s cubic-bezier(0.4,0,0.2,1) both;
+}
+.step-panel.active { display: block; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.step-header {
+  background: var(--navy);
+  padding: 36px 44px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.step-header::after {
+  content: '';
+  position: absolute;
+  right: -40px; top: -40px;
+  width: 220px; height: 220px;
+  border: 1px solid rgba(184,130,26,0.1);
+  transform: rotate(20deg);
+  pointer-events: none;
+}
+.step-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.step-eyebrow::before {
+  content: '';
+  display: block;
+  width: 20px; height: 1px;
+  background: var(--gold2);
+}
+.step-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.step-header h2 em { color: var(--gold3); font-style: italic; }
+.step-header p {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+  max-width: 520px;
+}
+.gold-rule { height: 3px; background: linear-gradient(to right, var(--gold), var(--gold2), var(--gold3), var(--gold2), var(--gold)); }
+
+/* ── FORM BODY ── */
+.step-body { padding: 36px 44px 40px; }
+
+/* ── FIELD GROUPS ── */
+.field-group { margin-bottom: 28px; }
+.field-group:last-child { margin-bottom: 0; }
+
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.field-label .required {
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 400;
+}
+.field-hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+/* RISK TAGS */
+.risk-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.risk-tag.high  { background: rgba(139,32,32,0.12);  color: var(--red); }
+.risk-tag.med   { background: rgba(122,80,16,0.12);   color: var(--amber); }
+.risk-tag.low   { background: rgba(26,107,60,0.12);   color: var(--green); }
+
+/* TEXT / SELECT INPUTS */
+input[type=text],
+input[type=email],
+input[type=tel],
+input[type=number],
+select,
+textarea {
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid rgba(14,27,43,0.15);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 11px 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  border-radius: 0;
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gold2);
+  box-shadow: 0 0 0 3px rgba(212,160,51,0.12);
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7060' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* OPTION CARDS */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.options-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+.options-grid.single { grid-template-columns: 1fr; }
+
+.option-card {
+  border: 1px solid rgba(14,27,43,0.12);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  background: var(--paper);
+  user-select: none;
+}
+.option-card:hover { border-color: var(--gold2); background: rgba(212,160,51,0.04); }
+.option-card.selected {
+  border-color: var(--gold);
+  background: rgba(184,130,26,0.07);
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.option-card input[type=radio],
+.option-card input[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px; height: 1px;
+}
+.option-check {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 16px; height: 16px;
+  border: 1.5px solid rgba(14,27,43,0.2);
+  border-radius: 50%;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.option-card.selected .option-check {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.option-check::after {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.option-card.selected .option-check::after { opacity: 1; }
+
+.option-card-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 3px;
+  padding-right: 20px;
+  line-height: 1.3;
+}
+.option-card-sub {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* DIVIDER */
+.field-divider {
+  height: 1px;
+  background: rgba(14,27,43,0.07);
+  margin: 24px 0;
+}
+
+/* ── NAVIGATION ── */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 44px 28px;
+  border-top: 1px solid rgba(14,27,43,0.07);
+}
+.btn-back {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 0;
+  transition: color 0.2s;
+}
+.btn-back:hover { color: var(--navy); }
+.btn-back:disabled { opacity: 0; pointer-events: none; }
+
+.btn-next {
+  background: var(--navy);
+  color: var(--gold2);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 13px 32px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-next:hover { background: var(--navy3); }
+.btn-next.submit {
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+}
+.btn-next.submit:hover { background: var(--gold2); }
+
+/* ── RESULT SCREEN ── */
+#resultPanel { display: none; }
+#resultPanel.active { display: block; animation: slideIn 0.4s ease both; }
+
+.result-header {
+  padding: 48px 44px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.result-header.low      { background: #0f2b1a; }
+.result-header.moderate { background: #1a1e0d; }
+.result-header.high     { background: #1f1509; }
+.result-header.critical { background: #1f0909; }
+
+.result-header::after {
+  content: '';
+  position: absolute;
+  right: -60px; top: -60px;
+  width: 300px; height: 300px;
+  border: 1px solid rgba(255,255,255,0.04);
+  transform: rotate(15deg);
+  pointer-events: none;
+}
+
+.result-badge {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  margin-bottom: 20px;
+}
+.result-badge.low      { background: rgba(26,107,60,0.2);  color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
+.result-badge.moderate { background: rgba(212,160,51,0.15); color: var(--gold3); border: 1px solid rgba(237,212,122,0.25); }
+.result-badge.high     { background: rgba(200,100,20,0.2);  color: #fb923c; border: 1px solid rgba(251,146,60,0.25); }
+.result-badge.critical { background: rgba(139,32,32,0.2);   color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+
+.result-score-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.result-score-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 90px;
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+}
+.result-score-meta { padding-bottom: 10px; }
+.result-score-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 4px;
+}
+.result-score-of {
+  font-family: 'DM Mono', monospace;
+  font-size: 18px;
+  color: rgba(255,255,255,0.2);
+}
+
+.result-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.result-header h2 em { color: var(--gold3); font-style: italic; }
+.result-header p {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.65;
+  max-width: 560px;
+}
+
+/* ── RESULT BODY ── */
+.result-body { padding: 36px 44px 44px; }
+
+/* ── SECTION HEADERS ── */
+.report-section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.report-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 16px;
+}
+.report-divider {
+  height: 1px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  margin: 32px 0;
+}
+
+/* ── EXECUTIVE SUMMARY ── */
+.exec-summary {
+  background: var(--cream);
+  padding: 24px 28px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--gold);
+}
+.exec-summary p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink2);
+}
+.exec-summary strong { color: var(--navy); }
+
+.tev-box {
+  background: var(--navy);
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.tev-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold2);
+}
+.tev-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+}
+.tev-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 0;
+  padding: 8px 0 0;
+}
+
+/* ── PRIORITY RISK MATRIX ── */
+.risk-matrix-card {
+  background: #fff;
+  border: 1px solid rgba(14,27,43,0.08);
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  position: relative;
+  border-left: 4px solid var(--red);
+}
+.risk-matrix-card.amber-border { border-left-color: var(--gold2); }
+.risk-matrix-card.green-border { border-left-color: var(--green); }
+
+.risk-matrix-rank {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+.risk-matrix-card.amber-border .risk-matrix-rank { color: var(--amber); }
+
+.risk-matrix-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.risk-matrix-body {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink2);
+  margin-bottom: 8px;
+}
+.risk-matrix-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.risk-matrix-meta-item {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: var(--cream);
+  color: var(--muted);
+}
+.risk-matrix-buyer {
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 8px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(14,27,43,0.1);
+}
+
+/* ── SCORE BREAKDOWN ── */
+.breakdown-section {
+  margin-bottom: 12px;
+}
+.breakdown-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.score-row {
+  margin-bottom: 18px;
+}
+.score-row-top {
+  display: grid;
+  grid-template-columns: 1fr 160px 50px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.score-row-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink2);
+}
+.score-row-bar-bg {
+  height: 5px;
+  background: rgba(14,27,43,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.score-row-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.score-row-bar-fill.green  { background: var(--green); }
+.score-row-bar-fill.amber  { background: var(--gold2); }
+.score-row-bar-fill.red    { background: var(--red); }
+.score-row-bar-fill.orange { background: #c05010; }
+.score-row-pts {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-align: right;
+}
+.score-row-insight {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink2);
+  padding: 8px 12px;
+  margin-top: 6px;
+  border-left: 2px solid rgba(14,27,43,0.1);
+  background: rgba(14,27,43,0.02);
+}
+.score-row-insight.red-insight { border-left-color: var(--red); background: rgba(139,32,32,0.04); }
+.score-row-insight.amber-insight { border-left-color: var(--gold2); background: rgba(184,130,26,0.04); }
+.score-row-insight.green-insight { border-left-color: var(--green); background: rgba(26,107,60,0.04); }
+
+/* ── ROADMAP ── */
+.roadmap-phase {
+  margin-bottom: 20px;
+}
+.roadmap-phase-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.roadmap-phase-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.roadmap-phase-dot.urgent { background: var(--red); }
+.roadmap-phase-dot.mid { background: var(--gold2); }
+.roadmap-phase-dot.ongoing { background: var(--green); }
+
+.roadmap-phase-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+  font-weight: 600;
+}
+.roadmap-item {
+  padding: 10px 16px;
+  background: var(--cream);
+  margin-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink2);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.roadmap-item-arrow {
+  color: var(--gold2);
+  flex-shrink: 0;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* ── CTA BOX ── */
+.cta-box {
+  background: var(--navy);
+  padding: 32px 36px;
+  text-align: center;
+}
+.cta-box h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.cta-box p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto 20px;
+}
+.cta-box .cta-quote {
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold3);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+.btn-cta {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 15px 36px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+.btn-cta:hover { background: var(--gold2); }
+
+/* ── CONFIRM BADGE ── */
+.confirm-band {
+  background: linear-gradient(135deg, rgba(26,107,60,0.08) 0%, rgba(184,130,26,0.06) 100%);
+  border: 1px solid rgba(26,107,60,0.2);
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.confirm-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.confirm-band p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink2);
+}
+.confirm-band strong { color: var(--green); }
+
+/* ── RESTART ── */
+.restart-wrap {
+  text-align: center;
+  padding-top: 8px;
+}
+.btn-restart {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: color 0.2s;
+}
+.btn-restart:hover { color: var(--navy); }
+
+@media (max-width: 600px) {
+  .step-header, .step-body, .step-nav, .result-header, .result-body { padding-left: 24px; padding-right: 24px; }
+  .options-grid, .options-grid.three, .input-row { grid-template-columns: 1fr; }
+  .header { padding: 16px 20px; }
+  .progress-wrap { padding: 16px 20px 0; }
+  .result-score-num { font-size: 60px; }
+  .score-row-top { grid-template-columns: 1fr 100px 40px; }
+  .tev-box { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .risk-matrix-meta { flex-direction: column; gap: 6px; }
+  .cta-box { padding: 28px 24px; }
+}
+.field-error {
+  border-radius: 8px;
+  padding: 12px;
+  margin-left: -12px;
+  margin-right: -12px;
+  background: rgba(231,76,60,0.05);
+  border: 1px solid rgba(231,76,60,0.3) !important;
+  animation: pulse-error 0.5s ease;
+}
+.field-error .field-label {
+  color: #e74c3c !important;
+}
+input.field-error {
+  border: 1px solid #e74c3c !important;
+  box-shadow: 0 0 0 2px rgba(231,76,60,0.3) !important;
+}
+.field-error .option-card {
+  border-color: rgba(231,76,60,0.4) !important;
+}
+@keyframes pulse-error {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+}
+.btn-shake {
+  animation: shake 0.5s ease;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23C9A84C'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' font-family='Georgia' fill='%230A0A0A' font-weight='bold'%3EA%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-brand">The Arena Partners</div>
+  <div class="header-label">Transferable Exit System™ — Exit Risk Assessment</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <div class="progress-step-label" id="stepLabel">Section 1 of 5 — Your Info</div>
+    <div class="progress-count" id="stepCount">Step 1 / 5</div>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+</div>
+
+<!-- FORM CARD -->
+<div class="form-outer">
+<div class="form-card">
+
+  <!-- ═══════════════ STEP 1: INTRO + CONTACT ═══════════════ -->
+  <div class="step-panel active" data-step="1">
+    <div class="step-header">
+      <div class="step-eyebrow">Free Exit Assessment</div>
+      <h2>How Ready Is Your Business <em>to Sell?</em></h2>
+      <p>Take 4 minutes to find out. You'll get a personalized Exit Risk Report showing exactly where your business stands — and what's between you and a premium exit.</p>
+    </div>
+    <div class="gold-rule"></div>
+    <div class="step-body">
+
+      <div class="input-row">
+        <div class="field-group">
+          <div class="field-label">Your Name <span class="required">Required</span></div>
+          <input type="text" id="ownerName" placeholder="Full name">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Company Name <span class="required">Required</span></div>
+          <input type="text" id="companyName" placeholder="Your business name">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="field-group">
+          <div class="field-label">Email <span class="required">Required</span></div>
+          <div class="field-hint">Your risk report will be sent here</div>
+          <input type="email" id="email" placeholder="email@yourbusiness.com">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Mobile Phone <span class="required">Required</span></div>
+          <div class="field-hint">We'll text you a quick summary</div>
+          <input type="tel" id="phone" placeholder="(000) 000-0000">
+        </div>
+      </div>
+
+      <div class="field-divider"></div>
+
+      <div class="field-group">
+        <div class="field-label">What industry is your business in? <span class="required">Required</span></div>
+        <div class="field-hint">Select the closest match</div>
+        <div class="options-grid three">
+          <div class="option-card" onclick="selectOption(this,'industry','trades')">
+            <input type="radio" name="industry" value="trades">
+            <div class="option-check"></div>
+            <div class="option-card-label">Trades / Mechanical</div>
+            <div class="option-card-sub">HVAC, plumbing, electrical, roofing</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'industry','construction')">
+            <input type="radio" name="industry" value="construction">
+            <div class="option-check"></div>
+            <div class="option-card-label">Construction / GC</div>
+            <div class="option-card-sub">General contracting, specialty</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'industry','industrial')">
+            <input type="radio" name="industry" value="industrial">
+            <div class="option-check"></div>
+            <div class="option-card-label">Industrial Services</div>
+            <div class="option-card-sub">Environmental, remediation, oilfield</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'industry','professional')">
+            <input type="radio" name="industry" value="professional">
+            <div class="option-check"></div>
+            <div class="option-card-label">Professional Services</div>
+            <div class="option-card-sub">Consulting, staffing, legal, financial</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'industry','healthcare')">
+            <input type="radio" name="industry" value="healthcare">
+            <div class="option-check"></div>
+            <div class="option-card-label">Healthcare / Medical</div>
+            <div class="option-card-sub">Clinics, home health, dental, therapy</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'industry','facilities')">
+            <input type="radio" name="industry" value="facilities">
+            <div class="option-check"></div>
+            <div class="option-card-label">Facilities / Property</div>
+            <div class="option-card-sub">Landscaping, janitorial, pest, security</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'industry','logistics')">
+            <input type="radio" name="industry" value="logistics">
+            <div class="option-check"></div>
+            <div class="option-card-label">Logistics / Distribution</div>
+            <div class="option-card-sub">Trucking, supply chain, warehousing</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'industry','tech_services')">
+            <input type="radio" name="industry" value="tech_services">
+            <div class="option-check"></div>
+            <div class="option-card-label">Technology / IT Services</div>
+            <div class="option-card-sub">MSP, SaaS, dev shops, cybersecurity</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'industry','other')">
+            <input type="radio" name="industry" value="other">
+            <div class="option-check"></div>
+            <div class="option-card-label">Other Service Business</div>
+            <div class="option-card-sub">Any service-based company</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Annual Revenue <span class="required">Required</span>
+          <span class="risk-tag high">Affects multiple range</span>
+        </div>
+        <div class="field-hint">Most recent full fiscal year</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'revenue','under5')">
+            <input type="radio" name="revenue" value="under5">
+            <div class="option-check"></div>
+            <div class="option-card-label">Under $5M</div>
+            <div class="option-card-sub">Smaller buyer pool, lower multiples</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'revenue','5to10')">
+            <input type="radio" name="revenue" value="5to10">
+            <div class="option-check"></div>
+            <div class="option-card-label">$5M – $10M</div>
+            <div class="option-card-sub">Entry of PE buyer attention</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'revenue','10to25')">
+            <input type="radio" name="revenue" value="10to25">
+            <div class="option-check"></div>
+            <div class="option-card-label">$10M – $25M</div>
+            <div class="option-card-sub">Strong market, competitive offers</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'revenue','25to50')">
+            <input type="radio" name="revenue" value="25to50">
+            <div class="option-check"></div>
+            <div class="option-card-label">$25M – $50M</div>
+            <div class="option-card-sub">Premium multiples available</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'revenue','over50')">
+            <input type="radio" name="revenue" value="over50">
+            <div class="option-check"></div>
+            <div class="option-card-label">Over $50M</div>
+            <div class="option-card-sub">M&A firm territory</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">How long has the business been operating?</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'age','under5')">
+            <input type="radio" name="age" value="under5">
+            <div class="option-check"></div>
+            <div class="option-card-label">Under 5 years</div>
+            <div class="option-card-sub">Limited track record</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'age','5to10')">
+            <input type="radio" name="age" value="5to10">
+            <div class="option-check"></div>
+            <div class="option-card-label">5 – 10 years</div>
+            <div class="option-card-sub">Established, some history</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'age','10to20')">
+            <input type="radio" name="age" value="10to20">
+            <div class="option-check"></div>
+            <div class="option-card-label">10 – 20 years</div>
+            <div class="option-card-sub">Strong credibility</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'age','over20')">
+            <input type="radio" name="age" value="over20">
+            <div class="option-check"></div>
+            <div class="option-card-label">20+ years</div>
+            <div class="option-card-sub">Deep market roots</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" disabled>← Back</button>
+      <button class="btn-next" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ STEP 2: EXIT TIMELINE & OWNERSHIP ═══════════════ -->
+  <div class="step-panel" data-step="2">
+    <div class="step-header">
+      <div class="step-eyebrow">Section 2 of 5</div>
+      <h2>Your Timeline &amp; <em>Exit Plan</em></h2>
+      <p>The gap between when you want to exit and how prepared you are is one of the biggest risk factors buyers exploit. Let's find out where you stand.</p>
+    </div>
+    <div class="gold-rule"></div>
+    <div class="step-body">
+
+      <div class="field-group">
+        <div class="field-label">When are you looking to exit or transition? <span class="required">Required</span>
+          <span class="risk-tag high">High risk factor</span>
+        </div>
+        <div class="field-hint">The tighter the timeline, the more leverage buyers have over you — unless you're prepared.</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'timeline','asap')">
+            <input type="radio" name="timeline" value="asap">
+            <div class="option-check"></div>
+            <div class="option-card-label">Within the next 12 months</div>
+            <div class="option-card-sub">Urgency is high — preparation is critical</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'timeline','1to3')">
+            <input type="radio" name="timeline" value="1to3">
+            <div class="option-check"></div>
+            <div class="option-card-label">1 – 3 years</div>
+            <div class="option-card-sub">Ideal planning window if work starts now</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'timeline','3to5')">
+            <input type="radio" name="timeline" value="3to5">
+            <div class="option-check"></div>
+            <div class="option-card-label">3 – 5 years</div>
+            <div class="option-card-sub">Time to do it right</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'timeline','over5')">
+            <input type="radio" name="timeline" value="over5">
+            <div class="option-check"></div>
+            <div class="option-card-label">5+ years or not sure yet</div>
+            <div class="option-card-sub">Early stage thinking</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Owner's age range <span class="required">Required</span></div>
+        <div class="options-grid three">
+          <div class="option-card" onclick="selectOption(this,'ownerAge','under45')">
+            <input type="radio" name="ownerAge" value="under45">
+            <div class="option-check"></div>
+            <div class="option-card-label">Under 45</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'ownerAge','45to54')">
+            <input type="radio" name="ownerAge" value="45to54">
+            <div class="option-check"></div>
+            <div class="option-card-label">45 – 54</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'ownerAge','55to64')">
+            <input type="radio" name="ownerAge" value="55to64">
+            <div class="option-check"></div>
+            <div class="option-card-label">55 – 64</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'ownerAge','65to74')">
+            <input type="radio" name="ownerAge" value="65to74">
+            <div class="option-check"></div>
+            <div class="option-card-label">65 – 74</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'ownerAge','75plus')">
+            <input type="radio" name="ownerAge" value="75plus">
+            <div class="option-check"></div>
+            <div class="option-card-label">75+</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Ownership structure</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'ownership','sole')">
+            <input type="radio" name="ownership" value="sole">
+            <div class="option-check"></div>
+            <div class="option-card-label">Sole Owner / Founder</div>
+            <div class="option-card-sub">100% — you make all decisions</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'ownership','family')">
+            <input type="radio" name="ownership" value="family">
+            <div class="option-check"></div>
+            <div class="option-card-label">Family-Owned</div>
+            <div class="option-card-sub">Multiple family members involved</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'ownership','partner')">
+            <input type="radio" name="ownership" value="partner">
+            <div class="option-check"></div>
+            <div class="option-card-label">Business Partners</div>
+            <div class="option-card-sub">Non-family co-owners</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'ownership','inherited')">
+            <input type="radio" name="ownership" value="inherited">
+            <div class="option-check"></div>
+            <div class="option-card-label">Inherited / 2nd Gen</div>
+            <div class="option-card-sub">Took over from a family member</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Do you have a formal succession plan in place?
+          <span class="risk-tag high">High risk factor</span>
+        </div>
+        <div class="field-hint">Buyers price you lower when there's no clear transition plan.</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'succPlan','yes_full')">
+            <input type="radio" name="succPlan" value="yes_full">
+            <div class="option-check"></div>
+            <div class="option-card-label">Yes — fully documented and in place</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'succPlan','yes_partial')">
+            <input type="radio" name="succPlan" value="yes_partial">
+            <div class="option-check"></div>
+            <div class="option-card-label">Partially — some ideas, not formal</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'succPlan','no')">
+            <input type="radio" name="succPlan" value="no">
+            <div class="option-check"></div>
+            <div class="option-card-label">No plan in place</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'succPlan','unsure')">
+            <input type="radio" name="succPlan" value="unsure">
+            <div class="option-check"></div>
+            <div class="option-card-label">Not sure where to start</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="prevStep()">← Back</button>
+      <button class="btn-next" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ STEP 3: BUSINESS HEALTH ═══════════════ -->
+  <div class="step-panel" data-step="3">
+    <div class="step-header">
+      <div class="step-eyebrow">Section 3 of 5</div>
+      <h2>Business Health <em>&amp; Operations</em></h2>
+      <p>These are the four things buyers look at first when they're deciding whether to discount your offer — or walk away entirely.</p>
+    </div>
+    <div class="gold-rule"></div>
+    <div class="step-body">
+
+      <div class="field-group">
+        <div class="field-label">How is your EBITDA trending?
+          <span class="risk-tag high">Direct multiple impact</span>
+        </div>
+        <div class="field-hint">Buyers pay for trajectory. A declining EBITDA kills multiple negotiations before they start.</div>
+        <div class="options-grid three">
+          <div class="option-card" onclick="selectOption(this,'ebitda','growing')">
+            <input type="radio" name="ebitda" value="growing">
+            <div class="option-check"></div>
+            <div class="option-card-label">Growing</div>
+            <div class="option-card-sub">Up 10%+ over the last 2 years</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'ebitda','stable')">
+            <input type="radio" name="ebitda" value="stable">
+            <div class="option-check"></div>
+            <div class="option-card-label">Stable</div>
+            <div class="option-card-sub">Flat or slight movement</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'ebitda','declining')">
+            <input type="radio" name="ebitda" value="declining">
+            <div class="option-check"></div>
+            <div class="option-card-label">Declining</div>
+            <div class="option-card-sub">Down vs. prior years</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Could the business run for 90 days without you present?
+          <span class="risk-tag high">Key man risk</span>
+        </div>
+        <div class="field-hint">This is the exact question PE buyers ask during due diligence. If the answer is no, they see a liability — not an asset. This is the #1 multiple killer.</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'runWithout','yes')">
+            <input type="radio" name="runWithout" value="yes">
+            <div class="option-check"></div>
+            <div class="option-card-label">Yes — confidently</div>
+            <div class="option-card-sub">Strong management team, systems in place</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'runWithout','maybe')">
+            <input type="radio" name="runWithout" value="maybe">
+            <div class="option-check"></div>
+            <div class="option-card-label">Maybe — with some friction</div>
+            <div class="option-card-sub">It would struggle but survive</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'runWithout','no')">
+            <input type="radio" name="runWithout" value="no">
+            <div class="option-check"></div>
+            <div class="option-card-label">No — I am the business</div>
+            <div class="option-card-sub">Customers, decisions, operations depend on me</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Does the business have documented SOPs?
+          <span class="risk-tag med">Valuation risk</span>
+        </div>
+        <div class="field-hint">No SOPs means every process walks out the door with you. Buyers use this to lower their offer.</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'sops','yes_full')">
+            <input type="radio" name="sops" value="yes_full">
+            <div class="option-check"></div>
+            <div class="option-card-label">Yes — comprehensive and current</div>
+            <div class="option-card-sub">All key departments documented</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'sops','partial')">
+            <input type="radio" name="sops" value="partial">
+            <div class="option-check"></div>
+            <div class="option-card-label">Some — key areas only</div>
+            <div class="option-card-sub">Partial documentation exists</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'sops','no')">
+            <input type="radio" name="sops" value="no">
+            <div class="option-check"></div>
+            <div class="option-card-label">No — it lives in people's heads</div>
+            <div class="option-card-sub">Nothing formally documented</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">How concentrated is your customer base?
+          <span class="risk-tag high">Deal-breaking risk</span>
+        </div>
+        <div class="field-hint">If one client walks after the sale, your buyer's entire investment is at risk. They price that in — hard.</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'custConc','diversified')">
+            <input type="radio" name="custConc" value="diversified">
+            <div class="option-check"></div>
+            <div class="option-card-label">Diversified</div>
+            <div class="option-card-sub">No single client over 10% of revenue</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'custConc','moderate')">
+            <input type="radio" name="custConc" value="moderate">
+            <div class="option-check"></div>
+            <div class="option-card-label">Moderate</div>
+            <div class="option-card-sub">Top client is 10–25% of revenue</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'custConc','concentrated')">
+            <input type="radio" name="custConc" value="concentrated">
+            <div class="option-check"></div>
+            <div class="option-card-label">Concentrated</div>
+            <div class="option-card-sub">Top client is 25–50% of revenue</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'custConc','very_concentrated')">
+            <input type="radio" name="custConc" value="very_concentrated">
+            <div class="option-check"></div>
+            <div class="option-card-label">Very Concentrated</div>
+            <div class="option-card-sub">One client is 50%+ of revenue</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="prevStep()">← Back</button>
+      <button class="btn-next" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ STEP 4: FINANCIALS & READINESS ═══════════════ -->
+  <div class="step-panel" data-step="4">
+    <div class="step-header">
+      <div class="step-eyebrow">Section 4 of 5</div>
+      <h2>Financial Clarity &amp; <em>Readiness</em></h2>
+      <p>Clean financials and a clear picture of what you want are non-negotiable. This is where most deals fall apart — before they even start.</p>
+    </div>
+    <div class="gold-rule"></div>
+    <div class="step-body">
+
+      <div class="field-group">
+        <div class="field-label">How clean and separated are your personal and business finances?
+          <span class="risk-tag high">Due diligence risk</span>
+        </div>
+        <div class="field-hint">Commingled finances are the #1 reason deals die in due diligence. Buyers walk or slash the offer.</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'finances','clean')">
+            <input type="radio" name="finances" value="clean">
+            <div class="option-check"></div>
+            <div class="option-card-label">Completely separated</div>
+            <div class="option-card-sub">Clean books, no personal mixing</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'finances','mostly')">
+            <input type="radio" name="finances" value="mostly">
+            <div class="option-check"></div>
+            <div class="option-card-label">Mostly clean</div>
+            <div class="option-card-sub">Minor overlap that could be cleaned up</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'finances','mixed')">
+            <input type="radio" name="finances" value="mixed">
+            <div class="option-check"></div>
+            <div class="option-card-label">Somewhat mixed</div>
+            <div class="option-card-sub">Personal expenses run through the business</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'finances','very_mixed')">
+            <input type="radio" name="finances" value="very_mixed">
+            <div class="option-check"></div>
+            <div class="option-card-label">Very intertwined</div>
+            <div class="option-card-sub">Hard to separate what's business vs. personal</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Do you know your current EBITDA number?
+          <span class="risk-tag med">Negotiation readiness</span>
+        </div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'knowEbitda','yes_exact')">
+            <input type="radio" name="knowEbitda" value="yes_exact">
+            <div class="option-check"></div>
+            <div class="option-card-label">Yes — exact number</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'knowEbitda','yes_approx')">
+            <input type="radio" name="knowEbitda" value="yes_approx">
+            <div class="option-check"></div>
+            <div class="option-card-label">Roughly — ballpark figure</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'knowEbitda','no')">
+            <input type="radio" name="knowEbitda" value="no">
+            <div class="option-check"></div>
+            <div class="option-card-label">No — I'd have to look it up</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'knowEbitda','unsure_what')">
+            <input type="radio" name="knowEbitda" value="unsure_what">
+            <div class="option-check"></div>
+            <div class="option-card-label">I'm not sure what EBITDA means</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Have you received any offers or inquiries about buying your business?</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'inbound','yes_multiple')">
+            <input type="radio" name="inbound" value="yes_multiple">
+            <div class="option-check"></div>
+            <div class="option-card-label">Yes — multiple approaches</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'inbound','yes_one')">
+            <input type="radio" name="inbound" value="yes_one">
+            <div class="option-check"></div>
+            <div class="option-card-label">Yes — one or two</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'inbound','no')">
+            <input type="radio" name="inbound" value="no">
+            <div class="option-check"></div>
+            <div class="option-card-label">No inquiries yet</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'inbound','not_looking')">
+            <input type="radio" name="inbound" value="not_looking">
+            <div class="option-check"></div>
+            <div class="option-card-label">Not actively looking yet</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Have you worked with an M&A advisor or exit planner before?</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'priorAdvisor','no')">
+            <input type="radio" name="priorAdvisor" value="no">
+            <div class="option-check"></div>
+            <div class="option-card-label">No — this is my first time</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'priorAdvisor','exploring')">
+            <input type="radio" name="priorAdvisor" value="exploring">
+            <div class="option-check"></div>
+            <div class="option-card-label">I'm interviewing advisors now</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'priorAdvisor','yes_good')">
+            <input type="radio" name="priorAdvisor" value="yes_good">
+            <div class="option-check"></div>
+            <div class="option-card-label">Yes — good experience</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'priorAdvisor','yes_bad')">
+            <input type="radio" name="priorAdvisor" value="yes_bad">
+            <div class="option-check"></div>
+            <div class="option-card-label">Yes — disappointed in the result</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="prevStep()">← Back</button>
+      <button class="btn-next" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ STEP 5: MINDSET & GOALS ═══════════════ -->
+  <div class="step-panel" data-step="5">
+    <div class="step-header">
+      <div class="step-eyebrow">Section 5 of 5 — Last Step</div>
+      <h2>Your Mindset &amp; <em>What You Want</em></h2>
+      <p>The deal you get isn't just about the business — it's about you. What you're willing to do, what you fear, and what success actually looks like.</p>
+    </div>
+    <div class="gold-rule"></div>
+    <div class="step-body">
+
+      <div class="field-group">
+        <div class="field-label">When you think about life after this business — does that picture feel clear?
+          <span class="risk-tag med">Post-exit readiness</span>
+        </div>
+        <div class="field-hint">75% of owners who sell profoundly regret it within 12 months — not because of the money, but because nobody prepared them for who they'd be without the business.</div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'postExit','clear')">
+            <input type="radio" name="postExit" value="clear">
+            <div class="option-check"></div>
+            <div class="option-card-label">Clear picture</div>
+            <div class="option-card-sub">I know what I'd do next</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'postExit','vague')">
+            <input type="radio" name="postExit" value="vague">
+            <div class="option-check"></div>
+            <div class="option-card-label">Some ideas, nothing concrete</div>
+            <div class="option-card-sub">Haven't formalized a plan</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'postExit','blank')">
+            <input type="radio" name="postExit" value="blank">
+            <div class="option-check"></div>
+            <div class="option-card-label">Blank page</div>
+            <div class="option-card-sub">The business is my identity</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-divider"></div>
+
+      <div class="field-group">
+        <div class="field-label">What's your biggest fear about selling?
+          <span class="risk-tag med">Shapes our approach</span>
+        </div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'fear','low_price')">
+            <input type="radio" name="fear" value="low_price">
+            <div class="option-check"></div>
+            <div class="option-card-label">Getting a low offer</div>
+            <div class="option-card-sub">Not getting what the business is worth</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'fear','taken_advantage')">
+            <input type="radio" name="fear" value="taken_advantage">
+            <div class="option-check"></div>
+            <div class="option-card-label">Being taken advantage of</div>
+            <div class="option-card-sub">Wrong buyer, bad deal structure</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'fear','legacy')">
+            <input type="radio" name="fear" value="legacy">
+            <div class="option-check"></div>
+            <div class="option-card-label">Losing my legacy</div>
+            <div class="option-card-sub">Name, people, and culture dismantled</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'fear','employees')">
+            <input type="radio" name="fear" value="employees">
+            <div class="option-check"></div>
+            <div class="option-card-label">What happens to my employees</div>
+            <div class="option-card-sub">Team members who've been here for years</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'fear','identity')">
+            <input type="radio" name="fear" value="identity">
+            <div class="option-check"></div>
+            <div class="option-card-label">Who am I after this?</div>
+            <div class="option-card-sub">Purpose, identity, what's next</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'fear','none')">
+            <input type="radio" name="fear" value="none">
+            <div class="option-check"></div>
+            <div class="option-card-label">I don't have major fears</div>
+            <div class="option-card-sub">Approaching this with clarity</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">How committed are you to doing the work required to prepare your business?
+          <span class="risk-tag high">Makes or breaks outcomes</span>
+        </div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectOption(this,'willingness','fully')">
+            <input type="radio" name="willingness" value="fully">
+            <div class="option-check"></div>
+            <div class="option-card-label">Fully committed</div>
+            <div class="option-card-sub">I'll do whatever it takes to get this right</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'willingness','mostly')">
+            <input type="radio" name="willingness" value="mostly">
+            <div class="option-check"></div>
+            <div class="option-card-label">Mostly committed</div>
+            <div class="option-card-sub">Open to it but want to understand the ask first</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'willingness','passive')">
+            <input type="radio" name="willingness" value="passive">
+            <div class="option-check"></div>
+            <div class="option-card-label">I want someone to handle it for me</div>
+            <div class="option-card-sub">Looking for a mostly hands-off approach</div>
+          </div>
+          <div class="option-card" onclick="selectOption(this,'willingness','resistant')">
+            <input type="radio" name="willingness" value="resistant">
+            <div class="option-check"></div>
+            <div class="option-card-label">I don't want to change much</div>
+            <div class="option-card-sub">The way we operate is fine</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">What does a successful exit look like to you?</div>
+        <div class="field-hint">Be specific — what matters most? Price, speed, terms, what happens after?</div>
+        <textarea id="successNote" placeholder="e.g. I want to get full value for what I built, protect my team, and not be tied to the business for more than 12 months after close..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Anything else we should know before your call?</div>
+        <textarea id="extraNote" placeholder="Specific concerns, prior conversations, context about the business situation..."></textarea>
+      </div>
+
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="prevStep()">← Back</button>
+      <button class="btn-next submit" onclick="submitForm()">Get My Risk Report →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ RESULT PANEL ═══════════════ -->
+  <div id="resultPanel">
+
+    <!-- RESULT HEADER (Section A: Executive Summary) -->
+    <div id="resultHeader" class="result-header high">
+      <div id="resultBadge" class="result-badge high">● High Risk</div>
+      <div class="result-score-wrap">
+        <div class="result-score-num" id="scoreNum">0</div>
+        <div class="result-score-meta">
+          <div class="result-score-label">Exit Risk Score</div>
+          <div class="result-score-of">/ 100</div>
+        </div>
+      </div>
+      <h2 id="resultTitle">Your business has <em>several risk factors</em> buyers will use against you.</h2>
+      <p id="resultSub"></p>
+    </div>
+    <div class="gold-rule"></div>
+
+    <div class="result-body">
+
+      <!-- CONFIRMATION BAND -->
+      <div class="confirm-band">
+        <div class="confirm-icon">✓</div>
+        <p id="confirmText">Your call is confirmed. <strong>Your advisor has received your risk report</strong> and will come prepared to address each of these areas specifically. Check your email for a copy of this report.</p>
+      </div>
+
+      <!-- Section A continued: Executive Summary & TEV -->
+      <div class="report-section-label">Section A</div>
+      <div class="report-section-title">Executive Summary</div>
+      <div class="exec-summary" id="execSummary"></div>
+      <div class="tev-box">
+        <div>
+          <div class="tev-label">Transferable Enterprise Value</div>
+          <div class="tev-note" style="color:rgba(255,255,255,0.4);margin:0;">Estimated % of full value you'd capture today</div>
+        </div>
+        <div class="tev-value" id="tevValue">—</div>
+      </div>
+      <div class="tev-note" id="tevNote"></div>
+
+      <div class="report-divider"></div>
+
+      <!-- Section B: Priority Risk Matrix -->
+      <div class="report-section-label">Section B</div>
+      <div class="report-section-title">Priority Risk Matrix</div>
+      <div id="riskMatrix"></div>
+
+      <div class="report-divider"></div>
+
+      <!-- Section C: Full Category Breakdown -->
+      <div class="report-section-label">Section C</div>
+      <div class="report-section-title">Full Category Breakdown</div>
+      <div class="breakdown-section" id="scoreBreakdown"></div>
+
+      <div class="report-divider"></div>
+
+      <!-- Section D: Actionable Roadmap -->
+      <div class="report-section-label">Section D</div>
+      <div class="report-section-title">Your Actionable Roadmap</div>
+      <div id="roadmap"></div>
+
+      <div class="report-divider"></div>
+
+      <!-- Section E: Next Step -->
+      <div id="ctaSection"></div>
+
+      <!-- RESTART -->
+      <div class="restart-wrap">
+        <button class="btn-restart" onclick="restartForm()">↺ Start Over</button>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /form-card -->
+</div><!-- /form-outer -->
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// DEEP INSIGHTS MAPPING
+// ══════════════════════════════════════════════════════════════════
+const INSIGHTS = {
+  // ── OWNER DEPENDENCY (runWithout) ──
+  runWithout: {
+    no: {
+      diagnosis: "Your business can't function without you. Every key relationship, every big decision, every critical process runs through you personally. You don't own a business - you own a job that happens to have employees.",
+      buyerView: "A buyer sees a business that dies the day you leave. They're not buying a company - they're buying a dependency on you. Most serious buyers will walk. The ones who stay will structure the deal to keep you locked in for 3-5 years with heavy earnout provisions.",
+      impact: "This alone can reduce your multiple by 1.5-2x. On a $2M EBITDA business, that's $3-4M left on the table. It's the single biggest value destroyer in any deal.",
+      fixTimeline: "12-18 months",
+      priority: 1,
+      category: "Owner / Key-Man Dependency"
+    },
+    maybe: {
+      diagnosis: "Your business would survive without you, but it wouldn't thrive. There are people who can keep things running, but you're still the linchpin for sales, key accounts, or strategic decisions. It's better than total dependency, but buyers see the gap.",
+      buyerView: "A buyer sees transition risk. They'll want an earnout clause to protect themselves and will likely require you to stay 12-24 months post-close. They'll also discount the offer to account for the uncertainty of whether your team can actually step up.",
+      impact: "Expect a 0.5-1x multiple reduction. Buyers will also structure more of the deal as earnout rather than cash at close, meaning you carry more risk.",
+      fixTimeline: "6-12 months",
+      priority: 2,
+      category: "Owner / Key-Man Dependency"
+    },
+    yes: {
+      diagnosis: "Your business runs without you. You've built a management team and systems that operate independently. This is what separates a sellable enterprise from an expensive job. You've done the hardest part.",
+      buyerView: "A buyer sees a turnkey operation. The business value isn't tied to you leaving or staying. This is exactly what PE firms and strategic acquirers look for - it means they can plug in their own growth strategies immediately.",
+      impact: "This adds 0.5-1x to your multiple. You'll also get better deal structure - more cash at close, shorter transition period, less earnout risk.",
+      fixTimeline: "Maintain ongoing",
+      priority: 5,
+      category: "Owner / Key-Man Dependency"
+    }
+  },
+
+  // ── CUSTOMER CONCENTRATION (custConc) ──
+  custConc: {
+    very_concentrated: {
+      diagnosis: "One customer controls 50%+ of your revenue. That's not a customer base - that's a dependency. If that client leaves, gets acquired, or changes vendors, half your business disappears overnight. You're one phone call away from a crisis.",
+      buyerView: "This is a deal-killer for most sophisticated buyers. They're essentially betting that a single relationship they don't control will hold after you leave. Most PE firms won't even make an offer. The ones who do will demand that client sign a long-term contract before close.",
+      impact: "This can reduce your multiple by 2-3x or kill the deal entirely. On a $2M EBITDA business, the difference between a diversified and very concentrated customer base can be $4-6M in enterprise value.",
+      fixTimeline: "12-18 months",
+      priority: 1,
+      category: "Customer Concentration Risk"
+    },
+    concentrated: {
+      diagnosis: "Your top client represents 25-50% of revenue. That's a significant concentration risk. You've built a business that's partially hostage to one relationship. If they renegotiate terms or leave, your EBITDA takes a massive hit.",
+      buyerView: "Buyers will flag this in due diligence and use it to negotiate a lower price or build in protections. Expect them to require customer retention guarantees or structure a portion of the deal around that client staying for 12-24 months post-close.",
+      impact: "Expect a 1-1.5x multiple reduction. Buyers will also shift more of the deal structure toward earnout provisions tied to customer retention.",
+      fixTimeline: "6-12 months",
+      priority: 2,
+      category: "Customer Concentration Risk"
+    },
+    moderate: {
+      diagnosis: "Your top client is 10-25% of revenue. There's some concentration, but it's manageable. You have a reasonable spread of customers, though losing your biggest account would still create a noticeable dip in performance.",
+      buyerView: "Buyers will note it but it won't kill the deal. They may ask about the strength of the relationship and whether contracts are in place. It's a yellow flag, not a red one.",
+      impact: "Minor impact - maybe a 0.25-0.5x reduction depending on whether contracts are in place. Fixable with a clear diversification plan.",
+      fixTimeline: "3-6 months",
+      priority: 4,
+      category: "Customer Concentration Risk"
+    },
+    diversified: {
+      diagnosis: "No single client represents more than 10% of your revenue. This is exactly where you want to be. Your revenue base is resilient - losing any one client won't significantly impact the business. You've built something durable.",
+      buyerView: "Buyers love this. A diversified customer base means predictable revenue and lower risk. This is a value accelerator, not just the absence of a problem.",
+      impact: "No negative impact. In fact, this adds 0.25-0.5x to your multiple compared to businesses with concentrated customer bases in your space.",
+      fixTimeline: "Maintain ongoing",
+      priority: 5,
+      category: "Customer Concentration Risk"
+    }
+  },
+
+  // ── EBITDA TRAJECTORY (ebitda) ──
+  ebitda: {
+    declining: {
+      diagnosis: "Your EBITDA is going down. Regardless of the reason - market shifts, rising costs, lost accounts - a buyer sees a business that's losing momentum. They don't pay premium multiples for declining trajectory. They discount for it.",
+      buyerView: "A declining EBITDA tells a buyer the best days might be behind this business. They'll either walk, apply a distress discount, or use trailing 12-month numbers to calculate a lower offer. Some will wait and come back in 6 months when your number is even lower and their leverage is even higher.",
+      impact: "A declining trajectory typically costs 1-2x on your multiple. Buyers may also use a lower EBITDA base (not your peak year) for valuation, compounding the discount.",
+      fixTimeline: "6-12 months",
+      priority: 1,
+      category: "EBITDA Trajectory"
+    },
+    stable: {
+      diagnosis: "Your EBITDA is flat. It's not declining, which is better than most, but it's not growing either. Flat EBITDA tells a buyer you've plateaued. They'll still make an offer, but they won't pay a growth premium - and they'll want to know why you've stalled.",
+      buyerView: "Buyers see a stable business as safe but not exciting. They'll value it fairly but won't compete aggressively for it. If they're a PE firm, they'll look at where they can inject growth post-acquisition - which means they'll pay you less so their returns are still attractive.",
+      impact: "You'll get market-rate multiples but no premium. In most trades and services businesses, that's the difference between 4x and 5-6x EBITDA.",
+      fixTimeline: "3-6 months",
+      priority: 3,
+      category: "EBITDA Trajectory"
+    },
+    growing: {
+      diagnosis: "Your EBITDA is growing. This is the strongest signal you can send to any buyer. Growth means the business has momentum, the market wants what you sell, and there's upside beyond just maintaining the status quo.",
+      buyerView: "Growing EBITDA is a buyer magnet. It creates competition among buyers, drives up multiples, and gives you leverage in negotiations. PE firms especially will pay a premium because they can project continued growth and show stronger returns to their investors.",
+      impact: "Growing EBITDA can add 1-2x to your multiple. On a $2M EBITDA business, that's $2-4M additional enterprise value. This is the single biggest value accelerator.",
+      fixTimeline: "Maintain ongoing",
+      priority: 5,
+      category: "EBITDA Trajectory"
+    }
+  },
+
+  // ── SOPs / DOCUMENTATION (sops) ──
+  sops: {
+    no: {
+      diagnosis: "Nothing is documented. Every process, every procedure, every 'way we do things' lives in someone's head. When those people leave - and they will after a sale - the operational knowledge walks out the door with them. You don't have a system. You have a collection of habits.",
+      buyerView: "Buyers see a business that's one resignation away from chaos. No SOPs means they'll need to invest significant time and money post-close to build what should already exist. They'll price that cost directly into a lower offer.",
+      impact: "Expect a 0.5-1x multiple reduction. Buyers will also factor in 6-12 months of operational risk during their integration plan, which further depresses the offer.",
+      fixTimeline: "6-12 months",
+      priority: 2,
+      category: "Operational Documentation (SOPs)"
+    },
+    partial: {
+      diagnosis: "You've documented some processes but not all. Key areas might be covered, but there are significant gaps. It shows intent and some operational maturity, but a buyer will still see gaps that create risk during transition.",
+      buyerView: "Buyers will give you credit for having started but will probe the gaps. They'll ask which departments lack documentation and factor in the cost of completing it. It's a moderate risk, not a deal-breaker.",
+      impact: "Minor multiple impact - about 0.25-0.5x reduction. The bigger impact is in how the deal gets structured. Better documentation means a smoother transition, which means fewer earnout provisions.",
+      fixTimeline: "3-6 months",
+      priority: 3,
+      category: "Operational Documentation (SOPs)"
+    },
+    yes_full: {
+      diagnosis: "Your operations are fully documented. Every key process has a standard operating procedure that anyone can follow. This means your business doesn't depend on institutional knowledge living in people's heads. It's in the system.",
+      buyerView: "Buyers see operational maturity. Full documentation means lower integration risk, faster onboarding of new management, and predictable operations post-close. This is a sign of a well-run business - exactly what they want to buy.",
+      impact: "No negative impact. Strong documentation can add 0.25-0.5x to your multiple and significantly improve deal structure in your favor.",
+      fixTimeline: "Maintain ongoing",
+      priority: 5,
+      category: "Operational Documentation (SOPs)"
+    }
+  },
+
+  // ── SUCCESSION PLAN (succPlan) ──
+  succPlan: {
+    no: {
+      diagnosis: "You have no succession plan. There's no one identified to take over, no timeline for transition, and no structure for what happens when you step away. Right now, if you got hit by a bus tomorrow, the business would be in serious trouble.",
+      buyerView: "Buyers see maximum transition risk. They'll want you to stay longer, they'll add earnout provisions, and they'll discount the offer because the entire transition plan needs to be built from scratch. Every month of unclear transition is a month of risk they're pricing in.",
+      impact: "Expect a 0.5-1x multiple reduction. You'll also get worse deal terms - longer required stay, more earnout, less cash at close.",
+      fixTimeline: "6-12 months",
+      priority: 2,
+      category: "Succession & Transition Plan"
+    },
+    unsure: {
+      diagnosis: "You don't know where to start on succession planning. That's honest, but it means you're further behind than most. A buyer will see this and know they're dealing with someone who hasn't thought through the transition. That gives them leverage.",
+      buyerView: "A buyer sees an owner who hasn't seriously considered life after the sale. They'll use this to push for terms that protect them - longer stay periods, heavier earnouts, and more control during transition.",
+      impact: "Similar to having no plan - expect 0.5-1x multiple reduction plus unfavorable deal structure.",
+      fixTimeline: "6-12 months",
+      priority: 2,
+      category: "Succession & Transition Plan"
+    },
+    yes_partial: {
+      diagnosis: "You've thought about succession but haven't formalized it. There are some ideas, maybe a few people in mind, but nothing documented or tested. It's a starting point, but buyers will see the gap between intent and execution.",
+      buyerView: "Buyers will probe how real your plan is. If it's just 'I've thought about it,' they'll treat it as no plan. If there's a clear next-in-line person with some responsibility already, they'll give you partial credit.",
+      impact: "Minor impact - about 0.25-0.5x reduction. The key variable is whether you can show a credible candidate who's already taking on responsibility.",
+      fixTimeline: "3-6 months",
+      priority: 3,
+      category: "Succession & Transition Plan"
+    },
+    yes_full: {
+      diagnosis: "You have a documented succession plan with identified successors, a transition timeline, and clear responsibilities. This is rare and extremely valuable. Most business owners never get here.",
+      buyerView: "Buyers see a smooth transition ahead. This dramatically reduces their risk and increases their confidence in the deal. They're buying a business that can operate without you from day one.",
+      impact: "No negative impact. A strong succession plan can improve your deal terms significantly - shorter required stay, less earnout, more cash at close.",
+      fixTimeline: "Maintain ongoing",
+      priority: 5,
+      category: "Succession & Transition Plan"
+    }
+  },
+
+  // ── FINANCIAL CLEANLINESS (finances) ──
+  finances: {
+    very_mixed: {
+      diagnosis: "Your personal and business finances are deeply intertwined. Personal cars, vacations, family expenses - they're all running through the business. This makes it nearly impossible for a buyer to determine the real profitability of the company. And if they can't see it, they won't pay for it.",
+      buyerView: "This is a due diligence nightmare. Buyers will either walk or bring in forensic accountants to untangle the mess - at your expense (reflected in a lower offer). They can't underwrite a loan or justify an investment when the numbers are unreliable.",
+      impact: "Commingled finances can reduce your multiple by 0.5-1.5x and are the #1 reason deals collapse in due diligence. Even if the deal survives, the cost of cleanup comes directly out of your proceeds.",
+      fixTimeline: "6-12 months",
+      priority: 1,
+      category: "Financial Cleanliness"
+    },
+    mixed: {
+      diagnosis: "There are personal expenses running through the business. It's common - most owners do it for tax advantages - but it creates a real problem when it's time to sell. Buyers need clean financials to calculate what the business actually earns.",
+      buyerView: "Buyers will flag every personal expense and use it to question your reported EBITDA. They'll do their own add-back calculations and they won't be generous. Expect disputes about what's a legitimate business expense vs. what's personal.",
+      impact: "Expect a 0.5-1x multiple reduction. The more time spent debating financials in due diligence, the more leverage shifts to the buyer.",
+      fixTimeline: "3-6 months",
+      priority: 2,
+      category: "Financial Cleanliness"
+    },
+    mostly: {
+      diagnosis: "Your finances are mostly clean with minor overlap. Maybe a few personal expenses find their way into the business, but the core financials tell a clear story. This is fixable quickly and shows operational discipline.",
+      buyerView: "Buyers will note the minor issues but won't use them as a significant negotiation lever. A few adjustments during due diligence and the picture will be clear. This is a normal finding, not a red flag.",
+      impact: "Minimal impact - cleanup might take a few weeks of accounting work. No meaningful multiple reduction if you clean it up before going to market.",
+      fixTimeline: "1-3 months",
+      priority: 4,
+      category: "Financial Cleanliness"
+    },
+    clean: {
+      diagnosis: "Your personal and business finances are completely separated. Clean books, clear P&L, documented add-backs. This is the standard every business should meet before going to market - and you're already there.",
+      buyerView: "Buyers can trust the numbers. Clean financials mean faster due diligence, fewer surprises, and higher confidence in the deal. This accelerates the entire process.",
+      impact: "No negative impact. Clean financials are table stakes, but meeting this standard means you avoid the 0.5-1.5x penalty that messy books create.",
+      fixTimeline: "Maintain ongoing",
+      priority: 5,
+      category: "Financial Cleanliness"
+    }
+  },
+
+  // ── TIMELINE URGENCY (timeline) ──
+  timeline: {
+    asap: {
+      diagnosis: "You want to exit within 12 months. Urgency creates leverage - for the buyer. The less time you have, the less room you have to negotiate, fix issues, or walk away from a bad deal. Every month of pressure you feel is a discount the buyer will apply.",
+      buyerView: "A buyer who knows you need to sell quickly will use that against you. They'll move slowly, introduce delays in due diligence, and know you can't afford to walk away. Urgency is the buyer's best friend and your worst enemy.",
+      impact: "Urgency without preparation typically costs 10-20% of total deal value. It also limits your buyer pool because you can't run a competitive process.",
+      fixTimeline: "Immediate - start prep now",
+      priority: 2,
+      category: "Timeline Urgency"
+    },
+    '1to3': {
+      diagnosis: "You're looking at a 1-3 year exit window. This is the ideal planning horizon. Enough time to fix real issues, build a competitive process, and approach the market from a position of strength. But only if you start now.",
+      buyerView: "A 1-3 year timeline tells a buyer you're planning, not panicking. This means you can afford to walk away from a bad deal, which shifts leverage to you. Buyers compete harder when they know you have time and options.",
+      impact: "This timeline gives you room to add 1-2x to your multiple by fixing the issues identified in this report. Time is your most valuable asset right now.",
+      fixTimeline: "Use the full window",
+      priority: 4,
+      category: "Timeline Urgency"
+    },
+    '3to5': {
+      diagnosis: "You have 3-5 years. You have the luxury of time to build this right. Every issue in this report can be addressed, systems built, team developed, and financials optimized. When you go to market, you'll go from a position of maximum strength.",
+      buyerView: "Buyers won't even be a factor yet. Use this time to make the business so attractive that when you do go to market, buyers compete for the privilege of acquiring you.",
+      impact: "With this timeline, you can realistically add 2-3x to your eventual multiple compared to selling today. The compound effect of fixing every area is massive.",
+      fixTimeline: "Build the full plan now",
+      priority: 5,
+      category: "Timeline Urgency"
+    },
+    over5: {
+      diagnosis: "Your timeline is 5+ years or undefined. You're thinking about this early, which is smart. Most owners don't think about exit readiness until it's too late. Starting now means you can build toward maximum value with zero pressure.",
+      buyerView: "Not relevant yet - but the smart move is to build a business that's always ready to sell. The best time to prepare for an exit is long before you need one.",
+      impact: "No urgency penalty. Every improvement you make now compounds over years. Starting the optimization process early is the single highest-ROI decision you can make.",
+      fixTimeline: "Build foundations now",
+      priority: 5,
+      category: "Timeline Urgency"
+    }
+  }
+};
+
+// Answer labels for email readability
+const ANSWER_LABELS = {
+  runWithout: { yes: "Yes - confidently", maybe: "Maybe - with some friction", no: "No - I am the business" },
+  custConc: { diversified: "Diversified (no client >10%)", moderate: "Moderate (top client 10-25%)", concentrated: "Concentrated (top client 25-50%)", very_concentrated: "Very concentrated (one client 50%+)" },
+  ebitda: { growing: "Growing (up 10%+ over 2 years)", stable: "Stable (flat)", declining: "Declining (down vs prior years)" },
+  sops: { yes_full: "Yes - comprehensive and current", partial: "Some - key areas only", no: "No - lives in people's heads" },
+  succPlan: { yes_full: "Yes - fully documented", yes_partial: "Partially - some ideas", no: "No plan in place", unsure: "Not sure where to start" },
+  finances: { clean: "Completely separated", mostly: "Mostly clean", mixed: "Somewhat mixed", very_mixed: "Very intertwined" },
+  timeline: { asap: "Within 12 months", '1to3': "1-3 years", '3to5': "3-5 years", over5: "5+ years or not sure" },
+  industry: { trades: "Trades/Mechanical", construction: "Construction/GC", industrial: "Industrial Services", professional: "Professional Services", healthcare: "Healthcare/Medical", facilities: "Facilities/Property", logistics: "Logistics/Distribution", tech_services: "Technology/IT Services", other: "Other Service Business" },
+  revenue: { under5: "Under $5M", '5to10': "$5M-$10M", '10to25': "$10M-$25M", '25to50': "$25M-$50M", over50: "Over $50M" },
+  age: { under5: "Under 5 years", '5to10': "5-10 years", '10to20': "10-20 years", over20: "20+ years" },
+  ownerAge: { under45: "Under 45", '45to54': "45-54", '55to64': "55-64", '65to74': "65-74", '75plus': "75+" },
+  ownership: { sole: "Sole Owner/Founder", family: "Family-Owned", partner: "Business Partners", inherited: "Inherited/2nd Gen" },
+  postExit: { clear: "Clear picture", vague: "Some ideas, nothing concrete", blank: "Blank page" },
+  fear: { low_price: "Getting a low offer", taken_advantage: "Being taken advantage of", legacy: "Losing my legacy", employees: "What happens to my employees", identity: "Who am I after this?", none: "No major fears" },
+  willingness: { fully: "Fully committed", mostly: "Mostly committed", passive: "Want someone to handle it", resistant: "Don't want to change much" },
+  knowEbitda: { yes_exact: "Yes - exact number", yes_approx: "Roughly - ballpark", no: "No - would have to look it up", unsure_what: "Not sure what EBITDA means" },
+  inbound: { yes_multiple: "Yes - multiple approaches", yes_one: "Yes - one or two", no: "No inquiries yet", not_looking: "Not actively looking" },
+  priorAdvisor: { no: "No - first time", exploring: "Interviewing advisors now", yes_good: "Yes - good experience", yes_bad: "Yes - disappointed" }
+};
+
+// ── STATE ──────────────────────────────────────────────────────────
+const answers = {};
+let currentStep = 1;
+const totalSteps = 5;
+
+// Progressive data capture
+const progressiveData = { startedAt: new Date().toISOString(), completedSections: [] };
+
+const stepLabels = [
+  'Section 1 of 5 — Your Info',
+  'Section 2 of 5 — Timeline & Exit Plan',
+  'Section 3 of 5 — Business Health',
+  'Section 4 of 5 — Financial Clarity',
+  'Section 5 of 5 — Mindset & Goals'
+];
+
+// ── OPTION CARDS ───────────────────────────────────────────────────
+function selectOption(card, field, value) {
+  const group = card.closest('.options-grid');
+  group.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  answers[field] = value;
+  // Clear error highlight when user selects
+  const fieldGroup = card.closest('.field-group');
+  if (fieldGroup) fieldGroup.classList.remove('field-error');
+  // Progressive capture
+  progressiveData[field] = value;
+  progressiveData.lastActivity = new Date().toISOString();
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────────────
+function showStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.querySelector(`.step-panel[data-step="${n}"]`);
+  if (panel) panel.classList.add('active');
+  currentStep = n;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validateStep(step) {
+  const requiredFields = {
+    1: {
+      texts: ['ownerName', 'companyName', 'email', 'phone'],
+      radios: ['industry', 'revenue', 'age']
+    },
+    2: {
+      texts: [],
+      radios: ['timeline', 'ownerAge', 'ownership', 'succPlan']
+    },
+    3: {
+      texts: [],
+      radios: ['ebitda', 'runWithout', 'sops', 'custConc']
+    },
+    4: {
+      texts: [],
+      radios: ['finances', 'knowEbitda', 'inbound', 'priorAdvisor']
+    },
+    5: {
+      texts: [],
+      radios: ['postExit', 'fear', 'willingness']
+    }
+  };
+
+  const fields = requiredFields[step];
+  if (!fields) return true;
+
+  // Clear previous error highlights
+  document.querySelectorAll('.step-panel[data-step="' + step + '"] .field-error').forEach(el => el.classList.remove('field-error'));
+
+  let firstError = null;
+
+  // Check text inputs
+  for (const id of fields.texts) {
+    const el = document.getElementById(id);
+    if (el && !el.value.trim()) {
+      el.classList.add('field-error');
+      if (!firstError) firstError = el;
+    }
+  }
+
+  // Check email format
+  if (step === 1) {
+    const emailEl = document.getElementById('email');
+    if (emailEl && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+      emailEl.classList.add('field-error');
+      if (!firstError) firstError = emailEl;
+    }
+  }
+
+  // Check radio groups - use answers object since selectOption doesn't set native checked
+  for (const name of fields.radios) {
+    if (!answers[name]) {
+      const radio = document.querySelector('input[name="' + name + '"]');
+      if (radio) {
+        const container = radio.closest('.field-group');
+        if (container) {
+          container.classList.add('field-error');
+          if (!firstError) firstError = container;
+        }
+      }
+    }
+  }
+
+  if (firstError) {
+    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Shake the button
+    const btn = document.querySelector('.step-panel[data-step="' + step + '"] .btn-next');
+    if (btn) {
+      btn.classList.add('btn-shake');
+      setTimeout(() => btn.classList.remove('btn-shake'), 600);
+    }
+    return false;
+  }
+  return true;
+}
+
+function nextStep() {
+  if (currentStep < totalSteps) {
+    // Validate before proceeding
+    if (!validateStep(currentStep)) return;
+
+    // Record section completion for progressive capture
+    if (!progressiveData.completedSections.includes(currentStep)) {
+      progressiveData.completedSections.push(currentStep);
+    }
+    // Capture text inputs from step 1
+    if (currentStep === 1) {
+      answers.ownerName = document.getElementById('ownerName').value;
+      answers.companyName = document.getElementById('companyName').value;
+      answers.email = document.getElementById('email').value;
+      answers.phone = document.getElementById('phone').value;
+      progressiveData.ownerName = answers.ownerName;
+      progressiveData.email = answers.email;
+      progressiveData.phone = answers.phone;
+      progressiveData.companyName = answers.companyName;
+    }
+    showStep(currentStep + 1);
+  }
+}
+
+function prevStep() {
+  if (currentStep > 1) showStep(currentStep - 1);
+}
+
+function updateProgress() {
+  const pct = ((currentStep - 1) / totalSteps) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('stepLabel').textContent = stepLabels[currentStep - 1] || 'Assessment Complete';
+  document.getElementById('stepCount').textContent = `Step ${currentStep} / ${totalSteps}`;
+}
+
+// ── SCORE CALCULATION (RISK: higher = more risk) ───────────────────
+function calculateRisk() {
+  let total = 0;
+  const breakdown = [];
+  const insightsUsed = [];
+
+  // ── OWNER DEPENDENCY (0-25)
+  const rwMap = { no: 25, maybe: 14, yes: 2 };
+  const rwScore = rwMap[answers.runWithout] ?? 12;
+  const rwColor = rwScore >= 18 ? 'red' : rwScore >= 10 ? 'amber' : 'green';
+  const rwInsight = INSIGHTS.runWithout[answers.runWithout] || null;
+  breakdown.push({ label: 'Owner / Key-Man Dependency', score: rwScore, max: 25, color: rwColor, insight: rwInsight, key: 'runWithout' });
+  if (rwInsight) insightsUsed.push(rwInsight);
+  total += rwScore;
+
+  // ── CUSTOMER CONCENTRATION (0-20)
+  const ccMap = { very_concentrated: 20, concentrated: 13, moderate: 6, diversified: 0 };
+  const ccScore = ccMap[answers.custConc] ?? 10;
+  const ccColor = ccScore >= 14 ? 'red' : ccScore >= 7 ? 'amber' : 'green';
+  const ccInsight = INSIGHTS.custConc[answers.custConc] || null;
+  breakdown.push({ label: 'Customer Concentration Risk', score: ccScore, max: 20, color: ccColor, insight: ccInsight, key: 'custConc' });
+  if (ccInsight) insightsUsed.push(ccInsight);
+  total += ccScore;
+
+  // ── EBITDA TREND (0-15)
+  const eMap = { declining: 15, stable: 6, growing: 0 };
+  const eScore = eMap[answers.ebitda] ?? 8;
+  const eColor = eScore >= 12 ? 'red' : eScore >= 5 ? 'amber' : 'green';
+  const eInsight = INSIGHTS.ebitda[answers.ebitda] || null;
+  breakdown.push({ label: 'EBITDA Trajectory', score: eScore, max: 15, color: eColor, insight: eInsight, key: 'ebitda' });
+  if (eInsight) insightsUsed.push(eInsight);
+  total += eScore;
+
+  // ── SOPs (0-15)
+  const sopMap = { no: 15, partial: 8, yes_full: 1 };
+  const sopScore = sopMap[answers.sops] ?? 8;
+  const sopColor = sopScore >= 12 ? 'red' : sopScore >= 6 ? 'amber' : 'green';
+  const sopInsight = INSIGHTS.sops[answers.sops] || null;
+  breakdown.push({ label: 'Operational Documentation (SOPs)', score: sopScore, max: 15, color: sopColor, insight: sopInsight, key: 'sops' });
+  if (sopInsight) insightsUsed.push(sopInsight);
+  total += sopScore;
+
+  // ── SUCCESSION PLAN (0-10)
+  const spMap = { no: 10, unsure: 9, yes_partial: 4, yes_full: 0 };
+  const spScore = spMap[answers.succPlan] ?? 5;
+  const spColor = spScore >= 8 ? 'red' : spScore >= 4 ? 'amber' : 'green';
+  const spInsight = INSIGHTS.succPlan[answers.succPlan] || null;
+  breakdown.push({ label: 'Succession & Transition Plan', score: spScore, max: 10, color: spColor, insight: spInsight, key: 'succPlan' });
+  if (spInsight) insightsUsed.push(spInsight);
+  total += spScore;
+
+  // ── FINANCIAL CLARITY (0-10)
+  const finMap = { very_mixed: 10, mixed: 7, mostly: 3, clean: 0 };
+  const finScore = finMap[answers.finances] ?? 5;
+  const finColor = finScore >= 8 ? 'red' : finScore >= 4 ? 'amber' : 'green';
+  const finInsight = INSIGHTS.finances[answers.finances] || null;
+  breakdown.push({ label: 'Financial Cleanliness', score: finScore, max: 10, color: finColor, insight: finInsight, key: 'finances' });
+  if (finInsight) insightsUsed.push(finInsight);
+  total += finScore;
+
+  // ── TIMELINE URGENCY (0-5)
+  const tlMap = { asap: 5, '1to3': 3, '3to5': 1, over5: 0 };
+  const tlScore = tlMap[answers.timeline] ?? 3;
+  const tlColor = tlScore >= 4 ? 'amber' : 'green';
+  const tlInsight = INSIGHTS.timeline[answers.timeline] || null;
+  breakdown.push({ label: 'Timeline Urgency', score: tlScore, max: 5, color: tlColor, insight: tlInsight, key: 'timeline' });
+  if (tlInsight) insightsUsed.push(tlInsight);
+  total += tlScore;
+
+  // Sort insights by priority for risk matrix
+  const sortedInsights = insightsUsed.filter(i => i.priority <= 3).sort((a, b) => a.priority - b.priority);
+
+  return { total, breakdown, sortedInsights, allInsights: insightsUsed };
+}
+
+// ── TEV CALCULATION ────────────────────────────────────────────────
+function calculateTEV(total) {
+  if (total <= 15) return { pct: '90-100%', note: 'Your business is close to fully transferable. Minor optimizations could push you to maximum value.' };
+  if (total <= 30) return { pct: '70-85%', note: 'You\'re leaving 15-30% of your enterprise value on the table. The gaps are fixable, but they need attention before you go to market.' };
+  if (total <= 50) return { pct: '45-65%', note: 'A buyer would discount your business by 35-55% from its potential value. That\'s real money - on a $10M enterprise, you\'re walking away from $3.5-5.5M.' };
+  if (total <= 70) return { pct: '25-40%', note: 'You\'d capture less than half of what this business could be worth. Going to market now would be one of the most expensive decisions you ever make.' };
+  return { pct: '10-20%', note: 'In its current state, a buyer would pay a fraction of what this business is worth - if they make an offer at all. The gap between where you are and where you need to be is significant, but it\'s fixable.' };
+}
+
+// ── EMAIL SIGNATURE ────────────────────────────────────────────────
+const arenaSignature = `
+<div style="margin-top:30px;padding-top:20px;border-top:1px solid rgba(201,168,76,0.12);">
+  <p style="color:#c9a84c;font-weight:700;font-size:14px;margin:0 0 4px;">Jean Hardy</p>
+  <p style="color:#9a9590;font-size:12px;margin:0 0 2px;">Managing Partner, The Arena Partners</p>
+  <p style="color:#6b6560;font-size:11px;margin:0 0 12px;">Arena Business Advisors, LLC</p>
+  <p style="color:#6b6560;font-size:11px;margin:0;">3555 Timmons Lane, Suite 1140, Houston, TX 77027</p>
+</div>`;
+
+// ── SUBMIT ─────────────────────────────────────────────────────────
+function submitForm() {
+  // Capture final text fields
+  answers.ownerName = document.getElementById('ownerName').value;
+  answers.companyName = document.getElementById('companyName').value;
+  answers.email = document.getElementById('email').value;
+  answers.phone = document.getElementById('phone').value;
+  answers.successNote = document.getElementById('successNote').value;
+  answers.extraNote = document.getElementById('extraNote').value;
+
+  const { total, breakdown, sortedInsights, allInsights } = calculateRisk();
+  const tev = calculateTEV(total);
+
+  // Hide form steps, show result
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('stepLabel').textContent = 'Your Exit Diagnostic Report';
+  document.getElementById('stepCount').textContent = '';
+
+  const panel = document.getElementById('resultPanel');
+  panel.style.display = 'block';
+  setTimeout(() => panel.classList.add('active'), 10);
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Animate score
+  const scoreEl = document.getElementById('scoreNum');
+  let n = 0;
+  const interval = setInterval(() => {
+    n = Math.min(n + 2, total);
+    scoreEl.textContent = n;
+    if (n >= total) clearInterval(interval);
+  }, 18);
+
+  // Determine risk band
+  let band, headerClass, badgeClass, badgeText, title, sub;
+  const name = answers.ownerName ? answers.ownerName.split(' ')[0] : 'there';
+  const company = answers.companyName || 'your business';
+
+  if (total <= 20) {
+    band = 'low'; headerClass = badgeClass = 'low';
+    badgeText = '● Low Risk — Transferable & Exit Ready';
+    title = `${name}, your business is in <em>stronger shape</em> than most.`;
+    sub = `With a risk score of ${total}/100, your business is well-positioned for a premium exit. Your Transferable Enterprise Value is high - you've done the hard work. Our call will focus on optimization and maximizing your multiple.`;
+  } else if (total <= 45) {
+    band = 'moderate'; headerClass = badgeClass = 'moderate';
+    badgeText = '◐ Moderate Risk — Not Yet Transferable';
+    title = `${name}, you have <em>real risk factors</em> a buyer will use against you.`;
+    sub = `With a risk score of ${total}/100, your Transferable Enterprise Value is significantly below your full enterprise value. The issues below are exactly what buyers use to justify a lower offer. Each one is fixable - our call will map the timeline.`;
+  } else if (total <= 70) {
+    band = 'high'; headerClass = badgeClass = 'high';
+    badgeText = '▲ High Risk — Significant Transferability Gaps';
+    title = `${name}, several factors will <em>significantly discount your multiple</em> — or kill the deal.`;
+    sub = `With a risk score of ${total}/100, going to market today would leave serious money on the table. Buyers will exploit every gap identified below. The Transferable Exit System addresses each one. Our call shows you how.`;
+  } else {
+    band = 'critical'; headerClass = badgeClass = 'critical';
+    badgeText = '✕ Critical Risk — Not Transferable';
+    title = `${name}, in its current state, this business <em>will struggle to sell</em> — or sell far below value.`;
+    sub = `With a risk score of ${total}/100, buyers will either walk away or structure a deal that protects them at your expense. This is not permanent - the Transferable Exit System has turned businesses like yours around. Our call is the first step.`;
+  }
+
+  document.getElementById('resultHeader').className = 'result-header ' + headerClass;
+  const badge = document.getElementById('resultBadge');
+  badge.className = 'result-badge ' + badgeClass;
+  badge.textContent = badgeText;
+  document.getElementById('resultTitle').innerHTML = title;
+  document.getElementById('resultSub').textContent = sub;
+
+  // Confirmation text
+  document.getElementById('confirmText').innerHTML = `Your diagnostic report is ready and your advisor has received a detailed copy. <strong>Come prepared to discuss these risk areas directly.</strong> A full copy has been sent to ${answers.email || 'your email'}.`;
+
+  // ── Section A: Executive Summary ──
+  const worstAreas = breakdown.filter(b => b.insight && b.insight.priority <= 2).sort((a, b) => b.score/b.max - a.score/a.max);
+  const worstNames = worstAreas.slice(0, 2).map(b => b.label.toLowerCase());
+  let summaryText = `<p><strong>${answers.ownerName || 'Assessment'} — ${company}</strong></p>`;
+  summaryText += `<p style="margin-top:10px;">Your overall Exit Risk Score is <strong>${total}/100</strong> (${band} risk). `;
+  if (worstNames.length >= 2) {
+    summaryText += `Your biggest vulnerabilities are in <strong>${worstNames[0]}</strong> and <strong>${worstNames[1]}</strong>. `;
+  } else if (worstNames.length === 1) {
+    summaryText += `Your primary vulnerability is in <strong>${worstNames[0]}</strong>. `;
+  }
+  if (total > 45) {
+    summaryText += `If you went to market today, buyers would exploit these gaps to discount your offer significantly - or walk away entirely. Every issue identified below is fixable with the right plan and timeline.</p>`;
+  } else if (total > 20) {
+    summaryText += `These areas will come up in due diligence and give buyers negotiation leverage. Addressing them before going to market is the difference between a good deal and a great one.</p>`;
+  } else {
+    summaryText += `You've built a business that's well-positioned for a strong exit. Our focus will be optimization and making sure you capture maximum value.</p>`;
+  }
+  document.getElementById('execSummary').innerHTML = summaryText;
+
+  // TEV
+  document.getElementById('tevValue').textContent = tev.pct;
+  document.getElementById('tevNote').textContent = tev.note;
+
+  // ── Section B: Priority Risk Matrix ──
+  const topRisks = breakdown.filter(b => b.insight && b.insight.priority <= 3 && b.score / b.max > 0.3)
+    .sort((a, b) => a.insight.priority - b.insight.priority || (b.score/b.max) - (a.score/a.max))
+    .slice(0, 3);
+
+  const matrixEl = document.getElementById('riskMatrix');
+  if (topRisks.length > 0) {
+    matrixEl.innerHTML = topRisks.map((r, i) => {
+      const borderClass = r.color === 'red' ? '' : r.color === 'amber' ? 'amber-border' : 'green-border';
+      return `
+      <div class="risk-matrix-card ${borderClass}">
+        <div class="risk-matrix-rank">Risk #${i+1} — Priority ${r.insight.priority}</div>
+        <div class="risk-matrix-title">${r.label}</div>
+        <div class="risk-matrix-body">${r.insight.diagnosis}</div>
+        <div class="risk-matrix-buyer">"${r.insight.buyerView}"</div>
+        <div style="margin-top:10px;font-size:13px;color:var(--red);font-weight:600;">${r.insight.impact}</div>
+        <div class="risk-matrix-meta" style="margin-top:10px;">
+          <div class="risk-matrix-meta-item">Fix: ${r.insight.fixTimeline}</div>
+          <div class="risk-matrix-meta-item">Score: ${r.score}/${r.max}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    matrixEl.innerHTML = `<div class="risk-matrix-card green-border">
+      <div class="risk-matrix-rank">No Critical Risks Identified</div>
+      <div class="risk-matrix-title">Strong Baseline</div>
+      <div class="risk-matrix-body">Your business doesn't have any critical risk factors that would significantly discount your multiple. Our call will focus on optimization and positioning for maximum value.</div>
+    </div>`;
+  }
+
+  // ── Section C: Full Category Breakdown ──
+  const breakdownEl = document.getElementById('scoreBreakdown');
+  breakdownEl.innerHTML = breakdown.map(b => {
+    const insightClass = b.color === 'red' ? 'red-insight' : b.color === 'amber' ? 'amber-insight' : 'green-insight';
+    const insightText = b.insight ? b.insight.diagnosis : '';
+    return `
+    <div class="score-row">
+      <div class="score-row-top">
+        <div class="score-row-label">${b.label}</div>
+        <div class="score-row-bar-bg"><div class="score-row-bar-fill ${b.color}" style="width:0%" data-pct="${Math.round((b.score/b.max)*100)}"></div></div>
+        <div class="score-row-pts">${b.score} / ${b.max}</div>
+      </div>
+      ${insightText ? `<div class="score-row-insight ${insightClass}">${insightText}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  setTimeout(() => {
+    document.querySelectorAll('.score-row-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.pct + '%';
+    });
+  }, 200);
+
+  // ── Section D: Actionable Roadmap ──
+  const roadmapEl = document.getElementById('roadmap');
+  const phase1 = allInsights.filter(i => i.priority <= 2);
+  const phase2 = allInsights.filter(i => i.priority >= 3 && i.priority <= 4);
+  const phase3 = allInsights.filter(i => i.priority >= 5);
+
+  let roadmapHtml = '';
+  if (phase1.length > 0) {
+    roadmapHtml += `<div class="roadmap-phase">
+      <div class="roadmap-phase-header">
+        <div class="roadmap-phase-dot urgent"></div>
+        <div class="roadmap-phase-title">Fix in First 90 Days — Critical</div>
+      </div>
+      ${phase1.map(i => `<div class="roadmap-item"><span class="roadmap-item-arrow">→</span><div><strong>${i.category}:</strong> ${i.impact} <em style="color:var(--muted);">(${i.fixTimeline})</em></div></div>`).join('')}
+    </div>`;
+  }
+  if (phase2.length > 0) {
+    roadmapHtml += `<div class="roadmap-phase">
+      <div class="roadmap-phase-header">
+        <div class="roadmap-phase-dot mid"></div>
+        <div class="roadmap-phase-title">Fix in 6-12 Months — Important</div>
+      </div>
+      ${phase2.map(i => `<div class="roadmap-item"><span class="roadmap-item-arrow">→</span><div><strong>${i.category}:</strong> ${i.impact} <em style="color:var(--muted);">(${i.fixTimeline})</em></div></div>`).join('')}
+    </div>`;
+  }
+  if (phase3.length > 0) {
+    roadmapHtml += `<div class="roadmap-phase">
+      <div class="roadmap-phase-header">
+        <div class="roadmap-phase-dot ongoing"></div>
+        <div class="roadmap-phase-title">Optimize Ongoing — Maintain & Improve</div>
+      </div>
+      ${phase3.map(i => `<div class="roadmap-item"><span class="roadmap-item-arrow">→</span><div><strong>${i.category}:</strong> ${i.impact} <em style="color:var(--muted);">(${i.fixTimeline})</em></div></div>`).join('')}
+    </div>`;
+  }
+  if (!roadmapHtml) {
+    roadmapHtml = `<div class="roadmap-phase"><div class="roadmap-item"><span class="roadmap-item-arrow">→</span><div>Your business is in strong shape. Our call will focus on fine-tuning and maximizing your exit value.</div></div></div>`;
+  }
+  roadmapEl.innerHTML = roadmapHtml;
+
+  // ── Section E: Next Step CTA ──
+  const ctaEl = document.getElementById('ctaSection');
+  ctaEl.innerHTML = `
+    <div class="cta-box">
+      <h3>Your Next Step</h3>
+      <p>You now know exactly where your risks are. The question is what you do about them.</p>
+      <a href="https://api.leadconnectorhq.com/widget/booking/ZMY7F82g3SOZnYBn3pod" class="btn-cta">Book Your Diagnostic Call →</a>
+      <div class="cta-quote">"I've reviewed hundreds of businesses like yours. On our call, I'll walk you through exactly how to close the gaps identified above." — Jean Hardy</div>
+    </div>`;
+
+  // ══════════════════════════════════════════════════════════════════
+  // GHL INTEGRATION
+  // ══════════════════════════════════════════════════════════════════
+  const ghlHeaders = {
+    'Authorization': 'Bearer pit-8db4722a-0d8f-41c0-8cc0-1d17de5bff3d',
+    'Version': '2021-07-28',
+    'Content-Type': 'application/json'
+  };
+
+  // Custom field IDs
+  const customFields = {
+    exit_risk_score: 'UGDdOvCh4rqnCwrDMYG0',
+    exit_risk_level: 'sZMTEQkrdzHNKODv4otC',
+    owner_dependency: 'YtqB8aHd10eaM5wIrWc7',
+    customer_concentration: 'gODqxl5HUT3vPjrPnhbK',
+    ebitda_trajectory: 'PMrUhkTJky4qk5fg6m9N',
+    sop_documentation: 'CDoJWOzF3IfI2s4L37kH',
+    succession_plan: 'vp1gwLSOomfjnW6u2tEa',
+    financial_cleanliness: '61eMZWfBxxe5ds8DBAUF',
+    exit_timeline: '1SgERknyDZ4DnN42hJZR',
+    assessment_completed: 'QSlNyFOnxsFJf2o1LGKD'
+  };
+
+  // Build custom field values from breakdown
+  const scoreMap = {};
+  breakdown.forEach(b => {
+    if (b.label.includes('Owner')) scoreMap.owner_dependency = b.score;
+    if (b.label.includes('Customer')) scoreMap.customer_concentration = b.score;
+    if (b.label.includes('EBITDA')) scoreMap.ebitda_trajectory = b.score;
+    if (b.label.includes('Documentation') || b.label.includes('SOP')) scoreMap.sop_documentation = b.score;
+    if (b.label.includes('Succession')) scoreMap.succession_plan = b.score;
+    if (b.label.includes('Financial')) scoreMap.financial_cleanliness = b.score;
+    if (b.label.includes('Timeline')) scoreMap.exit_timeline = b.score;
+  });
+
+  const customFieldData = [
+    { id: customFields.exit_risk_score, value: total },
+    { id: customFields.exit_risk_level, value: band.charAt(0).toUpperCase() + band.slice(1) + ' Risk (' + total + '/100)' },
+    { id: customFields.owner_dependency, value: scoreMap.owner_dependency || 0 },
+    { id: customFields.customer_concentration, value: scoreMap.customer_concentration || 0 },
+    { id: customFields.ebitda_trajectory, value: scoreMap.ebitda_trajectory || 0 },
+    { id: customFields.sop_documentation, value: scoreMap.sop_documentation || 0 },
+    { id: customFields.succession_plan, value: scoreMap.succession_plan || 0 },
+    { id: customFields.financial_cleanliness, value: scoreMap.financial_cleanliness || 0 },
+    { id: customFields.exit_timeline, value: scoreMap.exit_timeline || 0 },
+    { id: customFields.assessment_completed, value: new Date().toISOString().split('T')[0] }
+  ];
+
+  // Helper: get readable answer label
+  function getLabel(field) {
+    const val = answers[field];
+    if (!val) return 'Not answered';
+    return (ANSWER_LABELS[field] && ANSWER_LABELS[field][val]) || val;
+  }
+
+  // Upsert contact with assessment data + tag
+  if (answers.email) {
+    const nameParts = (answers.ownerName || '').split(' ');
+    fetch('https://services.leadconnectorhq.com/contacts/upsert', {
+      method: 'POST',
+      headers: ghlHeaders,
+      body: JSON.stringify({
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+        email: answers.email,
+        companyName: answers.companyName || '',
+        locationId: 'LSvdgiiT7ManCRx9CCwE',
+        tags: ['assessment-complete'],
+        customFields: customFieldData
+      })
+    })
+    .then(r => r.json())
+    .then(data => {
+      const contactId = data.contact ? data.contact.id : data.contactId;
+      if (!contactId) return;
+
+      // Add detailed note
+      const noteBody = `EXIT RISK ASSESSMENT COMPLETED\n` +
+        `Score: ${total}/100 — ${band.toUpperCase()} RISK\n` +
+        `TEV: ${tev.pct}\n\n` +
+        `ANSWERS:\n` +
+        `  Industry: ${getLabel('industry')}\n` +
+        `  Revenue: ${getLabel('revenue')}\n` +
+        `  Business Age: ${getLabel('age')}\n` +
+        `  Owner Age: ${getLabel('ownerAge')}\n` +
+        `  Ownership: ${getLabel('ownership')}\n` +
+        `  Timeline: ${getLabel('timeline')}\n` +
+        `  Succession Plan: ${getLabel('succPlan')}\n` +
+        `  EBITDA Trend: ${getLabel('ebitda')}\n` +
+        `  Run Without Owner: ${getLabel('runWithout')}\n` +
+        `  SOPs: ${getLabel('sops')}\n` +
+        `  Customer Concentration: ${getLabel('custConc')}\n` +
+        `  Financial Cleanliness: ${getLabel('finances')}\n` +
+        `  Know EBITDA: ${getLabel('knowEbitda')}\n` +
+        `  Inbound Interest: ${getLabel('inbound')}\n` +
+        `  Prior Advisor: ${getLabel('priorAdvisor')}\n` +
+        `  Post-Exit Vision: ${getLabel('postExit')}\n` +
+        `  Biggest Fear: ${getLabel('fear')}\n` +
+        `  Commitment Level: ${getLabel('willingness')}\n\n` +
+        `BREAKDOWN:\n` +
+        breakdown.map(b => `  ${b.label}: ${b.score}/${b.max} (${b.color})`).join('\n') + '\n\n' +
+        `Success: ${answers.successNote || 'None'}\n` +
+        `Extra Notes: ${answers.extraNote || 'None'}`;
+
+      fetch('https://services.leadconnectorhq.com/contacts/' + contactId + '/notes', {
+        method: 'POST',
+        headers: ghlHeaders,
+        body: JSON.stringify({ body: noteBody })
+      });
+
+      // ── ENHANCED EMAIL TO LEAD ──
+      const leadBreakdownHtml = breakdown.map(b => {
+        const barColor = b.color === 'red' ? '#c44b3f' : b.color === 'amber' ? '#d4a43b' : '#4a9e6e';
+        const insightHtml = b.insight ? `<p style="color:#9a9590;font-size:12px;line-height:1.6;margin:8px 0 0;padding-left:12px;border-left:2px solid ${barColor};">${b.insight.diagnosis}</p>` : '';
+        return `
+        <div style="margin:14px 0;padding:14px 16px;background:#161616;border-radius:8px;border-left:3px solid ${barColor};">
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:#f5f0e8;font-weight:600;font-size:14px;">${b.label}</span>
+            <span style="color:#c9a84c;font-weight:700;font-size:14px;">${b.score}/${b.max}</span>
+          </div>
+          ${insightHtml}
+        </div>`;
+      }).join('');
+
+      const topRiskHtml = topRisks.length > 0 ? `
+        <div style="margin:24px 0;">
+          <p style="color:#c9a84c;font-weight:700;font-size:16px;margin-bottom:12px;">Your Top Risks:</p>
+          ${topRisks.map((r, i) => `
+            <div style="background:#161616;border:1px solid rgba(196,75,63,0.2);border-radius:8px;padding:16px;margin:10px 0;">
+              <p style="color:#fb923c;font-weight:700;margin:0 0 6px;">Risk #${i+1}: ${r.label}</p>
+              <p style="color:#9a9590;font-size:13px;line-height:1.6;margin:0 0 6px;">${r.insight.diagnosis}</p>
+              <p style="color:#c44b3f;font-size:13px;font-weight:600;margin:0;">${r.insight.impact}</p>
+              <p style="color:#6b6560;font-size:11px;margin:6px 0 0;">Fix timeline: ${r.insight.fixTimeline}</p>
+            </div>`).join('')}
+        </div>` : '';
+
+      const roadmapEmailHtml = (() => {
+        let html = '<div style="margin:24px 0;"><p style="color:#c9a84c;font-weight:700;font-size:16px;margin-bottom:12px;">Your Roadmap:</p>';
+        if (phase1.length > 0) {
+          html += `<p style="color:#c44b3f;font-weight:600;font-size:13px;margin:12px 0 6px;">⚡ Fix in First 90 Days:</p>`;
+          phase1.forEach(i => { html += `<p style="color:#9a9590;font-size:12px;margin:4px 0;padding-left:12px;">→ ${i.category}: ${i.impact}</p>`; });
+        }
+        if (phase2.length > 0) {
+          html += `<p style="color:#d4a43b;font-weight:600;font-size:13px;margin:12px 0 6px;">📋 Fix in 6-12 Months:</p>`;
+          phase2.forEach(i => { html += `<p style="color:#9a9590;font-size:12px;margin:4px 0;padding-left:12px;">→ ${i.category}: ${i.impact}</p>`; });
+        }
+        if (phase3.length > 0) {
+          html += `<p style="color:#4a9e6e;font-weight:600;font-size:13px;margin:12px 0 6px;">✓ Optimize Ongoing:</p>`;
+          phase3.forEach(i => { html += `<p style="color:#9a9590;font-size:12px;margin:4px 0;padding-left:12px;">→ ${i.category}: ${i.impact}</p>`; });
+        }
+        html += '</div>';
+        return html;
+      })();
+
+      const leadResultHtml = `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0a0a0a;color:#f5f0e8;padding:40px;">
+        <div style="text-align:center;margin-bottom:30px;">
+          <h1 style="font-family:Georgia,serif;color:#c9a84c;font-size:24px;margin:0;">Your Exit Diagnostic Report</h1>
+          <p style="color:#9a9590;margin-top:8px;">The Arena Partners — Transferable Exit System™</p>
+        </div>
+        <p style="font-size:16px;line-height:1.6;">Hi ${name},</p>
+        <p style="font-size:14px;line-height:1.7;color:#9a9590;">Here's your complete Exit Diagnostic Report for <strong style="color:#f5f0e8;">${company}</strong>.</p>
+        <div style="text-align:center;margin:30px 0;padding:30px;background:#161616;border:1px solid rgba(201,168,76,0.15);border-radius:12px;">
+          <div style="font-family:Georgia,serif;font-size:48px;font-weight:800;color:#c9a84c;">${total}<span style="font-size:24px;color:#6b6560;">/100</span></div>
+          <div style="font-size:14px;color:#9a9590;margin-top:8px;text-transform:uppercase;letter-spacing:2px;">${band} risk</div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(201,168,76,0.1);">
+            <div style="font-size:11px;color:#6b6560;text-transform:uppercase;letter-spacing:1px;">Transferable Enterprise Value</div>
+            <div style="font-family:Georgia,serif;font-size:28px;font-weight:800;color:#fff;margin-top:4px;">${tev.pct}</div>
+            <div style="font-size:11px;color:#9a9590;margin-top:4px;">${tev.note}</div>
+          </div>
+        </div>
+        ${topRiskHtml}
+        <div style="margin:24px 0;">
+          <p style="color:#c9a84c;font-weight:700;font-size:16px;margin-bottom:8px;">Full Breakdown:</p>
+          ${leadBreakdownHtml}
+        </div>
+        ${roadmapEmailHtml}
+        <div style="text-align:center;margin:30px 0;padding:24px;background:#161616;border:1px solid rgba(201,168,76,0.15);border-radius:8px;">
+          <p style="color:#f5f0e8;font-size:15px;font-weight:600;margin:0 0 8px;">Ready to Close These Gaps?</p>
+          <p style="color:#9a9590;font-size:13px;line-height:1.6;margin:0 0 16px;">Your advisor has this report and will walk you through exactly how to address each risk area.</p>
+          <a href="https://api.leadconnectorhq.com/widget/booking/ZMY7F82g3SOZnYBn3pod" style="display:inline-block;background:#c9a84c;color:#0a0a0a;font-weight:700;padding:12px 28px;text-decoration:none;text-transform:uppercase;font-size:12px;letter-spacing:1px;">Book Your Diagnostic Call →</a>
+        </div>
+        <p style="font-style:italic;color:#c9a84c;font-size:13px;line-height:1.6;text-align:center;margin:20px 0;">"I've reviewed hundreds of businesses like yours. On our call, I'll walk you through exactly how to close the gaps identified above." — Jean Hardy</p>
+        ${arenaSignature}
+      </div>`;
+
+      fetch('https://services.leadconnectorhq.com/conversations/messages', {
+        method: 'POST',
+        headers: ghlHeaders,
+        body: JSON.stringify({
+          type: 'Email',
+          contactId: contactId,
+          subject: 'Your Exit Diagnostic Report — ' + (answers.companyName || 'Assessment Results'),
+          emailFrom: 'The Arena Partners <support@thearenapartners.com>',
+          html: leadResultHtml
+        })
+      });
+
+      // ── ENHANCED EMAIL TO JEAN ──
+      fetch('https://services.leadconnectorhq.com/contacts/upsert', {
+        method: 'POST',
+        headers: ghlHeaders,
+        body: JSON.stringify({
+          firstName: 'Jean',
+          lastName: 'Hardy',
+          email: 'jean@eng2.ca',
+          locationId: 'LSvdgiiT7ManCRx9CCwE',
+          tags: ['internal-notify'],
+          source: 'System'
+        })
+      }).then(r => r.json()).then(jd => {
+        const jeanId = jd.contact ? jd.contact.id : jd.contactId;
+        if (!jeanId) return;
+
+        // Build priority list for call discussion
+        const priorityList = breakdown
+          .filter(b => b.insight && b.insight.priority <= 3)
+          .sort((a, b) => a.insight.priority - b.insight.priority)
+          .map((b, i) => `<tr>
+            <td style="padding:8px 12px;border-bottom:1px solid rgba(201,168,76,0.1);color:#fb923c;font-weight:700;">#${i+1}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid rgba(201,168,76,0.1);color:#f5f0e8;">${b.label}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid rgba(201,168,76,0.1);color:#c44b3f;">${b.score}/${b.max}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid rgba(201,168,76,0.1);color:#9a9590;">${b.insight.fixTimeline}</td>
+          </tr>`).join('');
+
+        // Build full answers section
+        const allAnswersHtml = [
+          { section: 'PROFILE', items: [
+            ['Industry', getLabel('industry')],
+            ['Revenue', getLabel('revenue')],
+            ['Business Age', getLabel('age')],
+            ['Owner Age', getLabel('ownerAge')],
+            ['Ownership', getLabel('ownership')]
+          ]},
+          { section: 'TIMELINE & SUCCESSION', items: [
+            ['Exit Timeline', getLabel('timeline')],
+            ['Succession Plan', getLabel('succPlan')]
+          ]},
+          { section: 'BUSINESS HEALTH', items: [
+            ['EBITDA Trend', getLabel('ebitda')],
+            ['Run Without Owner', getLabel('runWithout')],
+            ['SOPs', getLabel('sops')],
+            ['Customer Concentration', getLabel('custConc')]
+          ]},
+          { section: 'FINANCIAL', items: [
+            ['Financial Cleanliness', getLabel('finances')],
+            ['Knows EBITDA', getLabel('knowEbitda')],
+            ['Inbound Interest', getLabel('inbound')],
+            ['Prior Advisor', getLabel('priorAdvisor')]
+          ]},
+          { section: 'MINDSET', items: [
+            ['Post-Exit Vision', getLabel('postExit')],
+            ['Biggest Fear', getLabel('fear')],
+            ['Commitment Level', getLabel('willingness')]
+          ]}
+        ].map(s => `
+          <p style="color:#c9a84c;font-weight:700;font-size:12px;letter-spacing:1px;margin:16px 0 6px;">${s.section}</p>
+          ${s.items.map(([k, v]) => `<p style="margin:3px 0;font-size:13px;"><span style="color:#6b6560;">${k}:</span> <span style="color:#f5f0e8;">${v}</span></p>`).join('')}
+        `).join('');
+
+        // Build insights for each scored answer
+        const insightsForJeanHtml = breakdown.filter(b => b.insight).map(b => {
+          const color = b.color === 'red' ? '#c44b3f' : b.color === 'amber' ? '#d4a43b' : '#4a9e6e';
+          return `
+          <div style="margin:10px 0;padding:12px 16px;background:#161616;border-left:3px solid ${color};border-radius:4px;">
+            <p style="color:#f5f0e8;font-weight:600;margin:0 0 4px;">${b.label} (${b.score}/${b.max})</p>
+            <p style="color:#9a9590;font-size:12px;line-height:1.5;margin:0 0 4px;">${b.insight.diagnosis}</p>
+            <p style="color:${color};font-size:12px;font-weight:600;margin:0;">${b.insight.impact}</p>
+          </div>`;
+        }).join('');
+
+        const repHtml = `
+        <div style="font-family:Arial,sans-serif;max-width:640px;padding:30px;background:#0a0a0a;color:#f5f0e8;">
+          <h2 style="color:#c9a84c;margin:0 0 4px;">Exit Assessment: ${answers.ownerName || 'Unknown'}</h2>
+          <p style="color:#6b6560;font-size:12px;margin:0 0 20px;">Completed ${new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'})} at ${new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'})}</p>
+
+          <div style="background:#161616;border:1px solid rgba(201,168,76,0.15);border-radius:8px;padding:20px;margin:16px 0;">
+            <table style="width:100%;border-collapse:collapse;">
+              <tr><td style="color:#6b6560;padding:4px 0;">Name</td><td style="color:#f5f0e8;font-weight:600;">${answers.ownerName || 'N/A'}</td></tr>
+              <tr><td style="color:#6b6560;padding:4px 0;">Email</td><td style="color:#f5f0e8;">${answers.email || 'N/A'}</td></tr>
+              <tr><td style="color:#6b6560;padding:4px 0;">Phone</td><td style="color:#f5f0e8;">${answers.phone || 'N/A'}</td></tr>
+              <tr><td style="color:#6b6560;padding:4px 0;">Company</td><td style="color:#f5f0e8;font-weight:600;">${answers.companyName || 'N/A'}</td></tr>
+              <tr><td style="color:#6b6560;padding:4px 0;">Score</td><td><span style="font-size:24px;font-weight:800;color:#c9a84c;">${total}/100</span> <span style="color:#fb923c;font-weight:600;">${band.toUpperCase()} RISK</span></td></tr>
+              <tr><td style="color:#6b6560;padding:4px 0;">TEV</td><td style="color:#fff;font-weight:700;font-size:18px;">${tev.pct}</td></tr>
+            </table>
+          </div>
+
+          <div style="background:rgba(196,75,63,0.1);border:1px solid rgba(196,75,63,0.2);border-radius:8px;padding:16px;margin:16px 0;">
+            <p style="color:#c44b3f;font-weight:700;margin:0 0 8px;">PRIORITY DISCUSSION ORDER:</p>
+            <table style="width:100%;border-collapse:collapse;">
+              <tr style="color:#6b6560;font-size:11px;text-transform:uppercase;letter-spacing:1px;">
+                <th style="text-align:left;padding:6px 12px;">Priority</th>
+                <th style="text-align:left;padding:6px 12px;">Area</th>
+                <th style="text-align:left;padding:6px 12px;">Score</th>
+                <th style="text-align:left;padding:6px 12px;">Fix Time</th>
+              </tr>
+              ${priorityList || '<tr><td colspan="4" style="padding:8px 12px;color:#4a9e6e;">No critical priorities - optimization focus</td></tr>'}
+            </table>
+          </div>
+
+          <p style="color:#c9a84c;font-weight:700;font-size:14px;margin:20px 0 8px;">INSIGHTS PER CATEGORY:</p>
+          ${insightsForJeanHtml}
+
+          <p style="color:#c9a84c;font-weight:700;font-size:14px;margin:20px 0 8px;">EVERY ANSWER SELECTED:</p>
+          ${allAnswersHtml}
+
+          ${answers.successNote ? `<div style="margin:20px 0;padding:14px 16px;background:#161616;border-radius:8px;border-left:3px solid #c9a84c;"><p style="color:#c9a84c;font-weight:700;margin:0 0 4px;">What success looks like:</p><p style="color:#9a9590;font-size:13px;line-height:1.6;margin:0;">${answers.successNote}</p></div>` : ''}
+          ${answers.extraNote ? `<div style="margin:10px 0;padding:14px 16px;background:#161616;border-radius:8px;border-left:3px solid #c9a84c;"><p style="color:#c9a84c;font-weight:700;margin:0 0 4px;">Additional notes:</p><p style="color:#9a9590;font-size:13px;line-height:1.6;margin:0;">${answers.extraNote}</p></div>` : ''}
+
+          <p style="color:#6b6560;font-size:11px;margin-top:20px;">Arena Exit Assessment — Internal Notification</p>
+        </div>`;
+
+        fetch('https://services.leadconnectorhq.com/conversations/messages', {
+          method: 'POST',
+          headers: ghlHeaders,
+          body: JSON.stringify({
+            type: 'Email',
+            contactId: jeanId,
+            subject: '🎯 Assessment: ' + (answers.ownerName || 'Unknown') + ' — ' + total + '/100 (' + band + ') — ' + (answers.companyName || 'Unknown Co'),
+            emailFrom: 'The Arena Partners <support@thearenapartners.com>',
+            html: repHtml
+          })
+        });
+      });
+    })
+    .catch(err => console.error('GHL assessment error:', err));
+  }
+}
+
+// ── RESTART ────────────────────────────────────────────────────────
+function restartForm() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('input[type=radio]').forEach(i => i.checked = false);
+  document.querySelectorAll('textarea, input[type=text], input[type=email], input[type=tel]').forEach(i => i.value = '');
+  document.getElementById('resultPanel').style.display = 'none';
+  document.getElementById('resultPanel').classList.remove('active');
+  showStep(1);
+}
+
+// Init
+updateProgress();
+
+// Clear error highlights on text input
+['ownerName','companyName','email','phone'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('input', function() { this.classList.remove('field-error'); });
+});
+</script>
+</body>
+</html>
