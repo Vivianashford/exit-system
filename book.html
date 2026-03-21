@@ -290,11 +290,13 @@ const bookmarkKey = readerName ? STORAGE_KEY + '-' + readerName.toLowerCase() : 
 fetch('book-content.json')
   .then(r => r.json())
   .then(data => {
-    // Filter stubs but keep parts
+    // Filter stubs, keep parts only as markers (they'll be merged into next chapter)
     let filtered = data.filter((ch, i) => {
       if (i === 0) return true;
       const words = ch.content.reduce((a, p) => a + p.split(' ').length, 0);
-      return words > 30 || ch.title.toLowerCase().startsWith('part ');
+      const isPart = ch.title.toLowerCase().startsWith('part ');
+      // Keep parts (they get merged) and chapters with real content
+      return isPart || words > 50;
     });
 
     // Build pages: [cover, welcome+toc, ...chapters, backcover]
@@ -306,13 +308,12 @@ fetch('book-content.json')
     // Page 1: Welcome (dedication) + TOC
     pages.push({ type: 'welcome-toc', chapters: filtered.slice(1) }); // skip title entry
 
-    // Pages 2+: All chapters (skip standalone part dividers - merge into next chapter)
+    // Pages 2+: All chapters (ALL part entries merge into the next chapter, never standalone)
     let pendingPart = null;
     filtered.slice(1).forEach(ch => {
       const isPart = ch.title.toLowerCase().startsWith('part ');
-      const words = ch.content.reduce((a, p) => a + p.split(' ').length, 0);
-      if (isPart && words < 50) {
-        pendingPart = ch.title; // hold it, prepend to next chapter
+      if (isPart) {
+        pendingPart = ch.title;
       } else {
         pages.push({ type: 'chapter', title: ch.title, content: ch.content, partHeader: pendingPart || null });
         pendingPart = null;
@@ -400,10 +401,6 @@ function renderPage() {
       tocHtml += '</ul></div>';
 
       html = barHtml + welcomeHtml + tocHtml;
-
-    } else if (pg.type === 'part') {
-      const parts = pg.title.split(':');
-      html = `<div class="part-page"><p class="part-label">${parts[0].trim()}</p><h2>${parts.slice(1).join(':').trim() || ''}</h2></div>`;
 
     } else if (pg.type === 'chapter') {
       let label = '', heading = pg.title;
