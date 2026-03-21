@@ -287,7 +287,7 @@ readerName = decodeURIComponent(readerName).trim();
 if (readerName) readerName = readerName.charAt(0).toUpperCase() + readerName.slice(1).toLowerCase();
 const bookmarkKey = readerName ? STORAGE_KEY + '-' + readerName.toLowerCase() : STORAGE_KEY;
 
-fetch('book-content.json')
+fetch('book-content.json?v=' + Date.now())
   .then(r => r.json())
   .then(data => {
     // Filter stubs, keep parts only as markers (they'll be merged into next chapter)
@@ -305,8 +305,8 @@ fetch('book-content.json')
     // Page 0: Front cover
     pages.push({ type: 'cover', src: 'book-cover.png' });
 
-    // Page 1: Welcome (dedication) + TOC
-    pages.push({ type: 'welcome-toc', chapters: filtered.slice(1) }); // skip title entry
+    // Page 1: Welcome (dedication) + TOC (will be populated after pages are built)
+    pages.push({ type: 'welcome-toc', tocEntries: [] });
 
     // Pages 2+: All chapters (ALL part entries merge into the next chapter, never standalone)
     let pendingPart = null;
@@ -317,6 +317,13 @@ fetch('book-content.json')
       } else {
         pages.push({ type: 'chapter', title: ch.title, content: ch.content, partHeader: pendingPart || null });
         pendingPart = null;
+      }
+    });
+
+    // Build TOC entries from actual pages (not raw data)
+    pages.forEach((p, idx) => {
+      if (p.type === 'chapter') {
+        pages[1].tocEntries.push({ title: p.title, pageIdx: idx, partHeader: p.partHeader });
       }
     });
 
@@ -345,17 +352,17 @@ function renderPage() {
     el.parentElement.style.padding = '';
 
     if (pg.type === 'welcome-toc') {
-      // Build chapter nav bar
+      // Build chapter nav bar from actual pages
       let barHtml = '<div class="chapter-bar" id="chapterBar">';
-      let pageIdx = 2; // chapters start at page 2
-      pg.chapters.forEach(ch => {
-        const t = ch.title;
-        const isPart = t.toLowerCase().startsWith('part ');
+      pg.tocEntries.forEach(entry => {
+        const t = entry.title;
         const chMatch = t.match(/^(CHAPTER|Chapter)\s+(\d+)/i);
-        let label = isPart ? t.split(':')[0].trim() : (chMatch ? 'Ch.' + chMatch[2] : t.substring(0,15));
-        let cls = isPart ? 'cb-item part' : 'cb-item';
-        barHtml += `<span class="${cls}" data-page="${pageIdx}" onclick="goToPage(${pageIdx})">${label}</span>`;
-        pageIdx++;
+        let label = chMatch ? 'Ch.' + chMatch[2] : t.substring(0,15);
+        let cls = 'cb-item';
+        if (entry.partHeader) {
+          barHtml += `<span class="cb-item part" onclick="goToPage(${entry.pageIdx})">${entry.partHeader.split(':')[0].trim()}</span>`;
+        }
+        barHtml += `<span class="${cls}" onclick="goToPage(${entry.pageIdx})">${label}</span>`;
       });
       barHtml += '</div>';
 
@@ -379,24 +386,21 @@ function renderPage() {
         </div>`;
       }
 
-      // TOC
+      // TOC - built from actual page indices
       let tocHtml = '<div class="toc-inline"><h3>Contents</h3><ul class="toc-list">';
-      pageIdx = 2;
-      pg.chapters.forEach(ch => {
-        const t = ch.title;
-        const isPart = t.toLowerCase().startsWith('part ');
+      pg.tocEntries.forEach(entry => {
+        const t = entry.title;
         const chMatch = t.match(/^(CHAPTER|Chapter)\s+(\d+)\s*:\s*(.*)/i);
         let num = '', label = t;
         if (chMatch) { num = chMatch[2]; label = chMatch[3]; }
         else if (t.match(/^INTRODUCTION/i)) { num = ''; label = t.replace(/^INTRODUCTION:\s*/i, 'Introduction: '); }
         else if (t.match(/^Author/i)) { num = ''; label = t; }
 
-        if (isPart) {
-          tocHtml += `<li class="part-entry" onclick="goToPage(${pageIdx})"><span class="toc-label">${t}</span></li>`;
-        } else {
-          tocHtml += `<li onclick="goToPage(${pageIdx})"><span class="toc-num">${num}</span><span class="toc-label">${label}</span><span class="toc-dots"></span><span class="toc-pg">${pageIdx}</span></li>`;
+        // Show part header above the chapter entry
+        if (entry.partHeader) {
+          tocHtml += `<li class="part-entry" onclick="goToPage(${entry.pageIdx})"><span class="toc-label">${entry.partHeader}</span></li>`;
         }
-        pageIdx++;
+        tocHtml += `<li onclick="goToPage(${entry.pageIdx})"><span class="toc-num">${num}</span><span class="toc-label">${label}</span><span class="toc-dots"></span><span class="toc-pg">${entry.pageIdx}</span></li>`;
       });
       tocHtml += '</ul></div>';
 
