@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Overview | The Arena Partners</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      color: #f5f0e8;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+    }
+
+    .site-header {
+      background: #0a0a0a;
+      border-bottom: 1px solid #1e1e1e;
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-header .logo {
+      font-family: Georgia, serif;
+      font-size: 18px;
+      color: #c9a84c;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .site-header .tagline {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .page-wrapper {
+      max-width: 780px;
+      margin: 60px auto;
+      padding: 0 24px 100px;
+    }
+
+    .page-badge {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c9a84c;
+      border: 1px solid #c9a84c33;
+      padding: 6px 16px;
+      border-radius: 3px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-family: Georgia, serif;
+      font-size: 34px;
+      font-weight: normal;
+      color: #f5f0e8;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .page-intro {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #777;
+      margin-bottom: 48px;
+      max-width: 600px;
+    }
+
+    .prefill-notice {
+      background: #111;
+      border: 1px solid #c9a84c33;
+      border-left: 3px solid #c9a84c;
+      border-radius: 0 6px 6px 0;
+      padding: 16px 20px;
+      margin-bottom: 40px;
+      font-size: 14px;
+      color: #9a9590;
+      display: none;
+    }
+    .prefill-notice strong { color: #c9a84c; }
+
+    /* ── Form sections ── */
+    .form-section {
+      margin-bottom: 48px;
+    }
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .form-grid.single { grid-template-columns: 1fr; }
+
+    @media (max-width: 580px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #777;
+    }
+    label .req { color: #c9a84c; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="tel"],
+    textarea,
+    select {
+      background: #0f0f0f;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #f5f0e8;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: #c9a84c;
+    }
+    input::placeholder, textarea::placeholder { color: #333; }
+
+    textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+    select { appearance: none; cursor: pointer; }
+    select option { background: #111; color: #f5f0e8; }
+
+    /* Revenue rows */
+    .revenue-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .revenue-row .year-label {
+      font-size: 13px;
+      color: #9a9590;
+      font-weight: bold;
+    }
+
+    /* Inline radio group */
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: #9a9590;
+      cursor: pointer;
+    }
+    .radio-group input[type="radio"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #c9a84c;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* File upload */
+    .file-upload {
+      background: #0f0f0f;
+      border: 1px dashed #2a2a2a;
+      border-radius: 6px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .file-upload:hover { border-color: #c9a84c44; }
+    .file-upload input[type="file"] { display: none; }
+    .file-upload .upload-icon { font-size: 28px; margin-bottom: 8px; color: #333; }
+    .file-upload .upload-text { font-size: 13px; color: #555; }
+    .file-upload .upload-hint { font-size: 11px; color: #333; margin-top: 4px; }
+    .file-name { font-size: 12px; color: #c9a84c; margin-top: 8px; }
+
+    /* Submit area */
+    .submit-area { margin-top: 48px; }
+
+    .privacy-note {
+      font-size: 12px;
+      color: #444;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, #c9a84c, #e3c96e);
+      color: #0a0a0a;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .status-msg {
+      display: none;
+      margin-top: 24px;
+      padding: 20px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .status-msg.success {
+      background: #0d1f0d; border: 1px solid #1a4a1a; color: #5cb85c;
+    }
+    .status-msg.error {
+      background: #1f0d0d; border: 1px solid #4a1a1a; color: #d9534f;
+    }
+
+    .doc-footer {
+      text-align: center;
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid #1a1a1a;
+      font-size: 12px;
+      color: #444;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="logo" href="https://thearenapartners.com">The Arena Partners</a>
+  <span class="tagline">Confidential</span>
+</header>
+
+<div class="page-wrapper">
+
+  <span class="page-badge">Company Overview Request</span>
+  <h1>Tell us about your business</h1>
+  <p class="page-intro">This information is strictly confidential and protected by your signed NDA. We use it to build your custom exit roadmap - understanding your financials, operations, and team is how we identify the highest-leverage path to the exit you've earned.</p>
+
+  <div class="prefill-notice" id="prefillNotice">
+    Pre-addressed to <strong id="prefillName">you</strong> at <strong id="prefillCompany">your company</strong>. All information is protected by your NDA.
+  </div>
+
+  <form id="companyForm" novalidate>
+
+    <!-- Section 1: Company Basics -->
+    <div class="form-section">
+      <p class="section-label">Company Information</p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Company Legal Name <span class="req">*</span></label>
+          <input type="text" id="companyLegal" placeholder="Full legal entity name" required>
+        </div>
+        <div class="form-group">
+          <label>Industry / Vertical <span class="req">*</span></label>
+          <input type="text" id="industry" placeholder="e.g., HVAC, Plumbing, Electrical">
+        </div>
+        <div class="form-group">
+          <label>Number of Employees <span class="req">*</span></label>
+          <input type="number" id="numEmployees" placeholder="Total headcount" min="1">
+        </div>
+        <div class="form-group">
+          <label>Years in Business <span class="req">*</span></label>
+          <input type="number" id="yearsInBusiness" placeholder="Years operating" min="0">
+        </div>
+        <div class="form-group full">
+          <label>Target Exit Timeline</label>
+          <input type="text" id="exitTimeline" placeholder="e.g., 12-18 months, 3 years, exploring options">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Financials -->
+    <div class="form-section">
+      <p class="section-label">Financial Overview — Last 3 Years</p>
+
+      <div style="margin-bottom: 24px;">
+        <label style="display:block; margin-bottom: 16px;">Annual Revenue</label>
+        <div class="revenue-row">
+          <span class="year-label" id="year1Label">—</span>
+          <input type="text" id="rev1" placeholder="Revenue ($)">
+          <input type="text" id="ebitda1" placeholder="EBITDA ($)">
+        </div>
+        <div class="revenue-row">
+          <span class="year-label" id="year2Label">—</span>
+          <input type="text" id="rev2" placeholder="Revenue ($)">
+          <input type="text" id="ebitda2" placeholder="EBITDA ($)">
+        </div>
+        <div class="revenue-row">
+          <span class="year-label" id="year3Label">—</span>
+          <input type="text" id="rev3" placeholder="Revenue ($)">
+          <input type="text" id="ebitda3" placeholder="EBITDA ($)">
+        </div>
+        <p style="font-size:11px; color:#444; margin-top: 8px; letter-spacing: 0.5px;">Approximate figures are fine — we're looking for trend and range, not audited precision.</p>
+      </div>
+    </div>
+
+    <!-- Section 3: People -->
+    <div class="form-section">
+      <p class="section-label">Key People</p>
+      <div class="form-grid single">
+        <div class="form-group">
+          <label>Key Employees — Names, Roles &amp; Tenure</label>
+          <textarea id="keyEmployees" rows="5" placeholder="Example:&#10;• John Smith — Operations Manager, 8 years&#10;• Maria Lopez — Controller, 5 years&#10;• Dave Chen — Sales Director, 3 years"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Top 5 Clients — Name &amp; % of Revenue</label>
+          <textarea id="topClients" rows="5" placeholder="Example:&#10;• ABC Corp — 22% of revenue&#10;• XYZ LLC — 18% of revenue&#10;• Acme Industries — 11% of revenue"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Operations -->
+    <div class="form-section">
+      <p class="section-label">Operations &amp; Structure</p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Existing Process Documentation</label>
+          <div class="radio-group">
+            <label><input type="radio" name="sopStatus" value="Yes"> Yes — documented SOPs</label>
+            <label><input type="radio" name="sopStatus" value="Partial"> Partial</label>
+            <label><input type="radio" name="sopStatus" value="No"> Not yet</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Succession Plan in Place</label>
+          <div class="radio-group">
+            <label><input type="radio" name="successionStatus" value="Documented"> Documented</label>
+            <label><input type="radio" name="successionStatus" value="Informal"> Informal</label>
+            <label><input type="radio" name="successionStatus" value="None"> None</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Real Estate</label>
+          <div class="radio-group">
+            <label><input type="radio" name="realEstate" value="Owned"> Company-owned</label>
+            <label><input type="radio" name="realEstate" value="Leased"> Leased</label>
+            <label><input type="radio" name="realEstate" value="Both"> Mix of both</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Pending Legal / Litigation</label>
+          <div class="radio-group">
+            <label><input type="radio" name="legalPending" value="None"> None</label>
+            <label><input type="radio" name="legalPending" value="Minor"> Minor / routine</label>
+            <label><input type="radio" name="legalPending" value="Significant"> Significant</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Org Chart -->
+    <div class="form-section">
+      <p class="section-label">Organizational Chart (Optional)</p>
+      <div class="file-upload" onclick="document.getElementById('orgChartFile').click()">
+        <input type="file" id="orgChartFile" accept=".pdf,.png,.jpg,.jpeg,.docx">
+        <div class="upload-icon">📄</div>
+        <div class="upload-text">Upload org chart</div>
+        <div class="upload-hint">PDF, PNG, JPG, or Word — Max 10MB</div>
+        <div class="file-name" id="fileName"></div>
+      </div>
+    </div>
+
+    <!-- Section 6: Contact (hidden if pre-filled) -->
+    <div class="form-section" id="contactSection">
+      <p class="section-label">Your Contact Information</p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Your Name <span class="req">*</span></label>
+          <input type="text" id="contactName" placeholder="Full name" required>
+        </div>
+        <div class="form-group">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="contactEmail" placeholder="your@company.com" required>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <p class="privacy-note">🔒 This information is protected by your signed Non-Disclosure Agreement with Arena Business Advisors, LLC. It will only be accessed by Jean Hardy and the advisory team for the purpose of building your custom exit roadmap.</p>
+      <button type="button" class="btn-submit" id="submitBtn" onclick="submitForm()">
+        Submit Company Overview
+      </button>
+      <div class="status-msg success" id="successMsg">
+        ✓ Received — thank you. Jean will review your overview and reach out within 24-48 hours to schedule your strategy session. You're in the right place.
+      </div>
+      <div class="status-msg error" id="errorMsg">
+        Something went wrong. Please try again or email <a href="mailto:support@thearenapartners.com" style="color:#c9a84c;">support@thearenapartners.com</a>.
+      </div>
+    </div>
+
+  </form>
+
+  <div class="doc-footer">
+    <p>Arena Business Advisors, LLC &nbsp;·&nbsp; The Arena Partners<br>
+    3555 Timmons Ln, Suite 1140 &nbsp;·&nbsp; Houston, TX 77027<br>
+    <a href="mailto:support@thearenapartners.com" style="color:#555;">support@thearenapartners.com</a></p>
+  </div>
+</div>
+
+<script>
+// URL param pre-fill
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  const name      = p.get('name')    || '';
+  const company   = p.get('company') || '';
+  const email     = p.get('email')   || '';
+  window._ghlContactId = p.get('cid') || '';
+
+  if (name || company) {
+    document.getElementById('prefillNotice').style.display = 'block';
+    if (name)    document.getElementById('prefillName').textContent    = name;
+    if (company) document.getElementById('prefillCompany').textContent = company;
+  }
+
+  if (name)  { document.getElementById('contactName').value  = name;  }
+  if (email) { document.getElementById('contactEmail').value = email; }
+  if (company) { document.getElementById('companyLegal').value = company; }
+
+  // Fill revenue year labels
+  const y = new Date().getFullYear();
+  document.getElementById('year1Label').textContent = (y - 2).toString();
+  document.getElementById('year2Label').textContent = (y - 1).toString();
+  document.getElementById('year3Label').textContent = y.toString() + ' (YTD)';
+})();
+
+// File upload display
+document.getElementById('orgChartFile').addEventListener('change', function() {
+  document.getElementById('fileName').textContent = this.files[0] ? '✓ ' + this.files[0].name : '';
+});
+
+async function submitForm() {
+  const name    = document.getElementById('contactName').value.trim();
+  const email   = document.getElementById('contactEmail').value.trim();
+  const company = document.getElementById('companyLegal').value.trim();
+  const submitBtn = document.getElementById('submitBtn');
+
+  if (!name)    { alert('Please enter your name.');           return; }
+  if (!email)   { alert('Please enter your email address.');  return; }
+  if (!company) { alert('Please enter your company name.');   return; }
+
+  submitBtn.disabled    = true;
+  submitBtn.textContent = 'Submitting...';
+
+  const GHL_BASE = 'https://services.leadconnectorhq.com';
+  const LOCATION = 'LSvdgiiT7ManCRx9CCwE';
+  const TOKEN_META = document.querySelector('meta[name="ghl-write-token"]');
+  const token = TOKEN_META ? TOKEN_META.content : '';
+
+  // Build revenue summary
+  const y = new Date().getFullYear();
+  const revSummary = [
+    `${y-2}: Rev=${document.getElementById('rev1').value||'—'}, EBITDA=${document.getElementById('ebitda1').value||'—'}`,
+    `${y-1}: Rev=${document.getElementById('rev2').value||'—'}, EBITDA=${document.getElementById('ebitda2').value||'—'}`,
+    `${y} YTD: Rev=${document.getElementById('rev3').value||'—'}, EBITDA=${document.getElementById('ebitda3').value||'—'}`
+  ].join(' | ');
+
+  const sopVal  = document.querySelector('input[name="sopStatus"]:checked')?.value     || '';
+  const succVal = document.querySelector('input[name="successionStatus"]:checked')?.value || '';
+
+  try {
+    let contactId = window._ghlContactId;
+
+    // Upsert contact
+    const upsertResp = await fetch(`${GHL_BASE}/contacts/upsert`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Version': '2021-07-28', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        locationId: LOCATION,
+        email: email,
+        firstName: name.split(' ')[0],
+        lastName: name.split(' ').slice(1).join(' '),
+        companyName: company
+      })
+    });
+    if (upsertResp.ok) {
+      const ud = await upsertResp.json();
+      contactId = ud.contact?.id || contactId;
+    }
+
+    if (contactId) {
+      // Custom field IDs from creation
+      const customFields = [
+        { id: 'PUwLfMiUThAX5QtEfTcd', field_value: company },                              // Company Legal Name
+        { id: '8T1HrMWZUhR3nkAjFhU0', field_value: revSummary },                           // Annual Revenue
+        { id: 'XC6hYLM6OaVwlzUEDlFs', field_value: document.getElementById('numEmployees').value },  // # Employees
+        { id: '0CxSXWN9sX8VOlJCxM9P', field_value: document.getElementById('yearsInBusiness').value }, // Years in Business
+        { id: '5lQJTCA0U79VdGADx6Zj', field_value: document.getElementById('keyEmployees').value },   // Key Employees
+        { id: 'l3xPZNcXPolGIRFWNFGX', field_value: document.getElementById('topClients').value },     // Top 5 Clients
+        { id: 'BpSk6fPvHnJKNHrqrgM0', field_value: document.getElementById('exitTimeline').value },   // Exit Timeline
+        { id: '34Hw5yMzDL7XoXe4z2zK', field_value: 'Complete' },                           // Company Info Status
+      ];
+      if (sopVal)  customFields.push({ id: 'xW8x5d5ZUXcZuQnS1nEy', field_value: sopVal });
+      if (succVal) customFields.push({ id: 'OusAk4RA1iWfaSspQDfd', field_value: succVal });
+
+      await fetch(`${GHL_BASE}/contacts/${contactId}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}`, 'Version': '2021-07-28', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customFields,
+          tags: ['company-info-submitted']
+        })
+      });
+
+      // Add note with full submission
+      const noteLines = [
+        'COMPANY OVERVIEW SUBMITTED',
+        `Company: ${company}`,
+        `Industry: ${document.getElementById('industry').value}`,
+        `Employees: ${document.getElementById('numEmployees').value}`,
+        `Years in Business: ${document.getElementById('yearsInBusiness').value}`,
+        `Revenue: ${revSummary}`,
+        `Key Employees: ${document.getElementById('keyEmployees').value}`,
+        `Top Clients: ${document.getElementById('topClients').value}`,
+        `SOPs: ${sopVal}`,
+        `Succession: ${succVal}`,
+        `Exit Timeline: ${document.getElementById('exitTimeline').value}`,
+        `Real Estate: ${document.querySelector('input[name="realEstate"]:checked')?.value||''}`,
+        `Legal/Litigation: ${document.querySelector('input[name="legalPending"]:checked')?.value||''}`,
+        `Submitted at: ${new Date().toISOString()}`
+      ];
+
+      await fetch(`${GHL_BASE}/contacts/${contactId}/notes`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}`, 'Version': '2021-07-28', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ body: noteLines.join('\n') })
+      });
+    }
+
+    document.getElementById('successMsg').style.display = 'block';
+    document.getElementById('errorMsg').style.display   = 'none';
+    submitBtn.textContent = '✓ Submitted';
+    submitBtn.style.background = 'linear-gradient(135deg, #2d6a2d, #3d8a3d)';
+    submitBtn.style.color = '#fff';
+
+  } catch(err) {
+    console.error(err);
+    document.getElementById('errorMsg').style.display   = 'block';
+    document.getElementById('successMsg').style.display = 'none';
+    submitBtn.disabled    = false;
+    submitBtn.textContent = 'Submit Company Overview';
+  }
+}
+</script>
+
+<meta name="ghl-write-token" content="pit-8db4722a-0d8f-41c0-8cc0-1d17de5bff3d">
+
+</body>
+</html>

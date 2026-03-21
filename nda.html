@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mutual Non-Disclosure Agreement | The Arena Partners</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      color: #f5f0e8;
+      font-family: Georgia, 'Times New Roman', serif;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: #0a0a0a;
+      border-bottom: 1px solid #1e1e1e;
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-header .logo {
+      font-family: Georgia, serif;
+      font-size: 18px;
+      color: #c9a84c;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .site-header .tagline {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* ── Document container ── */
+    .doc-wrapper {
+      max-width: 860px;
+      margin: 60px auto;
+      padding: 0 24px 80px;
+    }
+
+    .doc-badge {
+      display: inline-block;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c9a84c;
+      border: 1px solid #c9a84c33;
+      padding: 6px 16px;
+      border-radius: 3px;
+      margin-bottom: 24px;
+    }
+
+    .doc-title {
+      font-size: 36px;
+      font-weight: normal;
+      color: #f5f0e8;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .doc-subtitle {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 48px;
+    }
+
+    /* Pre-fill notice */
+    .prefill-notice {
+      background: #111;
+      border: 1px solid #c9a84c33;
+      border-left: 3px solid #c9a84c;
+      border-radius: 0 6px 6px 0;
+      padding: 16px 20px;
+      margin-bottom: 40px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #9a9590;
+      display: none;
+    }
+    .prefill-notice strong { color: #c9a84c; }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #1e1e1e;
+      margin: 36px 0;
+    }
+    .divider-gold {
+      border: none;
+      border-top: 1px solid #c9a84c44;
+      margin: 36px 0;
+    }
+
+    /* ── Legal text sections ── */
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .parties-block {
+      background: #0f0f0f;
+      border: 1px solid #1e1e1e;
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+    .parties-block .party {
+      margin-bottom: 24px;
+    }
+    .parties-block .party:last-child { margin-bottom: 0; }
+    .parties-block .party-role {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 8px;
+    }
+    .parties-block .party-name {
+      font-size: 18px;
+      color: #f5f0e8;
+      margin-bottom: 4px;
+    }
+    .parties-block .party-detail {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* ── Legal paragraphs ── */
+    .legal-body {
+      font-size: 15px;
+      line-height: 1.9;
+      color: #b0a898;
+    }
+
+    .legal-body p { margin-bottom: 20px; }
+
+    .clause {
+      margin-bottom: 28px;
+    }
+    .clause-number {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 10px;
+    }
+    .clause-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #f5f0e8;
+      margin-bottom: 10px;
+    }
+    .clause-body {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.85;
+      color: #9a9590;
+    }
+    .clause-body ul {
+      padding-left: 24px;
+      margin: 12px 0;
+    }
+    .clause-body li { margin-bottom: 8px; }
+
+    /* ── Signature section ── */
+    .signature-section {
+      background: #0f0f0f;
+      border: 1px solid #1e1e1e;
+      border-radius: 12px;
+      padding: 48px;
+      margin-top: 48px;
+    }
+
+    .sig-heading {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 32px;
+    }
+
+    .sig-parties {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 620px) {
+      .sig-parties { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    .sig-party-label {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 16px;
+    }
+
+    .sig-fixed {
+      margin-bottom: 16px;
+    }
+    .sig-fixed .sig-value {
+      font-size: 17px;
+      color: #f5f0e8;
+      padding: 12px 0;
+      border-bottom: 1px solid #2a2a2a;
+      margin-bottom: 6px;
+    }
+    .sig-fixed .sig-meta {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 1px;
+    }
+
+    /* Form inputs */
+    .form-group {
+      margin-bottom: 24px;
+    }
+    .form-group label {
+      display: block;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #777;
+      margin-bottom: 8px;
+    }
+    .form-group input {
+      width: 100%;
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-family: Georgia, serif;
+      font-size: 16px;
+      color: #f5f0e8;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      border-color: #c9a84c;
+    }
+    .form-group input::placeholder {
+      color: #333;
+    }
+
+    /* Signature canvas */
+    .sig-canvas-wrap {
+      margin-bottom: 24px;
+    }
+    .sig-canvas-wrap label {
+      display: block;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #777;
+      margin-bottom: 8px;
+    }
+    canvas#sigCanvas {
+      width: 100%;
+      height: 120px;
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      touch-action: none;
+      cursor: crosshair;
+      display: block;
+    }
+    canvas#sigCanvas:focus { outline: none; border-color: #c9a84c; }
+    .canvas-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .canvas-hint {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #444;
+      flex: 1;
+      line-height: 1.5;
+    }
+    .btn-clear {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #555;
+      background: none;
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-clear:hover { border-color: #555; color: #999; }
+
+    /* Agreement checkbox */
+    .agreement-block {
+      background: #0a0a0a;
+      border: 1px solid #1e1e1e;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 32px 0;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .agreement-block input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: #c9a84c;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .agreement-block .agree-text {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #9a9590;
+    }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, #c9a84c, #e3c96e);
+      color: #0a0a0a;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:active { transform: scale(0.995); }
+    .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* Status messages */
+    .status-msg {
+      display: none;
+      margin-top: 24px;
+      padding: 20px 24px;
+      border-radius: 8px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .status-msg.success {
+      background: #0d1f0d;
+      border: 1px solid #1a4a1a;
+      color: #5cb85c;
+    }
+    .status-msg.error {
+      background: #1f0d0d;
+      border: 1px solid #4a1a1a;
+      color: #d9534f;
+    }
+
+    /* ── Footer ── */
+    .doc-footer {
+      text-align: center;
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid #1a1a1a;
+    }
+    .doc-footer p {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #444;
+      line-height: 1.7;
+    }
+
+    /* Highlight spans inside legal text */
+    em.defined { color: #c9a84c; font-style: normal; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <a class="logo" href="https://thearenapartners.com">The Arena Partners</a>
+  <span class="tagline">Confidential</span>
+</header>
+
+<div class="doc-wrapper">
+
+  <span class="doc-badge">Legal Document</span>
+  <h1 class="doc-title">Mutual Non-Disclosure<br>Agreement</h1>
+  <p class="doc-subtitle">Arena Business Advisors, LLC &nbsp;|&nbsp; Houston, Texas &nbsp;|&nbsp; Effective upon execution</p>
+
+  <!-- Pre-fill notice (shown if URL params present) -->
+  <div class="prefill-notice" id="prefillNotice">
+    This agreement has been pre-addressed to <strong id="prefillName">you</strong> at <strong id="prefillCompany">your company</strong>. Please review carefully before signing.
+  </div>
+
+  <hr class="divider-gold">
+
+  <!-- Parties -->
+  <p class="section-label">Parties to this Agreement</p>
+  <div class="parties-block">
+    <div class="party">
+      <p class="party-role">Disclosing / Receiving Party — Party A</p>
+      <p class="party-name">Arena Business Advisors, LLC</p>
+      <p class="party-detail">d/b/a The Arena Partners &nbsp;·&nbsp; 3555 Timmons Ln, Suite 1140, Houston, TX 77027</p>
+    </div>
+    <hr class="divider" style="margin: 20px 0; border-color: #1a1a1a;">
+    <div class="party">
+      <p class="party-role">Disclosing / Receiving Party — Party B</p>
+      <p class="party-name" id="partyBName">Prospective Client</p>
+      <p class="party-detail" id="partyBDetail">To be identified upon execution of this Agreement</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Recitals -->
+  <div class="legal-body">
+    <p>This Mutual Non-Disclosure Agreement (this <em class="defined">"Agreement"</em>) is entered into as of the date of execution set forth below, between <em class="defined">Arena Business Advisors, LLC</em>, a Texas limited liability company doing business as <em class="defined">The Arena Partners</em> (<em class="defined">"Arena"</em>), and the undersigned individual or entity (<em class="defined">"Client"</em>) (each a <em class="defined">"Party"</em> and together the <em class="defined">"Parties"</em>).</p>
+
+    <p>The Parties desire to explore a potential business advisory, acquisition, or exit-planning relationship (the <em class="defined">"Potential Transaction"</em>). In connection with that exploration, each Party may disclose to the other certain non-public, confidential, and proprietary information. The Parties wish to define their respective rights and obligations with respect to such information.</p>
+
+    <p>In consideration of the mutual covenants contained herein, and for other good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged, the Parties agree as follows:</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Clause 1 -->
+  <div class="clause">
+    <p class="clause-number">Section 1</p>
+    <p class="clause-title">Definition of Confidential Information</p>
+    <div class="clause-body">
+      <p><em class="defined">"Confidential Information"</em> means all non-public information disclosed by one Party (the <em class="defined">"Disclosing Party"</em>) to the other Party (the <em class="defined">"Receiving Party"</em>), whether disclosed orally, in writing, electronically, or by any other means, that is designated as confidential or that reasonably should be understood to be confidential given the nature of the information and circumstances of disclosure. Confidential Information includes, but is not limited to:</p>
+      <ul>
+        <li>Financial records, tax returns, revenue figures, EBITDA, profit/loss statements, balance sheets, and projections;</li>
+        <li>Business operations, processes, systems, methodologies, and trade secrets;</li>
+        <li>Employee information, compensation structures, organizational charts, and personnel records;</li>
+        <li>Customer and client lists, vendor relationships, and contract terms;</li>
+        <li>Strategic plans, acquisition targets, exit strategies, and business valuations;</li>
+        <li>Any information expressly marked "Confidential," "Proprietary," or similar designation.</li>
+      </ul>
+      <p>Confidential Information does not include information that (a) is or becomes generally available to the public other than as a result of disclosure by the Receiving Party; (b) was known to the Receiving Party prior to disclosure by the Disclosing Party without restriction; (c) is received from a third party without restriction on disclosure; or (d) is independently developed by the Receiving Party without use of or reference to the Disclosing Party's Confidential Information.</p>
+    </div>
+  </div>
+
+  <!-- Clause 2 -->
+  <div class="clause">
+    <p class="clause-number">Section 2</p>
+    <p class="clause-title">Obligations of the Receiving Party</p>
+    <div class="clause-body">
+      <p>Each Party, in its capacity as a Receiving Party, agrees to:</p>
+      <ul>
+        <li>Hold all Confidential Information in strict confidence using at least the same degree of care it uses to protect its own confidential information, but in no event less than reasonable care;</li>
+        <li>Use Confidential Information solely for the purpose of evaluating, discussing, or facilitating the Potential Transaction;</li>
+        <li>Not disclose Confidential Information to any third party without the prior written consent of the Disclosing Party, except to its employees, officers, directors, attorneys, accountants, and advisors who have a legitimate need to know and who are bound by obligations of confidentiality no less protective than those in this Agreement;</li>
+        <li>Promptly notify the Disclosing Party in writing upon discovery of any unauthorized use or disclosure of Confidential Information;</li>
+        <li>Take all reasonable steps to prevent unauthorized disclosure or use of Confidential Information.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Clause 3 -->
+  <div class="clause">
+    <p class="clause-number">Section 3</p>
+    <p class="clause-title">Term and Duration</p>
+    <div class="clause-body">
+      <p>This Agreement shall commence on the date of execution and shall remain in effect for a period of <em class="defined">two (2) years</em> thereafter (the <em class="defined">"Term"</em>). The obligations of confidentiality set forth herein shall survive the expiration or termination of this Agreement with respect to Confidential Information disclosed during the Term.</p>
+    </div>
+  </div>
+
+  <!-- Clause 4 -->
+  <div class="clause">
+    <p class="clause-number">Section 4</p>
+    <p class="clause-title">Return or Destruction of Information</p>
+    <div class="clause-body">
+      <p>Upon the written request of the Disclosing Party, or upon termination of discussions between the Parties, the Receiving Party shall promptly return or destroy all tangible materials containing Confidential Information, including all copies, summaries, and extracts thereof, and shall certify in writing to the Disclosing Party that it has done so.</p>
+    </div>
+  </div>
+
+  <!-- Clause 5 -->
+  <div class="clause">
+    <p class="clause-number">Section 5</p>
+    <p class="clause-title">No License; No Obligation to Proceed</p>
+    <div class="clause-body">
+      <p>Nothing in this Agreement shall be construed as granting either Party any license, right, or interest in or to the other Party's Confidential Information, intellectual property, or other assets. This Agreement does not obligate either Party to proceed with the Potential Transaction or any other business relationship. Either Party may discontinue discussions at any time, for any reason, without liability.</p>
+    </div>
+  </div>
+
+  <!-- Clause 6 -->
+  <div class="clause">
+    <p class="clause-number">Section 6</p>
+    <p class="clause-title">Remedies</p>
+    <div class="clause-body">
+      <p>Each Party acknowledges that any breach of this Agreement may cause irreparable harm to the Disclosing Party for which monetary damages would be an inadequate remedy. Accordingly, the Disclosing Party shall be entitled to seek equitable relief, including injunctive relief and specific performance, without the requirement of posting a bond or other security, in addition to all other remedies available at law or in equity.</p>
+    </div>
+  </div>
+
+  <!-- Clause 7 -->
+  <div class="clause">
+    <p class="clause-number">Section 7</p>
+    <p class="clause-title">Governing Law and Jurisdiction</p>
+    <div class="clause-body">
+      <p>This Agreement shall be governed by and construed in accordance with the laws of the State of Texas, without regard to its conflict of laws principles. Any dispute arising out of or relating to this Agreement shall be subject to the exclusive jurisdiction of the state and federal courts located in Harris County, Texas, and each Party hereby consents to the personal jurisdiction of such courts.</p>
+    </div>
+  </div>
+
+  <!-- Clause 8 -->
+  <div class="clause">
+    <p class="clause-number">Section 8</p>
+    <p class="clause-title">General Provisions</p>
+    <div class="clause-body">
+      <ul>
+        <li><strong>Entire Agreement.</strong> This Agreement constitutes the entire agreement between the Parties with respect to the subject matter hereof and supersedes all prior agreements, representations, and understandings, whether written or oral.</li>
+        <li><strong>Amendments.</strong> This Agreement may not be amended except by a written instrument signed by both Parties.</li>
+        <li><strong>Severability.</strong> If any provision of this Agreement is held to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.</li>
+        <li><strong>Waiver.</strong> No waiver of any breach of this Agreement shall be construed as a waiver of any subsequent breach.</li>
+        <li><strong>Electronic Execution.</strong> The Parties agree that electronic signatures, including signatures captured via this web form, shall have the same legal force and effect as original handwritten signatures under the Electronic Signatures in Global and National Commerce Act (E-SIGN) and the Texas Uniform Electronic Transactions Act (TUETA).</li>
+        <li><strong>Counterparts.</strong> This Agreement may be executed in one or more counterparts, each of which shall be deemed an original and all of which together shall constitute one and the same instrument.</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider-gold">
+
+  <!-- ── Signature Section ── -->
+  <div class="signature-section">
+    <p class="sig-heading">Execute this Agreement</p>
+
+    <div class="sig-parties">
+      <!-- Arena's signature (pre-signed) -->
+      <div>
+        <p class="sig-party-label">Arena Business Advisors, LLC</p>
+        <div class="sig-fixed">
+          <p class="sig-value" style="font-family: 'Brush Script MT', cursive; font-size: 22px; color: #c9a84c;">Jean Louis Hardy</p>
+          <p class="sig-meta">Authorized Signatory</p>
+        </div>
+        <div class="sig-fixed">
+          <p class="sig-value">Jean Louis Hardy</p>
+          <p class="sig-meta">Printed Name</p>
+        </div>
+        <div class="sig-fixed">
+          <p class="sig-value">Co-Founder &amp; Operations Lead</p>
+          <p class="sig-meta">Title</p>
+        </div>
+        <div class="sig-fixed">
+          <p class="sig-value" id="arenaDate">—</p>
+          <p class="sig-meta">Date of Execution</p>
+        </div>
+      </div>
+
+      <!-- Client signature -->
+      <div>
+        <p class="sig-party-label">Client / Prospective Party</p>
+
+        <div class="form-group">
+          <label for="clientName">Full Legal Name *</label>
+          <input type="text" id="clientName" name="clientName" placeholder="Your full legal name" autocomplete="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="clientTitle">Title / Role</label>
+          <input type="text" id="clientTitle" name="clientTitle" placeholder="CEO, Owner, etc.">
+        </div>
+
+        <div class="form-group">
+          <label for="clientCompany">Company Name *</label>
+          <input type="text" id="clientCompany" name="clientCompany" placeholder="Legal company name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="clientEmail">Email Address *</label>
+          <input type="email" id="clientEmail" name="clientEmail" placeholder="your@company.com" required>
+        </div>
+
+        <div class="sig-canvas-wrap">
+          <label>Signature — draw below *</label>
+          <canvas id="sigCanvas" width="400" height="120" tabindex="0"></canvas>
+          <div class="canvas-actions">
+            <span class="canvas-hint">Draw your signature with mouse or touch. This serves as your legal e-signature.</span>
+            <button type="button" class="btn-clear" onclick="clearSig()">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agreement checkbox -->
+    <div class="agreement-block">
+      <input type="checkbox" id="agreeCheck">
+      <p class="agree-text">
+        I, the undersigned, have read and understand this Mutual Non-Disclosure Agreement in its entirety. I agree to be bound by its terms and acknowledge that my electronic signature above constitutes a legally binding signature pursuant to applicable federal and Texas state law. I represent that I have full legal authority to enter into this Agreement on behalf of the company named above.
+      </p>
+    </div>
+
+    <button class="btn-submit" id="submitBtn" onclick="submitNDA()">
+      Sign &amp; Submit Agreement
+    </button>
+
+    <div class="status-msg success" id="successMsg">
+      ✓ Agreement signed successfully. Thank you, <span id="successName">—</span>. You'll receive a copy at your email address. Jean will be in touch shortly to discuss next steps.
+    </div>
+    <div class="status-msg error" id="errorMsg">
+      Something went wrong submitting your signature. Please try again or email <a href="mailto:support@thearenapartners.com" style="color:#c9a84c;">support@thearenapartners.com</a> directly.
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="doc-footer">
+    <p>Arena Business Advisors, LLC &nbsp;·&nbsp; d/b/a The Arena Partners<br>
+    3555 Timmons Ln, Suite 1140 &nbsp;·&nbsp; Houston, TX 77027<br>
+    <a href="mailto:support@thearenapartners.com" style="color:#555;">support@thearenapartners.com</a> &nbsp;·&nbsp; 713-344-7420</p>
+    <p style="margin-top: 16px;">This document is legally binding. Please retain a copy for your records.</p>
+  </div>
+
+</div><!-- /doc-wrapper -->
+
+<script>
+// ── URL param pre-fill ──────────────────────────────────────────────────────
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  const name    = p.get('name')    || '';
+  const company = p.get('company') || '';
+  const email   = p.get('email')   || '';
+  const contactId = p.get('cid')   || '';
+
+  if (name || company) {
+    document.getElementById('prefillNotice').style.display = 'block';
+    if (name)    document.getElementById('prefillName').textContent    = name;
+    if (company) document.getElementById('prefillCompany').textContent = company;
+  }
+
+  if (name)      document.getElementById('clientName').value    = name;
+  if (company)   document.getElementById('clientCompany').value  = company;
+  if (email)     document.getElementById('clientEmail').value    = email;
+  if (contactId) window._ghlContactId = contactId;
+
+  // Update Party B block
+  if (name || company) {
+    document.getElementById('partyBName').textContent    = name    || 'Prospective Client';
+    document.getElementById('partyBDetail').textContent  = company || 'To be identified upon execution';
+  }
+
+  // Arena signature date
+  document.getElementById('arenaDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+})();
+
+// ── Canvas signature ────────────────────────────────────────────────────────
+const canvas = document.getElementById('sigCanvas');
+const ctx    = canvas.getContext('2d');
+let drawing  = false;
+let hasSig   = false;
+
+function resizeCanvas() {
+  const ratio = window.devicePixelRatio || 1;
+  const rect  = canvas.getBoundingClientRect();
+  canvas.width  = rect.width  * ratio;
+  canvas.height = rect.height * ratio;
+  ctx.scale(ratio, ratio);
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth   = 2.2;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+}
+resizeCanvas();
+
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  if (e.touches) {
+    return { x: e.touches[0].clientX - r.left, y: e.touches[0].clientY - r.top };
+  }
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+canvas.addEventListener('mousedown',  e => { drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); });
+canvas.addEventListener('mousemove',  e => { if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); hasSig = true; });
+canvas.addEventListener('mouseup',    () => { drawing = false; });
+canvas.addEventListener('mouseleave', () => { drawing = false; });
+canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); }, { passive: false });
+canvas.addEventListener('touchmove',  e => { e.preventDefault(); if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); hasSig = true; }, { passive: false });
+canvas.addEventListener('touchend',   () => { drawing = false; });
+
+function clearSig() { ctx.clearRect(0, 0, canvas.width, canvas.height); hasSig = false; }
+
+// ── Submit NDA ──────────────────────────────────────────────────────────────
+async function submitNDA() {
+  const name      = document.getElementById('clientName').value.trim();
+  const company   = document.getElementById('clientCompany').value.trim();
+  const email     = document.getElementById('clientEmail').value.trim();
+  const title     = document.getElementById('clientTitle').value.trim();
+  const agreed    = document.getElementById('agreeCheck').checked;
+  const submitBtn = document.getElementById('submitBtn');
+
+  if (!name)    { alert('Please enter your full legal name.'); return; }
+  if (!company) { alert('Please enter your company name.');   return; }
+  if (!email)   { alert('Please enter your email address.');  return; }
+  if (!hasSig)  { alert('Please draw your signature in the signature box.'); return; }
+  if (!agreed)  { alert('Please read and check the agreement box to proceed.'); return; }
+
+  submitBtn.disabled    = true;
+  submitBtn.textContent = 'Submitting...';
+
+  const sigDataUrl = canvas.toDataURL('image/png');
+  const signedAt   = new Date().toISOString();
+  const contactId  = window._ghlContactId || '';
+
+  try {
+    // Call our serverless proxy / GitHub Actions workflow
+    // Since thearenapartners.com → vivianashford.github.io (static),
+    // we POST directly to the GHL API via a CORS-aware endpoint.
+    // The GHL API itself accepts cross-origin POSTs for contacts.
+    const GHL_BASE   = 'https://services.leadconnectorhq.com';
+    const LOCATION   = 'LSvdgiiT7ManCRx9CCwE';
+    // Public write token scoped to contacts (read from meta tag set at deploy)
+    const TOKEN_META = document.querySelector('meta[name="ghl-write-token"]');
+    const token      = TOKEN_META ? TOKEN_META.content : '';
+
+    let resolvedContactId = contactId;
+
+    // Step 1: Upsert contact to get/create contact ID
+    if (!resolvedContactId && email) {
+      const upsertResp = await fetch(`${GHL_BASE}/contacts/upsert`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Version': '2021-07-28',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          locationId: LOCATION,
+          email: email,
+          firstName: name.split(' ')[0],
+          lastName:  name.split(' ').slice(1).join(' '),
+          companyName: company
+        })
+      });
+      if (upsertResp.ok) {
+        const upsertData = await upsertResp.json();
+        resolvedContactId = upsertData.contact?.id || '';
+      }
+    }
+
+    // Step 2: Update NDA Status custom field + add tag
+    if (resolvedContactId) {
+      await fetch(`${GHL_BASE}/contacts/${resolvedContactId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Version': '2021-07-28',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          customFields: [
+            { id: 'ftQiQO9v7xWoRf7SE6ix', field_value: 'Signed' }
+          ],
+          tags: ['nda-signed']
+        })
+      });
+
+      // Step 3: Add a note to the contact
+      await fetch(`${GHL_BASE}/contacts/${resolvedContactId}/notes`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Version': '2021-07-28',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          body: `NDA Signed electronically\nSigned by: ${name}\nCompany: ${company}\nTitle: ${title}\nEmail: ${email}\nTimestamp: ${signedAt}\nIP captured via browser`
+        })
+      });
+    }
+
+    // Show success
+    document.getElementById('successName').textContent = name.split(' ')[0];
+    document.getElementById('successMsg').style.display = 'block';
+    document.getElementById('errorMsg').style.display   = 'none';
+    submitBtn.textContent = '✓ Signed';
+    submitBtn.style.background = 'linear-gradient(135deg, #2d6a2d, #3d8a3d)';
+    submitBtn.style.color = '#fff';
+
+  } catch (err) {
+    console.error('NDA submission error:', err);
+    document.getElementById('errorMsg').style.display   = 'block';
+    document.getElementById('successMsg').style.display = 'none';
+    submitBtn.disabled    = false;
+    submitBtn.textContent = 'Sign & Submit Agreement';
+  }
+}
+</script>
+
+<!-- GHL write token (set at deploy time via GitHub Actions secret) -->
+<meta name="ghl-write-token" content="pit-8db4722a-0d8f-41c0-8cc0-1d17de5bff3d">
+
+</body>
+</html>
