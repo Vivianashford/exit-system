@@ -520,14 +520,9 @@ function renderPage() {
       <p class="ded-title">Founder, The Arena Partners</p>
     </div>`;
   } else if (isTitle) {
-    // Title page
-    html = `<div class="title-page">
-      <div class="tp-label">The Arena Press</div>
-      <h1>TRANSFERABLE</h1>
-      <p class="tp-sub">Why the Best Operators Own the Least Valuable Businesses</p>
-      <div class="tp-rule"></div>
-      <p class="tp-author">Jean Louis Hardy</p>
-      <p class="tp-role">Founder of The Arena</p>
+    // Title page - show the actual book cover
+    html = `<div class="title-page" style="padding:0;overflow:hidden;">
+      <img src="book-cover.png" alt="TRANSFERABLE by Jean Louis Hardy" style="width:100%;height:100%;object-fit:contain;">
     </div>`;
   } else if (isPart) {
     // Part divider page
