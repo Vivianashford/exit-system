@@ -344,10 +344,11 @@ fetch('book-content.json?v=' + Date.now())
       usePortrait: true,
       showCover: true,
       maxShadowOpacity: 0.5,
-      mobileScrollSupport: true,
-      swipeDistance: 30,
+      mobileScrollSupport: false,
+      swipeDistance: 120,
       startPage: 0,
       autoSize: true,
+      clickEventForward: false,
     });
 
     pageFlip.loadFromHTML(document.querySelectorAll('.book-page'));
@@ -406,6 +407,22 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') { e.preventDefault(); flipPrev(); }
   if (e.key === 'Escape') { document.getElementById('tocOverlay').classList.remove('active'); }
 });
+
+// Custom touch handler: only flip on deliberate HORIZONTAL swipes (not vertical scroll)
+let touchStartX = 0, touchStartY = 0;
+document.querySelector('.book-area').addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, {passive: true});
+document.querySelector('.book-area').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  // Only trigger if horizontal movement > 100px AND mostly horizontal (ratio > 2:1)
+  if (Math.abs(dx) > 100 && Math.abs(dx) > Math.abs(dy) * 2) {
+    if (dx < 0) flipNext();
+    else flipPrev();
+  }
+}, {passive: true});
 
 // Resize handler
 window.addEventListener('resize', () => {
