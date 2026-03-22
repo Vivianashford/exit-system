@@ -892,11 +892,10 @@ async function submitNDA() {
     // Since thearenapartners.com → vivianashford.github.io (static),
     // we POST directly to the GHL API via a CORS-aware endpoint.
     // The GHL API itself accepts cross-origin POSTs for contacts.
-    const GHL_BASE   = 'https://services.leadconnectorhq.com';
+    const WORKER_URL = 'https://arena-api.jean-475.workers.dev';
+    const GHL_BASE   = WORKER_URL + '/api/ghl';
     const LOCATION   = 'LSvdgiiT7ManCRx9CCwE';
-    // Public write token scoped to contacts (read from meta tag set at deploy)
-    const TOKEN_META = document.querySelector('meta[name="ghl-write-token"]');
-    const token      = TOKEN_META ? TOKEN_META.content : '';
+    const token      = 'proxy'; // Token is server-side on Worker now
 
     let resolvedContactId = contactId;
 
@@ -957,21 +956,38 @@ async function submitNDA() {
       const firstName = name.split(' ')[0];
       let pdfDownloadUrl = '';
 
-      // Upload PDF to GHL media storage
+      // Upload PDF to R2 storage via Worker + GHL media
       try {
         const result2 = await generateNDAPdf(name, company, title, email, sigDataUrl, signedAt);
         const pdfBlob2 = result2.blob;
-        const formData = new FormData();
-        formData.append('file', new Blob([pdfBlob2], {type:'application/pdf'}), `NDA - The Arena Partners x ${company}.pdf`);
-        formData.append('locationId', LOCATION);
-        const uploadResp = await fetch(`${GHL_BASE}/medias/upload-file`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}`, 'Version': '2021-07-28' },
-          body: formData
-        });
-        if (uploadResp.ok) {
-          const uploadData = await uploadResp.json();
-          pdfDownloadUrl = uploadData.url || '';
+        const pdfFileName = `NDA - The Arena Partners x ${company}.pdf`;
+
+        // Upload to R2 (permanent storage)
+        const r2Form = new FormData();
+        r2Form.append('file', new Blob([pdfBlob2], {type:'application/pdf'}), pdfFileName);
+        r2Form.append('company', company);
+        r2Form.append('category', 'nda');
+        r2Form.append('contactId', resolvedContactId);
+        const r2Resp = await fetch(WORKER_URL + '/api/upload', { method: 'POST', body: r2Form });
+        if (r2Resp.ok) {
+          const r2Data = await r2Resp.json();
+          pdfDownloadUrl = r2Data.url || '';
+        }
+
+        // Also upload to GHL media (for email attachment)
+        if (!pdfDownloadUrl) {
+          const ghlForm = new FormData();
+          ghlForm.append('file', new Blob([pdfBlob2], {type:'application/pdf'}), pdfFileName);
+          ghlForm.append('locationId', LOCATION);
+          const ghlResp = await fetch(`${GHL_BASE}/medias/upload-file`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Version': '2021-07-28' },
+            body: ghlForm
+          });
+          if (ghlResp.ok) {
+            const ghlData = await ghlResp.json();
+            pdfDownloadUrl = ghlData.url || '';
+          }
         }
       } catch(uploadErr) { console.error('PDF upload error:', uploadErr); }
 
@@ -991,7 +1007,8 @@ async function submitNDA() {
             <p style="font-size:13px;color:#d5d0c8;margin:0;">Signed by: ${name}<br>Date: ${new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})}<br>Term: 2 years from date of execution</p>
           </div>
           ${pdfButtonHtml}
-          <p style="font-size:15px;line-height:1.7;color:#d5d0c8;margin:0 0 16px;">You should also have received (or will shortly receive) a Company Information Request. The sooner we have that, the sooner we can start building your custom exit plan.</p>
+          <p style="font-size:15px;line-height:1.7;color:#d5d0c8;margin:0 0 16px;">Your next step is to complete the Company Information Request. The sooner we have this, the sooner we can start building your custom exit plan.</p>
+          <p style="margin:20px 0;text-align:center;"><a href="https://thearenapartners.com/company-info.html?name=${encodeURIComponent(name)}&company=${encodeURIComponent(company)}&email=${encodeURIComponent(email)}&cid=${resolvedContactId}" style="display:inline-block;padding:14px 30px;background:transparent;color:#c9a84c;font-weight:bold;text-decoration:none;border-radius:6px;font-size:14px;border:2px solid #c9a84c;">Complete Company Information →</a></p>
           <p style="font-size:15px;line-height:1.7;color:#d5d0c8;margin:0;">Looking forward to working with you.</p>
           <p style="font-size:15px;color:#f5f0e8;margin:16px 0 0;">Jean Hardy<br><span style="font-size:13px;color:#9a9590;">Co-Founder & Operations Lead<br>The Arena Partners</span></p>
         </div>

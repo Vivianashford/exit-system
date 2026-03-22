@@ -481,10 +481,9 @@ async function submitForm() {
   submitBtn.disabled    = true;
   submitBtn.textContent = 'Submitting...';
 
-  const GHL_BASE = 'https://services.leadconnectorhq.com';
+  const GHL_BASE = 'https://arena-api.jean-475.workers.dev/api/ghl';
   const LOCATION = 'LSvdgiiT7ManCRx9CCwE';
-  const TOKEN_META = document.querySelector('meta[name="ghl-write-token"]');
-  const token = TOKEN_META ? TOKEN_META.content : '';
+  const token = 'proxy'; // Token is server-side on Worker
 
   // Build revenue summary
   const y = new Date().getFullYear();
@@ -576,7 +575,9 @@ async function submitForm() {
         <div style="background:#141414;border:1px solid rgba(201,168,76,0.15);border-radius:8px;padding:28px;">
           <p style="font-size:15px;line-height:1.7;color:#f5f0e8;margin:0 0 16px;">Hi ${firstName},</p>
           <p style="font-size:15px;line-height:1.7;color:#d5d0c8;margin:0 0 16px;">We've received your company overview for <strong style="color:#f5f0e8;">${company}</strong>. Thank you for putting this together.</p>
-          <p style="font-size:15px;line-height:1.7;color:#d5d0c8;margin:0 0 16px;">I'll be reviewing everything over the next few days and building your custom exit roadmap. I'll reach out to schedule our next conversation once the plan is ready.</p>
+          <p style="font-size:15px;line-height:1.7;color:#d5d0c8;margin:0 0 16px;">One more step: please upload your key financial and operational documents through our secure portal. This gives us the complete picture to build your custom exit roadmap.</p>
+          <p style="margin:20px 0;text-align:center;"><a href="https://thearenapartners.com/upload.html?company=${encodeURIComponent(company)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&cid=${contactId}" style="display:inline-block;padding:14px 30px;background:#c9a84c;color:#0a0a0a;font-weight:bold;text-decoration:none;border-radius:6px;font-size:14px;">Upload Documents →</a></p>
+          <p style="font-size:15px;line-height:1.7;color:#d5d0c8;margin:0 0 16px;">I'll review everything and reach out to schedule our next conversation once the plan is ready.</p>
           <p style="font-size:15px;line-height:1.7;color:#d5d0c8;margin:0;">Talk soon.</p>
           <p style="font-size:15px;color:#f5f0e8;margin:16px 0 0;">Jean Hardy<br><span style="font-size:13px;color:#9a9590;">Co-Founder & Operations Lead<br>The Arena Partners</span></p>
         </div>
