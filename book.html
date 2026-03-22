@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>TRANSFERABLE - Jean Louis Hardy | The Arena Partners</title>
 
 <!-- Favicon -->
@@ -370,6 +373,9 @@ if (readerName) readerName = readerName.charAt(0).toUpperCase() + readerName.sli
 const bookmarkKey = 'transferable-bm' + (readerName ? '-' + readerName.toLowerCase() : '');
 
 // Calculate book size based on viewport
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 function getBookSize() {
   const area = document.querySelector('.book-area');
   const h = area.clientHeight - 20;
@@ -660,5 +666,6 @@ window.addEventListener('resize', () => {
   if (pageFlip) pageFlip.update();
 });
 </script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
 </body>
 </html>
