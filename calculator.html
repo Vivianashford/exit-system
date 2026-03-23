@@ -151,6 +151,65 @@
         </div>
       </div>
 
+      <div class="calc-section">
+        <h2>3. Risk Deductions</h2>
+        <p style="color: #888; margin-bottom: 16px; font-size: 0.9rem;">These factors reduce your valuation. Answer honestly - buyers will find them in due diligence.</p>
+        <div class="field">
+          <label>Are your financials clean? (No personal expenses through the business)</label>
+          <select id="ded_financials">
+            <option value="0">Yes - fully separated</option>
+            <option value="-0.3">Minor items (car payment, cell phone)</option>
+            <option value="-0.5">Moderate commingling</option>
+            <option value="-1.0">Heavy commingling (family on payroll, vacations, etc.)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Any pending or recent lawsuits, liens, or regulatory issues?</label>
+          <select id="ded_legal">
+            <option value="0">None</option>
+            <option value="-0.2">Minor resolved issue</option>
+            <option value="-0.5">Pending lawsuit or lien</option>
+            <option value="-1.0">Multiple legal/regulatory issues</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>How old is your key equipment/fleet?</label>
+          <select id="ded_equipment">
+            <option value="0">Under 5 years - well maintained</option>
+            <option value="-0.2">5-10 years - good condition</option>
+            <option value="-0.5">10+ years - needs replacement soon</option>
+            <option value="-0.8">Significant deferred maintenance</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Do you have a signed lease or own your facility?</label>
+          <select id="ded_facility">
+            <option value="0">Own the property or long-term lease (5+ years)</option>
+            <option value="-0.2">Lease with 2-5 years remaining</option>
+            <option value="-0.5">Lease expiring within 2 years</option>
+            <option value="-0.8">Month-to-month or no formal lease</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Key employee risk - could you lose critical people during a sale?</label>
+          <select id="ded_keypeople">
+            <option value="0">Team is stable with retention agreements</option>
+            <option value="-0.2">Stable but no formal retention plans</option>
+            <option value="-0.5">1-2 key people might leave</option>
+            <option value="-0.8">High turnover or key person flight risk</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Industry headwinds or tailwinds?</label>
+          <select id="ded_market">
+            <option value="0.3">Strong tailwinds (growing demand, consolidation wave)</option>
+            <option value="0">Stable market</option>
+            <option value="-0.3">Some headwinds (regulatory, competition)</option>
+            <option value="-0.5">Significant headwinds</option>
+          </select>
+        </div>
+      </div>
+
       <button class="btn" onclick="calculate()">Calculate My Business Value</button>
     </div>
 
@@ -162,6 +221,12 @@
       </div>
 
       <div class="factors" id="factor-cards"></div>
+
+      <div id="deduction-section" style="display: none; margin-bottom: 24px;">
+        <h3 style="color: #f44336; margin-bottom: 12px; font-size: 1rem;">Risk Deductions</h3>
+        <div class="factors" id="deduction-cards"></div>
+        <p style="text-align: center; margin-top: 8px;"><span id="deduction-total" class="range"></span></p>
+      </div>
 
       <div class="result-card" style="border-color: #333;">
         <div class="label">Your EBITDA Multiple</div>
@@ -201,6 +266,15 @@
     const concentration = parseInt(document.getElementById('concentration').value);
     const trend = parseInt(document.getElementById('trend').value);
 
+    // Risk deductions
+    const dedFinancials = parseFloat(document.getElementById('ded_financials').value);
+    const dedLegal = parseFloat(document.getElementById('ded_legal').value);
+    const dedEquipment = parseFloat(document.getElementById('ded_equipment').value);
+    const dedFacility = parseFloat(document.getElementById('ded_facility').value);
+    const dedKeypeople = parseFloat(document.getElementById('ded_keypeople').value);
+    const dedMarket = parseFloat(document.getElementById('ded_market').value);
+    const totalDeductions = dedFinancials + dedLegal + dedEquipment + dedFacility + dedKeypeople + dedMarket;
+
     // Base multiples by industry
     const baseMultiples = {
       plumbing: [3.5, 7.5], hvac: [3.5, 8.0], electrical: [3.0, 7.0],
@@ -212,7 +286,8 @@
     const totalScore = ownerDep + docs + recurring + concentration + trend; // 5-25
     const scorePercent = (totalScore - 5) / 20; // 0-1
 
-    const multiple = baseMin + (baseMax - baseMin) * scorePercent;
+    const rawMultiple = baseMin + (baseMax - baseMin) * scorePercent;
+    const multiple = Math.max(baseMin, rawMultiple + totalDeductions);
     const lowMultiple = Math.max(baseMin, multiple - 0.5);
     const highMultiple = Math.min(baseMax, multiple + 0.5);
 
@@ -243,6 +318,31 @@
       html += '<div class="factor"><div class="name">' + f.name + '</div><div class="score ' + cls + '">' + f.labels[f.score - 1] + ' (' + f.score + '/5)</div></div>';
     });
     document.getElementById('factor-cards').innerHTML = html;
+
+    // Deduction cards
+    const deductions = [
+      { name: 'Financial Cleanliness', val: dedFinancials },
+      { name: 'Legal/Regulatory Risk', val: dedLegal },
+      { name: 'Equipment Condition', val: dedEquipment },
+      { name: 'Facility/Lease Security', val: dedFacility },
+      { name: 'Key Employee Retention', val: dedKeypeople },
+      { name: 'Market Conditions', val: dedMarket }
+    ];
+    let dedHtml = '';
+    deductions.forEach(d => {
+      if (d.val !== 0) {
+        const cls = d.val > 0 ? 'good' : d.val >= -0.3 ? 'mid' : 'bad';
+        const sign = d.val > 0 ? '+' : '';
+        dedHtml += '<div class="factor"><div class="name">' + d.name + '</div><div class="score ' + cls + '">' + sign + d.val.toFixed(1) + 'x</div></div>';
+      }
+    });
+    if (dedHtml) {
+      document.getElementById('deduction-cards').innerHTML = dedHtml;
+      document.getElementById('deduction-section').style.display = 'block';
+      document.getElementById('deduction-total').textContent = (totalDeductions > 0 ? '+' : '') + totalDeductions.toFixed(1) + 'x total risk adjustment';
+    } else {
+      document.getElementById('deduction-section').style.display = 'none';
+    }
 
     document.getElementById('calculator').style.display = 'none';
     document.getElementById('results').style.display = 'block';
