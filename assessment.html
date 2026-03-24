@@ -1035,9 +1035,9 @@ input.field-error {
 
       <div class="field-group">
         <div class="field-label">When are you looking to exit or transition? <span class="required">Required</span>
-          <span class="risk-tag high">High risk factor</span>
+          <span class="risk-tag high">High impact factor</span>
         </div>
-        <div class="field-hint">The tighter the timeline, the more leverage buyers have over you  -  unless you're prepared.</div>
+        <div class="field-hint">The right timeline gives you room to prepare and go to market from a position of strength.</div>
         <div class="options-grid">
           <div class="option-card" onclick="selectOption(this,'timeline','asap')">
             <input type="radio" name="timeline" value="asap">
@@ -1129,9 +1129,9 @@ input.field-error {
 
       <div class="field-group">
         <div class="field-label">Do you have a formal succession plan in place?
-          <span class="risk-tag high">High risk factor</span>
+          <span class="risk-tag high">High impact factor</span>
         </div>
-        <div class="field-hint">Buyers price you lower when there's no clear transition plan.</div>
+        <div class="field-hint">A clear transition plan is one of the fastest ways to increase your multiple and improve deal terms.</div>
         <div class="options-grid">
           <div class="option-card" onclick="selectOption(this,'succPlan','yes_full')">
             <input type="radio" name="succPlan" value="yes_full">
@@ -1202,7 +1202,7 @@ input.field-error {
 
       <div class="field-group">
         <div class="field-label">Could the business run for 90 days without you present?
-          <span class="risk-tag high">Key man risk</span>
+          <span class="risk-tag high">Key person factor</span>
         </div>
         <div class="field-hint">This is the exact question PE buyers ask during due diligence. Packaging your expertise into systems is the single biggest lever for increasing your multiple.</div>
         <div class="options-grid">
@@ -1229,9 +1229,9 @@ input.field-error {
 
       <div class="field-group">
         <div class="field-label">Does the business have documented SOPs?
-          <span class="risk-tag med">Valuation risk</span>
+          <span class="risk-tag med">Valuation factor</span>
         </div>
-        <div class="field-hint">No SOPs means every process walks out the door with you. Buyers use this to lower their offer.</div>
+        <div class="field-hint">Documented processes make your business transferable. Buyers pay premium multiples for operational clarity.</div>
         <div class="options-grid">
           <div class="option-card" onclick="selectOption(this,'sops','yes_full')">
             <input type="radio" name="sops" value="yes_full">
@@ -1256,7 +1256,7 @@ input.field-error {
 
       <div class="field-group">
         <div class="field-label">How concentrated is your customer base?
-          <span class="risk-tag high">Deal-breaking risk</span>
+          <span class="risk-tag high">Key value driver</span>
         </div>
         <div class="field-hint">Diversifying your client base is one of the fastest ways to increase your multiple. Buyers pay premium prices for balanced revenue streams.</div>
         <div class="options-grid">
@@ -1306,9 +1306,9 @@ input.field-error {
 
       <div class="field-group">
         <div class="field-label">How clean and separated are your personal and business finances?
-          <span class="risk-tag high">Due diligence risk</span>
+          <span class="risk-tag high">Due diligence factor</span>
         </div>
-        <div class="field-hint">Commingled finances are the #1 reason deals die in due diligence. Buyers walk or slash the offer.</div>
+        <div class="field-hint">Clean financials speed up due diligence and give buyers confidence. It's one of the highest-ROI preparation steps.</div>
         <div class="options-grid">
           <div class="option-card" onclick="selectOption(this,'finances','clean')">
             <input type="radio" name="finances" value="clean">
@@ -1438,7 +1438,7 @@ input.field-error {
         <div class="field-label">When you think about life after this business  -  does that picture feel clear?
           <span class="risk-tag med">Post-exit readiness</span>
         </div>
-        <div class="field-hint">75% of owners who sell profoundly regret it within 12 months  -  not because of the money, but because nobody prepared them for who they'd be without the business.</div>
+        <div class="field-hint">The most successful exits happen when the owner has clarity on who they'll be and what comes next. That's the real preparation.</div>
         <div class="options-grid">
           <div class="option-card" onclick="selectOption(this,'postExit','clear')">
             <input type="radio" name="postExit" value="clear">
@@ -1562,7 +1562,7 @@ input.field-error {
 
     <!-- RESULT HEADER (Section A: Executive Summary) -->
     <div id="resultHeader" class="result-header high">
-      <div id="resultBadge" class="result-badge high">● High Risk</div>
+      <div id="resultBadge" class="result-badge high">● Assessment</div>
       <div class="result-score-wrap">
         <div class="result-score-num" id="scoreNum">0</div>
         <div class="result-score-meta">
@@ -1580,7 +1580,7 @@ input.field-error {
       <!-- CONFIRMATION BAND -->
       <div class="confirm-band">
         <div class="confirm-icon">✓</div>
-        <p id="confirmText">Your call is confirmed. <strong>Your advisor has received your risk report</strong> and will come prepared to address each of these areas specifically. Check your email for a copy of this report.</p>
+        <p id="confirmText">Your call is confirmed. <strong>Your advisor has received your diagnostic report</strong> and will come prepared to address each of these areas specifically. Check your email for a copy of this report.</p>
       </div>
 
       <!-- Section A continued: Executive Summary & TEV -->
@@ -1686,7 +1686,7 @@ const INSIGHTS = {
     },
     moderate: {
       diagnosis: "Your top client is 10-25% of revenue. There's some concentration, but it's manageable. You have a reasonable spread of customers, though losing your biggest account would still create a noticeable dip in performance.",
-      buyerView: "Buyers will note it but it won't kill the deal. They may ask about the strength of the relationship and whether contracts are in place. It's a yellow flag, not a red one.",
+      buyerView: "Buyers will review this but it won't be a major concern. They may ask about the strength of the relationship and whether contracts are in place. With a little diversification work, this becomes a non-issue.",
       impact: "Minor impact - maybe a 0.25-0.5x reduction depending on whether contracts are in place. Fixable with a clear diversification plan.",
       fixTimeline: "3-6 months",
       priority: 4,
@@ -1735,7 +1735,7 @@ const INSIGHTS = {
     no: {
       diagnosis: "Your team clearly knows how to get things done - the knowledge is there. The opportunity is to capture that know-how into documented systems. Once it's on paper, your business becomes transferable and significantly more valuable.",
       buyerView: "Documented processes are one of the easiest ways to increase buyer confidence and your multiple. Building SOPs signals operational maturity and makes the transition seamless - that's what commands premium pricing.",
-      impact: "Expect a 0.5-1x multiple reduction. Buyers will also factor in 6-12 months of operational risk during their integration plan, which further depresses the offer.",
+      impact: "Documenting your processes can add 0.5-1x to your multiple. It also makes the integration plan smoother, which improves your deal terms across the board.",
       fixTimeline: "6-12 months",
       priority: 2,
       category: "Operational Documentation (SOPs)"
@@ -1859,7 +1859,7 @@ const INSIGHTS = {
     over5: {
       diagnosis: "Your timeline is 5+ years or undefined. You're thinking about this early, which is smart. Most owners don't think about exit readiness until it's too late. Starting now means you can build toward maximum value with zero pressure.",
       buyerView: "Not relevant yet - but the smart move is to build a business that's always ready to sell. The best time to prepare for an exit is long before you need one.",
-      impact: "No urgency penalty. Every improvement you make now compounds over years. Starting the optimization process early is the single highest-ROI decision you can make.",
+      impact: "No urgency pressure. Every improvement you make now compounds over years. Starting the optimization process early is the single highest-ROI decision you can make.",
       fixTimeline: "Build foundations now",
       priority: 5,
       category: "Timeline Urgency"
