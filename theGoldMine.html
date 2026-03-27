@@ -148,11 +148,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;
   <div class="topbar">
     <div class="topbar-title" id="topbar-title">Pipeline Overview</div>
     <div class="date-row">
-      <button class="dbtn" data-r="7d">7D</button>
-      <button class="dbtn on" data-r="30d">30D</button>
-      <button class="dbtn" data-r="90d">90D</button>
-      <button class="dbtn" data-r="ytd">YTD</button>
-      <span style="color:var(--tm);font-size:10px;margin:0 3px">|</span>
       <input type="date" class="dinput" id="df">
       <span style="color:var(--tm);font-size:10px">to</span>
       <input type="date" class="dinput" id="dt">
@@ -352,7 +347,7 @@ function clr(id){const el=$(id);if(el)el.innerHTML=''}
 // ─── FACEBOOK API ───
 function getDateRange(){
   let from=$('df').value, to=$('dt').value;
-  if(!from||!to){const rd=rangeDate(range);from=rd.from;to=rd.to}
+  if(!from||!to){const now=new Date();to=now.toISOString().split('T')[0];from=new Date(now-30*864e5).toISOString().split('T')[0];$('df').value=from;$('dt').value=to}
   return {from,to};
 }
 
@@ -832,7 +827,7 @@ function renderPage(){
 
 // ─── EVENTS ───
 document.querySelectorAll('.side-link').forEach(l=>l.addEventListener('click',()=>go(l.dataset.page)));
-document.querySelectorAll('.dbtn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.dbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');range=b.dataset.r;const dr=getDateRange();$('df').value=dr.from;$('dt').value=dr.to;fetchAll()}));
+// Date change listeners
 $('ref-btn').addEventListener('click',fetchAll);
 $('df').addEventListener('change',()=>{document.querySelectorAll('.dbtn').forEach(x=>x.classList.remove('on'));fetchAll()});
 $('dt').addEventListener('change',()=>{document.querySelectorAll('.dbtn').forEach(x=>x.classList.remove('on'));fetchAll()});
