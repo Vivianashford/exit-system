@@ -574,6 +574,7 @@ function renderOverview(){
 function renderFBLeads(){
   const m=metrics();const fb=fbMetrics();const L=labels(range);const n=L.length;
   const fbLeads=fb.leads||m.fbLeads;const fbSpend=fb.spend||m.fbSpend||0;const fbCPL=fb.cpl||m.cpl;
+  const cn=fb.camps.map(c=>c.name.length>25?c.name.substring(0,25)+'…':c.name);
   ms('fb-stats',[
     {l:'Total FB Leads',v:fbLeads,s:'Facebook API',c:'var(--fb)'},
     {l:'FB Ad Spend',v:'$'+fbSpend.toLocaleString(undefined,{maximumFractionDigits:0}),s:'FB Insights'},
@@ -625,7 +626,6 @@ function renderFBLeads(){
     }]},legend:true
   });
   clr('fb-camp-charts');
-  const cn=fb.camps.map(c=>c.name.length>25?c.name.substring(0,25)+'…':c.name);
   mc('fb-camp-charts',{title:'Campaign Spend vs Leads',sub:'Real data from Facebook Ads API',badge:'FB API',full:true,
     type:'bar',data:{labels:cn,datasets:[
       {label:'Spend ($)',data:fb.camps.map(c=>c.spend),backgroundColor:'rgba(239,68,68,.4)',borderRadius:3},
