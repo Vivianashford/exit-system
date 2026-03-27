@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="utm.js"></script>
 <meta name="google-site-verification" content="8W6XrzOG_RuJaV-RF5gh2-9YrqHs0a_1ulubS51lV7Q" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -1318,7 +1319,7 @@
         email: email,
         locationId: 'LSvdgiiT7ManCRx9CCwE',
         source: 'Arena VSL Page',
-        tags: ['vsl-lead']
+        tags: ['vsl-lead', window.ArenaUTM ? window.ArenaUTM.getSourceTag() : 'source-organic']
       })
     })
     .then(function(res) { return res.json(); })
