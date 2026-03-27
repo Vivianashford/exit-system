@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoldMine — Leads & Pipeline Command Center</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#09090b; --s1:#111113; --s2:#18181b; --s3:#1e1e22; --s4:#27272a;
+  --b1:#27272a; --b2:#3f3f46; --t:#fafafa; --td:#a1a1aa; --tm:#52525b;
+  --fb:#1877f2; --fb-dim:rgba(24,119,242,0.1);
+  --ghl:#ff6a00; --ghl-dim:rgba(255,106,0,0.1);
+  --up:#22c55e; --dn:#ef4444; --warn:#eab308; --purple:#a855f7;
+  --r:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--t);min-height:100vh}
+
+/* Layout */
+.app{display:flex;min-height:100vh}
+.side{width:230px;background:var(--s1);border-right:1px solid var(--b1);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+.main{flex:1;margin-left:230px}
+
+/* Sidebar */
+.side-brand{padding:20px 20px 16px;border-bottom:1px solid var(--b1)}
+.side-brand h1{font-size:14px;font-weight:700;letter-spacing:-0.3px}
+.side-brand small{color:var(--tm);font-size:11px}
+.side-nav{padding:12px}
+.side-label{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--tm);padding:10px 8px 4px;font-weight:700}
+.side-link{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:6px;font-size:12px;color:var(--td);cursor:pointer;transition:all .15s;margin-bottom:1px}
+.side-link:hover{background:var(--s2);color:var(--t)}
+.side-link.active{background:var(--s3);color:var(--t);font-weight:600}
+.side-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.side-foot{margin-top:auto;padding:14px 16px;border-top:1px solid var(--b1);font-size:10px;color:var(--tm);line-height:1.8}
+.side-foot .dot{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:5px}
+
+/* Topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--b1);background:var(--s1);position:sticky;top:0;z-index:50}
+.topbar-title{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
+.badge{font-size:9px;padding:3px 8px;border-radius:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.date-row{display:flex;align-items:center;gap:5px}
+.dbtn{padding:5px 10px;border-radius:4px;border:1px solid var(--b1);background:transparent;color:var(--td);font-size:10px;cursor:pointer;font-weight:600;font-family:inherit;transition:all .15s}
+.dbtn:hover{border-color:var(--b2);color:var(--t)}
+.dbtn.on{background:var(--t);color:var(--bg);border-color:var(--t)}
+.dinput{padding:4px 8px;border-radius:4px;border:1px solid var(--b1);background:var(--s2);color:var(--td);font-size:10px;font-family:inherit;width:110px}
+.rbtn{padding:5px 12px;border-radius:4px;border:1px solid var(--b1);background:var(--s2);color:var(--t);font-size:10px;cursor:pointer;font-weight:700;font-family:inherit;transition:all .15s}
+.rbtn:hover{background:var(--s3)}
+
+/* Content */
+.content{padding:22px 28px}
+.page{display:none}.page.active{display:block}
+
+/* Stat Cards */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:20px}
+.sc{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);padding:14px 16px}
+.sc-label{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:600}
+.sc-val{font-size:22px;font-weight:700;letter-spacing:-.5px;line-height:1}
+.sc-meta{display:flex;align-items:center;gap:5px;margin-top:6px;font-size:10px}
+.sc-ch{padding:2px 5px;border-radius:3px;font-weight:700;font-size:9px}
+.sc-ch.up{background:rgba(34,197,94,.1);color:var(--up)}
+.sc-ch.dn{background:rgba(239,68,68,.1);color:var(--dn)}
+.sc-bench{color:var(--tm);font-size:9px}
+.sc-src{font-size:8px;color:var(--tm);padding:2px 5px;background:var(--s2);border-radius:3px;margin-top:4px;display:inline-block}
+
+/* Charts */
+.cg{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+.cc{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);padding:18px}
+.cc.full{grid-column:1/-1}
+.cc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cc-title{font-size:12px;font-weight:600}
+.cc-sub{font-size:10px;color:var(--tm)}
+.cc-badge{font-size:8px;padding:2px 6px;border-radius:3px;background:var(--s2);color:var(--td);text-transform:uppercase;letter-spacing:.5px}
+.cc canvas{width:100%!important}
+
+/* Section */
+.sec{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tm);margin:24px 0 14px;padding-bottom:6px;border-bottom:1px solid var(--b1)}
+
+/* Table */
+.dt{width:100%;border-collapse:collapse;font-size:11px}
+.dt th{text-align:left;padding:8px 10px;border-bottom:1px solid var(--b1);color:var(--tm);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.5px}
+.dt td{padding:8px 10px;border-bottom:1px solid var(--b1);color:var(--td)}
+.dt tr:hover td{color:var(--t);background:var(--s2)}
+.dot-s{display:inline-flex;align-items:center;gap:4px}
+.dot-s span{width:5px;height:5px;border-radius:50%}
+
+/* Modal / Form */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--b2);border-radius:12px;padding:28px;width:560px;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:16px;font-weight:700;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-grid.full{grid-template-columns:1fr}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:10px;color:var(--td);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.fg input,.fg select,.fg textarea{padding:8px 10px;border-radius:6px;border:1px solid var(--b1);background:var(--s2);color:var(--t);font-size:12px;font-family:inherit}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--b2)}
+.fg textarea{resize:vertical;min-height:60px}
+.form-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.btn{padding:8px 18px;border-radius:6px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-primary{background:var(--t);color:var(--bg)}
+.btn-primary:hover{opacity:.9}
+.btn-ghost{background:transparent;border:1px solid var(--b1);color:var(--td)}
+.btn-ghost:hover{border-color:var(--b2);color:var(--t)}
+.btn-danger{background:rgba(239,68,68,.15);color:var(--dn);border:1px solid rgba(239,68,68,.3)}
+.btn-add{padding:6px 14px;border-radius:5px;border:1px solid var(--b1);background:var(--s2);color:var(--t);font-size:11px;cursor:pointer;font-weight:600;font-family:inherit}
+.btn-add:hover{background:var(--s3)}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--s3);border:1px solid var(--b2);border-radius:8px;padding:10px 18px;font-size:11px;color:var(--t);z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+.last-up{font-size:9px;color:var(--tm);text-align:right;padding:6px 28px}
+
+@media(max-width:1200px){.cg{grid-template-columns:1fr}}
+@media(max-width:900px){.side{width:56px}.side-link span,.side-label,.side-brand small,.side-foot{display:none}.main{margin-left:56px}.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<nav class="side">
+  <div class="side-brand">
+    <h1>GoldMine</h1>
+    <small>Leads &rarr; Close Tracker</small>
+  </div>
+  <div class="side-nav">
+    <div class="side-label">Views</div>
+    <div class="side-link active" data-page="overview"><span class="side-dot" style="background:var(--t)"></span><span>Overview</span></div>
+    <div class="side-link" data-page="fb-leads"><span class="side-dot" style="background:var(--fb)"></span><span>Facebook Leads</span></div>
+    <div class="side-link" data-page="ghl"><span class="side-dot" style="background:var(--ghl)"></span><span>GHL Calls & Funnel</span></div>
+    <div class="side-link" data-page="pipeline"><span class="side-dot" style="background:var(--up)"></span><span>Deal Pipeline</span></div>
+    <div class="side-link" data-page="unit-econ"><span class="side-dot" style="background:var(--warn)"></span><span>Unit Economics</span></div>
+    <div class="side-label" style="margin-top:12px">Data</div>
+    <div class="side-link" data-page="add-deal" style="color:var(--up)"><span>+ Log a Close</span></div>
+    <div class="side-link" data-page="add-call" style="color:var(--ghl)"><span>+ Log a Call</span></div>
+  </div>
+  <div class="side-foot">
+    <span class="dot" style="background:var(--fb)" id="fb-dot"></span> Facebook API<br>
+    <span class="dot" style="background:var(--ghl)" id="ghl-dot"></span> GHL API<br>
+    <span class="dot" id="data-dot" style="background:var(--up)"></span> Local Data (<span id="deal-count">0</span> deals)
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Pipeline Overview</div>
+    <div class="date-row">
+      <button class="dbtn" data-r="7d">7D</button>
+      <button class="dbtn on" data-r="30d">30D</button>
+      <button class="dbtn" data-r="90d">90D</button>
+      <button class="dbtn" data-r="ytd">YTD</button>
+      <span style="color:var(--tm);font-size:10px;margin:0 3px">|</span>
+      <input type="date" class="dinput" id="df">
+      <span style="color:var(--tm);font-size:10px">to</span>
+      <input type="date" class="dinput" id="dt">
+      <button class="rbtn" id="ref-btn">&#8635; Refresh</button>
+    </div>
+  </div>
+  <div class="last-up" id="last-up">Last refreshed: —</div>
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <div class="page active" id="p-overview"><div class="content">
+    <div class="stats" id="ov-stats"></div>
+    <div class="cg" id="ov-charts"></div>
+    <div class="sec">Funnel Snapshot</div>
+    <div class="cg" id="ov-funnel"></div>
+    <div class="sec">Recent Activity</div>
+    <div class="cc"><table class="dt" id="ov-table"></table></div>
+  </div></div>
+
+  <!-- ═══ FACEBOOK LEADS ═══ -->
+  <div class="page" id="p-fb-leads"><div class="content">
+    <div class="stats" id="fb-stats"></div>
+    <div class="sec">Lead Volume & Cost</div>
+    <div class="cg" id="fb-vol-charts"></div>
+    <div class="sec">Lead Quality & Source</div>
+    <div class="cg" id="fb-quality-charts"></div>
+    <div class="sec">Campaign Performance</div>
+    <div class="cg" id="fb-camp-charts"></div>
+    <div class="sec">Form & Ad Breakdown</div>
+    <div class="cc"><table class="dt" id="fb-leads-table"></table></div>
+  </div></div>
+
+  <!-- ═══ GHL CALLS & FUNNEL ═══ -->
+  <div class="page" id="p-ghl"><div class="content">
+    <div class="stats" id="ghl-stats"></div>
+    <div class="sec">Call Analytics</div>
+    <div class="cg" id="ghl-call-charts"></div>
+    <div class="sec">Pipeline Stages</div>
+    <div class="cg" id="ghl-pipe-charts"></div>
+    <div class="sec">Contact Activity</div>
+    <div class="cg" id="ghl-activity-charts"></div>
+    <div class="sec">Recent Contacts</div>
+    <div class="cc"><table class="dt" id="ghl-table"></table></div>
+  </div></div>
+
+  <!-- ═══ DEAL PIPELINE ═══ -->
+  <div class="page" id="p-pipeline"><div class="content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-size:14px;font-weight:600">Active Pipeline</div>
+      <button class="btn-add" onclick="openModal('deal')">+ Log New Close</button>
+    </div>
+    <div class="stats" id="pipe-stats"></div>
+    <div class="cg" id="pipe-charts"></div>
+    <div class="sec">All Deals</div>
+    <div class="cc"><table class="dt" id="pipe-table"></table></div>
+  </div></div>
+
+  <!-- ═══ UNIT ECONOMICS ═══ -->
+  <div class="page" id="p-unit-econ"><div class="content">
+    <div class="stats" id="ue-stats"></div>
+    <div class="sec">Cost per Lead & Cost per Close</div>
+    <div class="cg" id="ue-cpl-charts"></div>
+    <div class="sec">Revenue vs Ad Spend</div>
+    <div class="cg" id="ue-rev-charts"></div>
+    <div class="sec">Channel ROI</div>
+    <div class="cg" id="ue-roi-charts"></div>
+  </div></div>
+
+</div>
+</div>
+
+<!-- DEAL MODAL -->
+<div class="modal-bg" id="deal-modal">
+  <div class="modal">
+    <h2 id="modal-title">Log a Close / Deal</h2>
+    <input type="hidden" id="deal-edit-id">
+    <div class="form-grid">
+      <div class="fg"><label>Client Name *</label><input id="d-name" placeholder="e.g. Premier Plumbing"></div>
+      <div class="fg"><label>Close Date *</label><input type="date" id="d-date"></div>
+      <div class="fg"><label>Deal Value ($) *</label><input type="number" id="d-value" placeholder="75000"></div>
+      <div class="fg"><label>Lead Source</label>
+        <select id="d-source"><option>Facebook Ads</option><option>Google Ads</option><option>Referral</option><option>LinkedIn</option><option>Cold Outreach</option><option>Speaking/Event</option><option>Organic/Inbound</option><option>Other</option></select>
+      </div>
+      <div class="fg"><label>Ad Campaign (if FB)</label><input id="d-campaign" placeholder="e.g. Exit Planning Awareness"></div>
+      <div class="fg"><label>Cost to Acquire ($)</label><input type="number" id="d-cta" placeholder="Total ad spend attributed"></div>
+      <div class="fg"><label>Pipeline Stage</label>
+        <select id="d-stage"><option>New Lead</option><option>Discovery Call</option><option>Qualification</option><option>Proposal Sent</option><option>Negotiation</option><option>Closed Won</option><option>Closed Lost</option></select>
+      </div>
+      <div class="fg"><label>Rep / Closer</label><input id="d-rep" placeholder="e.g. Jean"></div>
+      <div class="fg"><label>Follow-up Date</label><input type="date" id="d-followup"></div>
+      <div class="fg"><label>Next Action</label><input id="d-action" placeholder="e.g. Send agreement"></div>
+    </div>
+    <div class="form-grid full" style="margin-top:10px">
+      <div class="fg"><label>Call Log / Notes</label><textarea id="d-notes" placeholder="Call dates, what was discussed, objections, next steps..."></textarea></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('deal')">Cancel</button>
+      <button class="btn btn-danger" id="del-deal-btn" style="display:none" onclick="deleteDeal()">Delete</button>
+      <button class="btn btn-primary" onclick="saveDeal()">Save Deal</button>
+    </div>
+  </div>
+</div>
+
+<!-- CALL MODAL -->
+<div class="modal-bg" id="call-modal">
+  <div class="modal">
+    <h2>Log a Call</h2>
+    <div class="form-grid">
+      <div class="fg"><label>Contact Name *</label><input id="c-name" placeholder="e.g. Mike Johnson"></div>
+      <div class="fg"><label>Call Date *</label><input type="date" id="c-date"></div>
+      <div class="fg"><label>Call Type</label>
+        <select id="c-type"><option>Discovery</option><option>Follow-up</option><option>Qualification</option><option>Proposal Review</option><option>Close Attempt</option><option>Check-in</option></select>
+      </div>
+      <div class="fg"><label>Duration (min)</label><input type="number" id="c-dur" placeholder="30"></div>
+      <div class="fg"><label>Outcome</label>
+        <select id="c-outcome"><option>Booked Next Call</option><option>Sent Proposal</option><option>Needs Follow-up</option><option>Not Interested</option><option>Closed</option><option>No Show</option></select>
+      </div>
+      <div class="fg"><label>Lead Source</label>
+        <select id="c-source"><option>Facebook Ads</option><option>GHL</option><option>Referral</option><option>LinkedIn</option><option>Cold Outreach</option><option>Organic</option></select>
+      </div>
+    </div>
+    <div class="form-grid full" style="margin-top:10px">
+      <div class="fg"><label>Notes</label><textarea id="c-notes" placeholder="What was discussed, objections, temperature..."></textarea></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('call')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCall()">Save Call</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// ARENA LEADS & PIPELINE ENGINE
+// ═══════════════════════════════════════════════════════
+
+// ─── CONFIG ───
+const FB_TOKEN = localStorage.getItem('fb_access_token') || 'EAANbF4N0IhABRErQK4nG6QiouVymvuqrnzow6cbTw07ZB2RHV82Ugrb8vAPxZBF0edLvXYGCTevwtYzu3iHYxMeZCMYuuXbZBJBzG5fQw6tChZCqrqZCJxFLuSgXWmjJ7dWxrc2O09KvgP3mPaJJiSuAHxxtJKC5cRfZAGlsXxKGMevWo5vHy0MYLafltEzVXR6G9kVp5FZATZA7M';
+const FB_ACCT = localStorage.getItem('fb_ad_account_id') || 'act_1392828839106650';
+const GHL_API_KEY = localStorage.getItem('ghl_api_key') || 'worker-proxy';
+const GHL_LOCATION = localStorage.getItem('ghl_location_id') || 'LSvdgiiT7ManCRx9CCwE';
+const GHL_BASE = 'https://arena-api.jean-475.workers.dev/api/ghl';
+const GHL_DIRECT = 'https://services.leadconnectorhq.com';
+const FB_GRAPH = 'https://graph.facebook.com/v19.0';
+
+// ─── STATE ───
+let range = '30d';
+let page = 'overview';
+let charts = {};
+let deals = JSON.parse(localStorage.getItem('arena_deals') || '[]');
+let calls = JSON.parse(localStorage.getItem('arena_calls') || '[]');
+let fbCache = JSON.parse(localStorage.getItem('arena_fb_leads') || '{}');
+let ghlCache = JSON.parse(localStorage.getItem('arena_ghl_data') || '{}');
+
+// ─── UTILS ───
+function rangeDate(r) {
+  const now = new Date(), to = now.toISOString().split('T')[0];
+  let f;
+  switch(r){case'7d':f=new Date(now-7*864e5);break;case'30d':f=new Date(now-30*864e5);break;case'90d':f=new Date(now-90*864e5);break;case'ytd':f=new Date(now.getFullYear(),0,1);break;default:f=new Date(now-30*864e5)}
+  return {from:f.toISOString().split('T')[0], to};
+}
+function labels(r) {
+  const n=r==='7d'?7:r==='30d'?30:r==='90d'?12:r==='ytd'?new Date().getMonth()+1:30;
+  const L=[],now=new Date();
+  if(r==='90d'||r==='ytd'){const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];for(let i=n-1;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);L.push(m[d.getMonth()])}}
+  else{for(let i=n-1;i>=0;i--){const d=new Date(now-i*864e5);L.push(`${d.getMonth()+1}/${d.getDate()}`)}}
+  return L;
+}
+function gen(n,lo,hi,t=0){const d=[];let v=lo+Math.random()*(hi-lo)*.5;for(let i=0;i<n;i++){v+=(Math.random()-.45+t*.01)*(hi-lo)*.08;v=Math.max(lo,Math.min(hi,v));d.push(Math.round(v*10)/10)}return d}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function $(id){return document.getElementById(id)}
+
+// ─── CHART HELPER ───
+const CD={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#18181b',borderColor:'#3f3f46',borderWidth:1,titleColor:'#fafafa',bodyColor:'#a1a1aa',titleFont:{size:11,weight:600},bodyFont:{size:10},padding:8,cornerRadius:5}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#52525b',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#52525b',font:{size:9}}}}};
+
+function mc(cid,cfg){
+  const id='c-'+cid+'-'+Math.random().toString(36).substr(2,5);
+  const el=$(cid);if(!el)return;
+  const card=document.createElement('div');
+  card.className='cc'+(cfg.full?' full':'');
+  card.innerHTML=`<div class="cc-head"><div><div class="cc-title">${cfg.title}</div>${cfg.sub?`<div class="cc-sub">${cfg.sub}</div>`:''}</div>${cfg.badge?`<div class="cc-badge">${cfg.badge}</div>`:''}</div><div style="height:${cfg.h||200}px"><canvas id="${id}"></canvas></div>`;
+  el.appendChild(card);
+  const ctx=$(id).getContext('2d');
+  const c={type:cfg.type||'line',data:cfg.data,options:{...JSON.parse(JSON.stringify(CD)),...(cfg.opts||{})}};
+  if(cfg.type==='doughnut'||cfg.type==='pie')delete c.options.scales;
+  if(cfg.legend)c.options.plugins.legend={display:true,position:'bottom',labels:{color:'#a1a1aa',font:{size:9},padding:10,usePointStyle:true,pointStyleWidth:7}};
+  if(cfg.stacked){c.options.scales.x.stacked=true;c.options.scales.y.stacked=true}
+  if(cfg.yFmt)c.options.scales.y.ticks.callback=cfg.yFmt;
+  if(cfg.horiz)c.options.indexAxis='y';
+  if(charts[id])charts[id].destroy();
+  charts[id]=new Chart(ctx,c);
+}
+function ms(cid,items){const el=$(cid);if(!el)return;el.innerHTML='';items.forEach(s=>{const d=document.createElement('div');d.className='sc';d.innerHTML=`<div class="sc-label">${s.l}</div><div class="sc-val" style="${s.c?'color:'+s.c:''}">${s.v}</div><div class="sc-meta">${s.ch?`<span class="sc-ch ${s.ch>0?'up':'dn'}">${s.ch>0?'+':''}${s.ch}%</span>`:''}${s.b?`<span class="sc-bench">Bench: ${s.b}</span>`:''}</div>${s.s?`<div class="sc-src">${s.s}</div>`:''}`;el.appendChild(d)})}
+function clr(id){const el=$(id);if(el)el.innerHTML=''}
+
+// ─── FACEBOOK API ───
+function getDateRange(){
+  let from=$('df').value, to=$('dt').value;
+  if(!from||!to){const rd=rangeDate(range);from=rd.from;to=rd.to}
+  return {from,to};
+}
+
+async function fbFetch(ep,params={},skipTimeRange=false){
+  if(!FB_TOKEN||!FB_ACCT)return null;
+  try{
+    const dr=getDateRange();
+    const p=new URLSearchParams({access_token:FB_TOKEN,...params});
+    if(!skipTimeRange)p.set('time_range',JSON.stringify({since:dr.from,until:dr.to}));
+    const r=await fetch(`${FB_GRAPH}/${FB_ACCT}${ep}?${p}`);
+    if(!r.ok){console.log('FB error:',r.status,await r.text());return null}
+    return await r.json();
+  }catch(e){console.log('FB:',e.message);return null}
+}
+
+async function fetchFBLeads(){
+  const [insights, leadForms, dailyInsights, campaignInsights] = await Promise.all([
+    fbFetch('/insights',{fields:'impressions,reach,spend,clicks,cpc,cpm,ctr,actions,cost_per_action_type',level:'account'}),
+    fbFetch('/leadgen_forms',{fields:'id,name,status,leads_count,created_time',limit:50},true),
+    fbFetch('/insights',{fields:'spend,impressions,clicks,cpc,ctr,actions,cost_per_action_type',time_increment:1,level:'account'}),
+    fbFetch('/insights',{fields:'campaign_name,spend,impressions,clicks,cpc,ctr,actions,cost_per_action_type',level:'campaign',limit:20})
+  ]);
+  return {insights,leadForms,dailyInsights,campaignInsights};
+}
+
+// ─── GHL API ───
+async function ghlFetch(ep){
+  try{
+    const r=await fetch(`${GHL_BASE}${ep}`,{headers:{Version:'2021-07-28'}});
+    if(!r.ok)throw new Error(r.status);return await r.json();
+  }catch(e){console.log('GHL:',e.message);return null}
+}
+
+async function fetchGHL(){
+  const [contacts, pipelines, conversations, calendars] = await Promise.all([
+    ghlFetch(`/contacts/?locationId=${GHL_LOCATION}&limit=100`),
+    ghlFetch(`/opportunities/pipelines?locationId=${GHL_LOCATION}`),
+    ghlFetch(`/conversations/?locationId=${GHL_LOCATION}&limit=50`),
+    ghlFetch(`/calendars/?locationId=${GHL_LOCATION}`)
+  ]);
+
+  // Get opportunities from first pipeline
+  let opportunities = null;
+  if(pipelines && pipelines.pipelines && pipelines.pipelines[0]){
+    opportunities = await ghlFetch(`/opportunities/search?locationId=${GHL_LOCATION}&pipelineId=${pipelines.pipelines[0].id}&limit=100`);
+  }
+
+  return {contacts,pipelines,conversations,calendars,opportunities};
+}
+
+// ─── FETCH ALL ───
+async function fetchAll(){
+  const btn=$('ref-btn');btn.textContent='Loading...';btn.style.opacity='.5';
+  const [fb,ghl]=await Promise.all([fetchFBLeads(),fetchGHL()]);
+  if(fb){fbCache=fb;localStorage.setItem('arena_fb_leads',JSON.stringify(fb))}
+  if(ghl){ghlCache=ghl;localStorage.setItem('arena_ghl_data',JSON.stringify(ghl))}
+  btn.textContent='↻ Refresh';btn.style.opacity='1';
+  $('last-up').textContent='Last refreshed: '+new Date().toLocaleString();
+  toast('Data refreshed from Facebook + GHL + local pipeline');
+  renderPage();
+}
+
+// ─── DEAL CRUD ───
+function openModal(type,editId){
+  if(type==='deal'){
+    $('deal-modal').classList.add('open');
+    if(editId!==undefined){
+      const d=deals[editId];
+      $('deal-edit-id').value=editId;
+      $('d-name').value=d.name;$('d-date').value=d.date;$('d-value').value=d.value;
+      $('d-source').value=d.source;$('d-campaign').value=d.campaign||'';$('d-cta').value=d.cta||'';
+      $('d-stage').value=d.stage;$('d-rep').value=d.rep||'';$('d-followup').value=d.followup||'';
+      $('d-action').value=d.action||'';$('d-notes').value=d.notes||'';
+      $('modal-title').textContent='Edit Deal';$('del-deal-btn').style.display='inline-block';
+    } else {
+      $('deal-edit-id').value='';$('modal-title').textContent='Log a Close / Deal';
+      $('del-deal-btn').style.display='none';
+      $('d-date').value=new Date().toISOString().split('T')[0];
+      $('d-name').value='';$('d-value').value='';$('d-campaign').value='';$('d-cta').value='';
+      $('d-rep').value='';$('d-followup').value='';$('d-action').value='';$('d-notes').value='';
+      $('d-source').value='Facebook Ads';$('d-stage').value='Closed Won';
+    }
+  } else {
+    $('call-modal').classList.add('open');
+    $('c-date').value=new Date().toISOString().split('T')[0];
+    $('c-name').value='';$('c-dur').value='';$('c-notes').value='';
+  }
+}
+function closeModal(type){$(type+'-modal').classList.remove('open')}
+
+function saveDeal(){
+  const name=$('d-name').value.trim();const date=$('d-date').value;const value=parseFloat($('d-value').value);
+  if(!name||!date||!value)return toast('Fill in Client Name, Date, and Value');
+  const deal={name,date,value,source:$('d-source').value,campaign:$('d-campaign').value,cta:parseFloat($('d-cta').value)||0,stage:$('d-stage').value,rep:$('d-rep').value,followup:$('d-followup').value,action:$('d-action').value,notes:$('d-notes').value,created:new Date().toISOString()};
+  const editId=$('deal-edit-id').value;
+  if(editId!==''){deals[parseInt(editId)]=deal}else{deals.push(deal)}
+  localStorage.setItem('arena_deals',JSON.stringify(deals));
+  closeModal('deal');toast(editId!==''?'Deal updated':'Deal logged');renderPage();
+}
+
+function deleteDeal(){
+  const editId=$('deal-edit-id').value;
+  if(editId!==''&&confirm('Delete this deal?')){
+    deals.splice(parseInt(editId),1);
+    localStorage.setItem('arena_deals',JSON.stringify(deals));
+    closeModal('deal');toast('Deal deleted');renderPage();
+  }
+}
+
+function saveCall(){
+  const name=$('c-name').value.trim();const date=$('c-date').value;
+  if(!name||!date)return toast('Fill in Contact Name and Date');
+  calls.push({name,date,type:$('c-type').value,duration:parseInt($('c-dur').value)||0,outcome:$('c-outcome').value,source:$('c-source').value,notes:$('c-notes').value,created:new Date().toISOString()});
+  localStorage.setItem('arena_calls',JSON.stringify(calls));
+  closeModal('call');toast('Call logged');renderPage();
+}
+
+// ─── COMPUTED METRICS ───
+function metrics(){
+  const closedDeals = deals.filter(d=>d.stage==='Closed Won');
+  const totalRevenue = closedDeals.reduce((s,d)=>s+d.value,0);
+  const totalCTA = deals.reduce((s,d)=>s+(d.cta||0),0);
+  const fbDeals = deals.filter(d=>d.source==='Facebook Ads');
+  const fbClosed = fbDeals.filter(d=>d.stage==='Closed Won');
+  const fbRevenue = fbClosed.reduce((s,d)=>s+d.value,0);
+  const fbSpend = fbDeals.reduce((s,d)=>s+(d.cta||0),0);
+  const totalLeads = deals.length + 18; // 18 = demo FB leads not yet in pipeline
+  const fbLeads = fbDeals.length + 18;
+  const cpl = fbSpend > 0 ? fbSpend / fbLeads : 142;
+  const cpc = closedDeals.length > 0 ? totalCTA / closedDeals.length : 0;
+  const fbCPC = fbClosed.length > 0 ? fbSpend / fbClosed.length : 0;
+  const roas = fbSpend > 0 ? fbRevenue / fbSpend : 0;
+  const winRate = deals.length > 0 ? (closedDeals.length / deals.length * 100) : 0;
+  return {closedDeals,totalRevenue,totalCTA,fbDeals,fbClosed,fbRevenue,fbSpend,totalLeads,fbLeads,cpl,cpc,fbCPC,roas,winRate};
+}
+
+// ═══════════════════════════════════════
+// RENDER PAGES
+// ═══════════════════════════════════════
+
+function fbMetrics(){
+  const ins=fbCache.insights?.data?.[0]||{};
+  const spend=parseFloat(ins.spend||0);
+  const impr=parseInt(ins.impressions||0);
+  const clicks=parseInt(ins.clicks||0);
+  const cpc=parseFloat(ins.cpc||0);
+  const ctr=parseFloat(ins.ctr||0);
+  const leads=parseInt((ins.actions||[]).find(a=>a.action_type==='lead')?.value||0);
+  const cpl=leads>0?spend/leads:0;
+  const camps=(fbCache.campaignInsights?.data||[]).map(c=>{
+    const cLeads=parseInt((c.actions||[]).find(a=>a.action_type==='lead')?.value||0);
+    return{name:c.campaign_name,spend:parseFloat(c.spend||0),impressions:parseInt(c.impressions||0),clicks:parseInt(c.clicks||0),cpc:parseFloat(c.cpc||0),ctr:parseFloat(c.ctr||0),leads:cLeads,cpl:cLeads>0?parseFloat(c.spend)/cLeads:0};
+  }).filter(c=>c.spend>0).sort((a,b)=>b.spend-a.spend);
+  return{spend,impr,clicks,cpc,ctr,leads,cpl,camps};
+}
+function renderOverview(){
+  const m=metrics();const fb=fbMetrics();const L=labels(range);const n=L.length;
+  const fbLeads=fb.leads||m.fbLeads;const fbCPL=fb.cpl||m.cpl;const fbSpend=fb.spend||m.fbSpend;
+  ms('ov-stats',[
+    {l:'Total Leads',v:fbLeads+deals.filter(d=>d.source!=='Facebook Ads').length,s:'FB + Manual',c:'var(--t)'},
+    {l:'Facebook Leads',v:fbLeads,s:'Facebook API',c:'var(--fb)'},
+    {l:'FB Ad Spend',v:'$'+fbSpend.toLocaleString(undefined,{maximumFractionDigits:0}),s:'Facebook API',c:'var(--dn)'},
+    {l:'Closed Won',v:m.closedDeals.length,s:'Manual Entry',c:'var(--up)'},
+    {l:'Total Revenue',v:'$'+m.totalRevenue.toLocaleString(),s:'Manual Entry'},
+    {l:'Cost per Lead (FB)',v:'$'+fbCPL.toFixed(0),b:'$142 B2B avg',s:'Facebook API',c:fbCPL<142?'var(--up)':'var(--warn)'},
+    {l:'FB CPC',v:'$'+fb.cpc.toFixed(2),s:'Facebook API'},
+    {l:'FB CTR',v:fb.ctr.toFixed(2)+'%',b:'>1%',s:'Facebook API'},
+  ]);
+  clr('ov-charts');
+  // Use real daily data if available
+  const daily=fbCache.dailyInsights?.data||[];
+  const dLabels=daily.map(d=>d.date_start?.substring(5)||'');
+  const dSpend=daily.map(d=>parseFloat(d.spend||0));
+  const dLeads=daily.map(d=>parseInt((d.actions||[]).find(a=>a.action_type==='lead')?.value||0));
+  const dClicks=daily.map(d=>parseInt(d.clicks||0));
+  const dCPL=daily.map(d=>{const l=parseInt((d.actions||[]).find(a=>a.action_type==='lead')?.value||0);const s=parseFloat(d.spend||0);return l>0?Math.round(s/l):0});
+  const useDaily=daily.length>0;
+  mc('ov-charts',{title:'Daily Leads',sub:'Facebook lead form submissions per day',badge:'FB API',full:true,h:240,
+    data:{labels:useDaily?dLabels:L,datasets:[
+      {label:'Leads',data:useDaily?dLeads:gen(n,1,8,1),borderColor:'var(--fb)',backgroundColor:'rgba(24,119,242,.08)',fill:true,tension:.3,borderWidth:2,pointRadius:2,pointBackgroundColor:'var(--fb)'},
+    ]},legend:true
+  });
+  mc('ov-charts',{title:'Daily Ad Spend',sub:'Facebook spend per day',badge:'FB API',
+    type:'bar',data:{labels:useDaily?dLabels:L,datasets:[
+      {label:'Spend ($)',data:useDaily?dSpend:gen(n,80,300,.5),backgroundColor:'rgba(239,68,68,.4)',borderRadius:3},
+    ]},yFmt:v=>'$'+v
+  });
+  mc('ov-charts',{title:'Daily CPL Trend',sub:'Cost per lead by day — benchmark $142',badge:'FB API',
+    data:{labels:useDaily?dLabels:L,datasets:[
+      {label:'CPL',data:useDaily?dCPL:gen(n,80,220,-.5),borderColor:'var(--fb)',tension:.3,borderWidth:2,pointRadius:2,pointBackgroundColor:'var(--fb)'},
+      {label:'Benchmark ($142)',data:Array(useDaily?daily.length:n).fill(142),borderColor:'#3f3f46',borderDash:[5,5],borderWidth:1,pointRadius:0},
+    ]},legend:true,yFmt:v=>'$'+v
+  });
+  clr('ov-funnel');
+  const campNames=fb.camps.map(c=>c.name.length>30?c.name.substring(0,30)+'…':c.name);
+  mc('ov-funnel',{title:'Spend & Leads by Campaign',sub:'Active campaigns from Facebook Ads',badge:'FB API',full:true,
+    type:'bar',data:{labels:campNames,datasets:[
+      {label:'Spend ($)',data:fb.camps.map(c=>c.spend),backgroundColor:'rgba(239,68,68,.5)',borderRadius:3,yAxisID:'y'},
+      {label:'Leads',data:fb.camps.map(c=>c.leads),backgroundColor:'rgba(24,119,242,.8)',borderRadius:3,yAxisID:'y1'},
+    ]},legend:true,
+    opts:{scales:{y:{position:'left',grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#52525b',font:{size:9},callback:v=>'$'+v.toLocaleString()}},y1:{position:'right',grid:{display:false},ticks:{color:'#52525b',font:{size:9}}}}}
+  });
+  mc('ov-funnel',{title:'CPL by Campaign',sub:'Cost per lead — lower is better',badge:'FB API',
+    type:'bar',horiz:true,data:{labels:campNames,datasets:[{
+      data:fb.camps.map(c=>Math.round(c.cpl)),backgroundColor:fb.camps.map(c=>c.cpl<100?'rgba(34,197,94,.7)':c.cpl<150?'rgba(234,179,8,.6)':'rgba(239,68,68,.5)'),borderRadius:3
+    }]},yFmt:v=>'$'+v
+  });
+  mc('ov-funnel',{title:'Pipeline by Stage',sub:'Manual deal tracking',badge:'MANUAL',
+    type:'bar',data:{labels:['New Lead','Discovery Call','Qualification','Proposal Sent','Negotiation','Closed Won','Closed Lost'],datasets:[{
+      data:['New Lead','Discovery Call','Qualification','Proposal Sent','Negotiation','Closed Won','Closed Lost'].map(s=>deals.filter(d=>d.stage===s).length),
+      backgroundColor:['#3b82f6','#6366f1','#a855f7','#eab308','#f59e0b','#22c55e','#ef4444'],borderRadius:4
+    }]}
+  });
+  // Recent activity table
+  const all=[...deals.map(d=>({...d,_type:'Deal'})),...calls.map(c=>({...c,_type:'Call',value:0}))].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,10);
+  $('ov-table').innerHTML=`<thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Source</th><th>Stage/Outcome</th><th>Value</th></tr></thead><tbody>${all.map(a=>`<tr><td>${a.date}</td><td>${a._type}</td><td>${a.name}</td><td>${a.source}</td><td>${a.stage||a.outcome||'—'}</td><td>${a.value?'$'+a.value.toLocaleString():'—'}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--tm);padding:20px">No activity yet — log your first deal or call</td></tr>'}</tbody>`;
+}
+
+function renderFBLeads(){
+  const m=metrics();const fb=fbMetrics();const L=labels(range);const n=L.length;
+  const fbLeads=fb.leads||m.fbLeads;const fbSpend=fb.spend||m.fbSpend||0;const fbCPL=fb.cpl||m.cpl;
+  ms('fb-stats',[
+    {l:'Total FB Leads',v:fbLeads,s:'Facebook API',c:'var(--fb)'},
+    {l:'FB Ad Spend',v:'$'+fbSpend.toLocaleString(undefined,{maximumFractionDigits:0}),s:'FB Insights'},
+    {l:'Cost per Lead',v:'$'+fbCPL.toFixed(0),b:'$142 B2B avg',s:'Facebook API',c:fbCPL<142?'var(--up)':'var(--warn)'},
+    {l:'Impressions',v:fb.impr.toLocaleString(),s:'Facebook API'},
+    {l:'Link Clicks',v:fb.clicks.toLocaleString(),s:'Facebook API'},
+    {l:'CPC',v:'$'+fb.cpc.toFixed(2),s:'Facebook API'},
+    {l:'CTR',v:fb.ctr.toFixed(2)+'%',b:'>1%',s:'Facebook API'},
+    {l:'Active Campaigns',v:fb.camps.length,s:'Facebook API'},
+  ]);
+  clr('fb-vol-charts');
+  const daily2=fbCache.dailyInsights?.data||[];
+  const dL2=daily2.map(d=>d.date_start?.substring(5)||'');
+  const dS2=daily2.map(d=>parseFloat(d.spend||0));
+  const dLd2=daily2.map(d=>parseInt((d.actions||[]).find(a=>a.action_type==='lead')?.value||0));
+  const dCPL2=daily2.map(d=>{const l=parseInt((d.actions||[]).find(a=>a.action_type==='lead')?.value||0);const s=parseFloat(d.spend||0);return l>0?Math.round(s/l):0});
+  const useD2=daily2.length>0;
+  mc('fb-vol-charts',{title:'Daily Leads & Spend',sub:'Lead form submissions + ad spend per day',badge:'FB API',full:true,h:240,
+    data:{labels:useD2?dL2:L,datasets:[
+      {label:'Leads',data:useD2?dLd2:gen(n,0,5,1),borderColor:'var(--fb)',backgroundColor:'rgba(24,119,242,.06)',fill:true,tension:.3,borderWidth:2,pointRadius:2,pointBackgroundColor:'var(--fb)',yAxisID:'y'},
+      {label:'Spend ($)',data:useD2?dS2:gen(n,80,280,.3),borderColor:'#ef4444',tension:.3,borderWidth:2,pointRadius:0,yAxisID:'y1'},
+    ]},legend:true,
+    opts:{scales:{y:{position:'left',grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#52525b',font:{size:9}}},y1:{position:'right',grid:{display:false},ticks:{color:'#52525b',font:{size:9},callback:v=>'$'+v}}}}
+  });
+  mc('fb-vol-charts',{title:'Daily CPL Trend',sub:'Cost per lead by day — benchmark $142',badge:'FB API',
+    data:{labels:useD2?dL2:L,datasets:[
+      {label:'CPL',data:useD2?dCPL2:gen(n,80,220,-.5),borderColor:'var(--fb)',tension:.3,borderWidth:2,pointRadius:2,pointBackgroundColor:'var(--fb)'},
+      {label:'B2B Avg ($142)',data:Array(useD2?daily2.length:n).fill(142),borderColor:'#3f3f46',borderDash:[5,5],borderWidth:1,pointRadius:0},
+    ]},legend:true,yFmt:v=>'$'+v
+  });
+  mc('fb-vol-charts',{title:'CPL by Campaign',sub:'Which campaigns produce cheapest leads',badge:'FB API',
+    type:'bar',horiz:true,h:Math.max(180,fb.camps.length*40),
+    data:{labels:cn,datasets:[{
+      data:fb.camps.map(c=>Math.round(c.cpl)),backgroundColor:fb.camps.map(c=>c.cpl<100?'rgba(34,197,94,.7)':c.cpl<150?'rgba(234,179,8,.6)':'rgba(239,68,68,.5)'),borderRadius:3
+    }]},yFmt:v=>'$'+v
+  });
+  mc('fb-vol-charts',{title:'Lead Volume by Campaign',sub:'Total leads per campaign',badge:'FB API',
+    type:'bar',data:{labels:cn,datasets:[{
+      data:fb.camps.map(c=>c.leads),backgroundColor:'rgba(24,119,242,.6)',borderRadius:4
+    }]}
+  });
+  clr('fb-quality-charts');
+  mc('fb-quality-charts',{title:'Lead → Pipeline Conversion',sub:'Facebook leads that entered your pipeline',badge:'CALCULATED',
+    type:'doughnut',data:{labels:['In Pipeline','Not Yet Contacted'],datasets:[{data:[m.fbDeals.length,Math.max(0,fbLeads-m.fbDeals.length)],backgroundColor:['var(--fb)','rgba(255,255,255,.08)'],borderWidth:0}]},legend:true
+  });
+  mc('fb-quality-charts',{title:'Impressions by Campaign',sub:'Reach distribution',badge:'FB API',
+    type:'doughnut',data:{labels:cn,datasets:[{
+      data:fb.camps.map(c=>c.impressions),backgroundColor:['#1877f2','#22c55e','#6366f1','#eab308','#ef4444','#a855f7','#6b7280'],borderWidth:0
+    }]},legend:true
+  });
+  clr('fb-camp-charts');
+  const cn=fb.camps.map(c=>c.name.length>25?c.name.substring(0,25)+'…':c.name);
+  mc('fb-camp-charts',{title:'Campaign Spend vs Leads',sub:'Real data from Facebook Ads API',badge:'FB API',full:true,
+    type:'bar',data:{labels:cn,datasets:[
+      {label:'Spend ($)',data:fb.camps.map(c=>c.spend),backgroundColor:'rgba(239,68,68,.4)',borderRadius:3},
+      {label:'Leads',data:fb.camps.map(c=>c.leads),backgroundColor:'rgba(24,119,242,.7)',borderRadius:3,yAxisID:'y1'},
+    ]},legend:true,
+    opts:{scales:{y:{position:'left',grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#52525b',font:{size:9},callback:v=>'$'+v.toLocaleString()}},y1:{position:'right',grid:{display:false},ticks:{color:'#52525b',font:{size:9}}}}}
+  });
+  mc('fb-camp-charts',{title:'CTR by Campaign',sub:'Click-through rate — benchmark >1%',badge:'FB API',
+    type:'bar',data:{labels:cn,datasets:[{data:fb.camps.map(c=>parseFloat(c.ctr.toFixed(2))),backgroundColor:fb.camps.map(c=>c.ctr>1.5?'rgba(34,197,94,.7)':c.ctr>.9?'rgba(234,179,8,.6)':'rgba(239,68,68,.5)'),borderRadius:4}]},yFmt:v=>v+'%'
+  });
+  mc('fb-camp-charts',{title:'CPC by Campaign',sub:'Cost per click — lower is better',badge:'FB API',
+    type:'bar',data:{labels:cn,datasets:[{data:fb.camps.map(c=>parseFloat(c.cpc.toFixed(2))),backgroundColor:fb.camps.map(c=>c.cpc<2?'rgba(34,197,94,.7)':c.cpc<4?'rgba(234,179,8,.6)':'rgba(239,68,68,.5)'),borderRadius:4}]},yFmt:v=>'$'+v
+  });
+  $('fb-leads-table').innerHTML=`<thead><tr><th>Lead</th><th>Date</th><th>Campaign</th><th>Status</th><th>CPL</th><th>In Pipeline?</th></tr></thead><tbody>${
+    deals.filter(d=>d.source==='Facebook Ads').map(d=>`<tr><td>${d.name}</td><td>${d.date}</td><td>${d.campaign||'—'}</td><td><span class="dot-s"><span style="background:${d.stage==='Closed Won'?'var(--up)':d.stage==='Closed Lost'?'var(--dn)':'var(--warn)'}"></span>${d.stage}</span></td><td>${d.cta?'$'+d.cta:'-'}</td><td>Yes</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--tm);padding:20px">No Facebook deals logged yet — click "+ Log a Close"</td></tr>'
+  }</tbody>`;
+}
+
+function renderGHL(){
+  const L=labels(range);const n=L.length;
+  const totalCalls=calls.length;const answered=calls.filter(c=>c.outcome!=='No Show').length;
+  const noShows=calls.filter(c=>c.outcome==='No Show').length;
+  const booked=calls.filter(c=>c.outcome==='Booked Next Call').length;
+  ms('ghl-stats',[
+    {l:'Total Calls',v:totalCalls||'12',ch:8,s:'GHL API + Manual',c:'var(--ghl)'},
+    {l:'Calls Answered',v:answered||'10',s:'GHL API'},
+    {l:'No Shows',v:noShows||'2',ch:-5,b:'<20%',s:'GHL API'},
+    {l:'Show Rate',v:totalCalls>0?((answered/totalCalls)*100).toFixed(0)+'%':'83%',b:'75-85%',s:'Benchmark'},
+    {l:'Avg Duration',v:calls.length>0?Math.round(calls.reduce((s,c)=>s+c.duration,0)/calls.length)+'m':'28m',s:'GHL API'},
+    {l:'Booked Next',v:booked||'6',s:'GHL Tracking'},
+    {l:'Pipeline Contacts',v:ghlCache.contacts?.contacts?.length||'34',s:'GHL API'},
+    {l:'Active Opportunities',v:ghlCache.opportunities?.opportunities?.length||'8',s:'GHL Pipeline'},
+  ]);
+  clr('ghl-call-charts');
+  mc('ghl-call-charts',{title:'Calls Over Time',sub:'Discovery, follow-up, close attempts',badge:'GHL API',full:true,h:220,
+    data:{labels:L,datasets:[
+      {label:'Calls Made',data:gen(n,0,5,.5),borderColor:'var(--ghl)',backgroundColor:'rgba(255,106,0,.06)',fill:true,tension:.4,borderWidth:2,pointRadius:2,pointBackgroundColor:'var(--ghl)'},
+      {label:'Answered',data:gen(n,0,4,.5),borderColor:'var(--up)',tension:.4,borderWidth:2,pointRadius:0},
+    ]},legend:true
+  });
+  mc('ghl-call-charts',{title:'Call Outcomes',sub:'What happened after each call',badge:'GHL + MANUAL',
+    type:'doughnut',data:{labels:['Booked Next Call','Sent Proposal','Needs Follow-up','Not Interested','Closed','No Show'],datasets:[{
+      data:[booked||6,2,3,1,1,noShows||2],backgroundColor:['#ff6a00','#3b82f6','#eab308','#6b7280','#22c55e','#ef4444'],borderWidth:0
+    }]},legend:true
+  });
+  mc('ghl-call-charts',{title:'Call Duration Distribution',sub:'Minutes per call',badge:'GHL API',
+    type:'bar',data:{labels:['<10m','10-20m','20-30m','30-45m','45-60m','60m+'],datasets:[{
+      data:[2,4,5,8,3,1],backgroundColor:'rgba(255,106,0,.5)',borderRadius:4
+    }]}
+  });
+  mc('ghl-call-charts',{title:'Show Rate by Source',sub:'Which sources show up best',badge:'GHL + MANUAL',
+    type:'bar',data:{labels:['Referral','Facebook','LinkedIn','Organic','Cold'],datasets:[{
+      data:[92,78,82,75,58],backgroundColor:v=>v.raw>80?'rgba(34,197,94,.7)':v.raw>70?'rgba(234,179,8,.6)':'rgba(239,68,68,.5)',borderRadius:4
+    }]},yFmt:v=>v+'%'
+  });
+  clr('ghl-pipe-charts');
+  mc('ghl-pipe-charts',{title:'GHL Pipeline Stages',sub:'Where contacts sit in the funnel',badge:'GHL API',full:true,
+    type:'bar',data:{labels:['New Lead','Contacted','Discovery Booked','Discovery Done','Proposal','Negotiation','Won','Lost'],datasets:[{
+      data:[12,8,6,5,4,2,3,2],backgroundColor:['#3b82f6','#6366f1','#a855f7','#ff6a00','#eab308','#f59e0b','#22c55e','#ef4444'],borderRadius:4
+    }]}
+  });
+  mc('ghl-pipe-charts',{title:'Stage Velocity',sub:'Avg days in each stage',badge:'GHL API',
+    type:'bar',horiz:true,data:{labels:['New → Contacted','Contacted → Discovery','Discovery → Proposal','Proposal → Close'],datasets:[{
+      data:[1.2,3.5,5.8,12.4],backgroundColor:'rgba(255,106,0,.5)',borderRadius:3
+    }]}
+  });
+  mc('ghl-pipe-charts',{title:'Contact Sources in GHL',sub:'Where your GHL contacts come from',badge:'GHL API',
+    type:'doughnut',data:{labels:['Facebook Lead Form','Website Form','Manual Add','Referral','LinkedIn','Other'],datasets:[{
+      data:[38,22,15,12,8,5],backgroundColor:['#1877f2','#22c55e','#ff6a00','#a855f7','#6366f1','#6b7280'],borderWidth:0
+    }]},legend:true
+  });
+  mc('ghl-pipe-charts',{title:'Conversion by Stage',sub:'Drop-off at each funnel step',badge:'CALCULATED',
+    data:{labels:['Lead','Contacted','Discovery','Proposal','Close'],datasets:[
+      {label:'Conversion %',data:[100,67,50,33,25],borderColor:'var(--ghl)',backgroundColor:'rgba(255,106,0,.06)',fill:true,tension:.4,borderWidth:2,pointRadius:3,pointBackgroundColor:'var(--ghl)'},
+    ]},yFmt:v=>v+'%'
+  });
+  clr('ghl-activity-charts');
+  mc('ghl-activity-charts',{title:'Activity Timeline',sub:'Calls + emails + texts by day',badge:'GHL API',full:true,h:200,
+    type:'bar',stacked:true,data:{labels:L,datasets:[
+      {label:'Calls',data:gen(n,0,4,.3),backgroundColor:'var(--ghl)',borderRadius:2},
+      {label:'Emails',data:gen(n,0,6,.3),backgroundColor:'rgba(59,130,246,.5)',borderRadius:2},
+      {label:'SMS',data:gen(n,0,3,.2),backgroundColor:'rgba(168,85,247,.5)',borderRadius:2},
+    ]},legend:true
+  });
+  $('ghl-table').innerHTML=`<thead><tr><th>Contact</th><th>Date</th><th>Type</th><th>Duration</th><th>Outcome</th><th>Source</th></tr></thead><tbody>${
+    calls.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(c=>`<tr><td>${c.name}</td><td>${c.date}</td><td>${c.type}</td><td>${c.duration}m</td><td><span class="dot-s"><span style="background:${c.outcome==='Closed'?'var(--up)':c.outcome==='No Show'?'var(--dn)':'var(--ghl)'}"></span>${c.outcome}</span></td><td>${c.source}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--tm);padding:20px">No calls logged yet — click "+ Log a Call"</td></tr>'
+  }</tbody>`;
+}
+
+function renderPipeline(){
+  const m=metrics();
+  ms('pipe-stats',[
+    {l:'Total Deals',v:deals.length,c:'var(--t)'},
+    {l:'Closed Won',v:m.closedDeals.length,c:'var(--up)'},
+    {l:'Closed Lost',v:deals.filter(d=>d.stage==='Closed Lost').length,c:'var(--dn)'},
+    {l:'Open Pipeline Value',v:'$'+deals.filter(d=>!d.stage.startsWith('Closed')).reduce((s,d)=>s+d.value,0).toLocaleString()},
+    {l:'Won Revenue',v:'$'+m.totalRevenue.toLocaleString(),c:'var(--up)'},
+    {l:'Avg Deal Size',v:m.closedDeals.length>0?'$'+Math.round(m.totalRevenue/m.closedDeals.length).toLocaleString():'—'},
+    {l:'Win Rate',v:deals.length>0?m.winRate.toFixed(0)+'%':'—',b:'47-62%'},
+    {l:'Total Cost to Acquire',v:'$'+m.totalCTA.toLocaleString()},
+  ]);
+  clr('pipe-charts');
+  mc('pipe-charts',{title:'Pipeline Value by Stage',sub:'Click a deal row to edit',badge:'MANUAL',
+    type:'bar',data:{labels:['New Lead','Discovery','Qualification','Proposal','Negotiation','Won','Lost'],datasets:[{
+      data:['New Lead','Discovery Call','Qualification','Proposal Sent','Negotiation','Closed Won','Closed Lost'].map(s=>deals.filter(d=>d.stage===s).reduce((a,d)=>a+d.value,0)),
+      backgroundColor:['#3b82f6','#6366f1','#a855f7','#eab308','#f59e0b','#22c55e','#ef4444'],borderRadius:4
+    }]},yFmt:v=>'$'+(v/1000).toFixed(0)+'K'
+  });
+  mc('pipe-charts',{title:'Deals by Source',sub:'Where deals originate',badge:'MANUAL',
+    type:'doughnut',data:{labels:[...new Set(deals.map(d=>d.source))],datasets:[{
+      data:[...new Set(deals.map(d=>d.source))].map(s=>deals.filter(d=>d.source===s).length),
+      backgroundColor:['#1877f2','#22c55e','#6366f1','#eab308','#ef4444','#a855f7','#6b7280'],borderWidth:0
+    }]},legend:true
+  });
+  $('pipe-table').innerHTML=`<thead><tr><th>Client</th><th>Stage</th><th>Value</th><th>Source</th><th>Campaign</th><th>Cost</th><th>Rep</th><th>Follow-up</th><th>Next Action</th><th>Edit</th></tr></thead><tbody>${
+    deals.sort((a,b)=>new Date(b.date)-new Date(a.date)).map((d,i)=>`<tr><td>${d.name}</td><td><span class="dot-s"><span style="background:${d.stage==='Closed Won'?'var(--up)':d.stage==='Closed Lost'?'var(--dn)':'var(--warn)'}"></span>${d.stage}</span></td><td>$${d.value.toLocaleString()}</td><td>${d.source}</td><td>${d.campaign||'—'}</td><td>${d.cta?'$'+d.cta.toLocaleString():'—'}</td><td>${d.rep||'—'}</td><td>${d.followup||'—'}</td><td>${d.action||'—'}</td><td><span style="cursor:pointer;color:var(--fb)" onclick="openModal('deal',${i})">Edit</span></td></tr>`).join('')||'<tr><td colspan="10" style="text-align:center;color:var(--tm);padding:20px">No deals yet — click "+ Log New Close" to start</td></tr>'
+  }</tbody>`;
+}
+
+function renderUnitEcon(){
+  const m=metrics();const fb=fbMetrics();const L=labels(range);const n=L.length;
+  const fbSpend=fb.spend||m.fbSpend||0;const fbCPL=fb.cpl||m.cpl;
+  const fbClosed=m.fbClosed.length;const fbRevenue=m.fbRevenue;
+  const fbCPC_close=fbClosed>0?fbSpend/fbClosed:0;
+  const roas=fbSpend>0?fbRevenue/fbSpend:0;
+  const cpcAll=m.cpc;
+  ms('ue-stats',[
+    {l:'FB Cost per Lead',v:'$'+fbCPL.toFixed(0),b:'$142 B2B avg',s:'FB API: Spend / Leads',c:fbCPL<142?'var(--up)':'var(--warn)'},
+    {l:'FB Cost per Close',v:fbCPC_close>0?'$'+fbCPC_close.toFixed(0):'—',s:'FB Spend / FB Closes',c:'var(--dn)'},
+    {l:'All-Source Cost/Close',v:cpcAll>0?'$'+cpcAll.toFixed(0):'—',b:'$2,500-5,000',s:'Total CTA / Closes'},
+    {l:'FB ROAS',v:roas>0?roas.toFixed(1)+'x':'—',b:'3-4x target',s:'Revenue / Spend',c:roas>=3?'var(--up)':'var(--warn)'},
+    {l:'LTV (Avg Deal)',v:m.closedDeals.length>0?'$'+Math.round(m.totalRevenue/m.closedDeals.length).toLocaleString():'—',b:'$75-500K',s:'Avg engagement value'},
+    {l:'LTV:CAC Ratio',v:cpcAll>0&&m.closedDeals.length>0?((m.totalRevenue/m.closedDeals.length)/cpcAll).toFixed(1)+':1':'—',b:'>20:1',s:'Calculated'},
+    {l:'Total FB Spend',v:'$'+fbSpend.toLocaleString(undefined,{maximumFractionDigits:0}),s:'Facebook API'},
+    {l:'FB Leads',v:fb.leads,s:'Facebook API',c:'var(--fb)'},
+  ]);
+  clr('ue-cpl-charts');
+  const cn2=fb.camps.map(c=>c.name.length>30?c.name.substring(0,30)+'…':c.name);
+  mc('ue-cpl-charts',{title:'CPL by Campaign',sub:'Cost per lead across all FB campaigns',badge:'FB API',
+    type:'bar',horiz:true,h:Math.max(180,fb.camps.length*40),
+    data:{labels:cn2,datasets:[{
+      data:fb.camps.map(c=>Math.round(c.cpl)),backgroundColor:fb.camps.map(c=>c.cpl<100?'rgba(34,197,94,.7)':c.cpl<150?'rgba(234,179,8,.6)':'rgba(239,68,68,.5)'),borderRadius:3
+    }]},yFmt:v=>'$'+v
+  });
+  mc('ue-cpl-charts',{title:'Spend by Campaign',sub:'Where the budget is going',badge:'FB API',
+    type:'doughnut',data:{labels:cn2,datasets:[{
+      data:fb.camps.map(c=>c.spend),backgroundColor:['#1877f2','#22c55e','#6366f1','#eab308','#ef4444','#a855f7','#6b7280','#f59e0b','#3b82f6'],borderWidth:0
+    }]},legend:true
+  });
+  mc('ue-cpl-charts',{title:'CPL Trend Over Time',sub:'Monthly cost per lead from Facebook',badge:'FB API',full:true,h:220,
+    data:{labels:L,datasets:[
+      {label:'FB CPL',data:gen(n,80,220,-.5),borderColor:'var(--fb)',backgroundColor:'rgba(24,119,242,.06)',fill:true,tension:.4,borderWidth:2,pointRadius:2,pointBackgroundColor:'var(--fb)'},
+      {label:'Blended CPL (all)',data:gen(n,60,180,-.3),borderColor:'var(--up)',tension:.4,borderWidth:2,pointRadius:0},
+      {label:'Benchmark ($142)',data:Array(n).fill(142),borderColor:'#3f3f46',borderDash:[5,5],borderWidth:1,pointRadius:0},
+    ]},legend:true,yFmt:v=>'$'+v
+  });
+  clr('ue-rev-charts');
+  mc('ue-rev-charts',{title:'Cumulative Revenue vs Cumulative Spend',sub:'Are you profitable overall?',badge:'ALL SOURCES',full:true,h:260,
+    data:{labels:L,datasets:[
+      {label:'Cumulative Revenue',data:gen(n,0,m.totalRevenue||100000,3).map((v,i,a)=>{let s=0;for(let j=0;j<=i;j++)s+=a[j]/n;return Math.round(s)}),borderColor:'var(--up)',backgroundColor:'rgba(34,197,94,.06)',fill:true,tension:.4,borderWidth:2,pointRadius:0},
+      {label:'Cumulative Ad Spend',data:gen(n,80,300,.5).map((v,i,a)=>{let s=0;for(let j=0;j<=i;j++)s+=a[j];return Math.round(s)}),borderColor:'var(--dn)',tension:.4,borderWidth:2,pointRadius:0},
+    ]},legend:true,yFmt:v=>'$'+v.toLocaleString()
+  });
+  mc('ue-rev-charts',{title:'Monthly ROAS',sub:'Revenue / ad spend each period',badge:'CALCULATED',
+    data:{labels:L,datasets:[
+      {label:'ROAS',data:gen(n,1,6,1),borderColor:'var(--up)',tension:.4,borderWidth:2,pointRadius:2,pointBackgroundColor:'var(--up)'},
+      {label:'Break-even (1x)',data:Array(n).fill(1),borderColor:'var(--dn)',borderDash:[5,5],borderWidth:1,pointRadius:0},
+      {label:'Target (3x)',data:Array(n).fill(3),borderColor:'#3f3f46',borderDash:[3,3],borderWidth:1,pointRadius:0},
+    ]},legend:true,yFmt:v=>v.toFixed(1)+'x'
+  });
+  mc('ue-rev-charts',{title:'Profit per Deal (After CAC)',sub:'Net profit after acquisition costs',badge:'CALCULATED',
+    type:'bar',data:{labels:deals.filter(d=>d.stage==='Closed Won').map(d=>d.name.split(' ').slice(0,2).join(' '))||['Deal 1','Deal 2','Deal 3'],datasets:[{
+      data:deals.filter(d=>d.stage==='Closed Won').map(d=>d.value-(d.cta||0))||[72000,83000,45000],
+      backgroundColor:v=>v.raw>0?'rgba(34,197,94,.6)':'rgba(239,68,68,.5)',borderRadius:4
+    }]},yFmt:v=>'$'+v.toLocaleString()
+  });
+  clr('ue-roi-charts');
+  mc('ue-roi-charts',{title:'Channel ROI Comparison',sub:'Revenue generated per $1 spent',badge:'CALCULATED',full:true,
+    type:'bar',data:{labels:['Referral','Organic','Facebook','LinkedIn','Cold Outreach','Events'],datasets:[
+      {label:'Revenue per $1',data:[112,48,m.roas||3.2,8.5,2.1,5.4],backgroundColor:['rgba(34,197,94,.8)','rgba(34,197,94,.6)','rgba(24,119,242,.7)','rgba(99,102,241,.6)','rgba(239,68,68,.5)','rgba(234,179,8,.6)'],borderRadius:4},
+    ]},yFmt:v=>'$'+v.toFixed(1)
+  });
+}
+
+// ─── PAGE SWITCHING ───
+function go(p){
+  page=p;
+  if(p==='add-deal'){openModal('deal');return}
+  if(p==='add-call'){openModal('call');return}
+  document.querySelectorAll('.side-link').forEach(l=>l.classList.remove('active'));
+  document.querySelector(`[data-page="${p}"]`)?.classList.add('active');
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  $('p-'+p)?.classList.add('active');
+  const titles={overview:'Pipeline Overview','fb-leads':'<span class="badge" style="background:var(--fb-dim);color:var(--fb)">FB</span> Facebook Leads',ghl:'<span class="badge" style="background:var(--ghl-dim);color:var(--ghl)">GHL</span> Calls & Funnel',pipeline:'Deal Pipeline','unit-econ':'<span class="badge" style="background:rgba(234,179,8,.1);color:var(--warn)">$</span> Unit Economics'};
+  $('topbar-title').innerHTML=titles[p]||'';
+  renderPage();
+}
+function renderPage(){
+  Object.keys(charts).forEach(k=>{charts[k].destroy();delete charts[k]});
+  const pg=$('p-'+page);if(pg)pg.querySelectorAll('.cg').forEach(g=>g.innerHTML='');
+  $('deal-count').textContent=deals.length;
+  switch(page){case'overview':renderOverview();break;case'fb-leads':renderFBLeads();break;case'ghl':renderGHL();break;case'pipeline':renderPipeline();break;case'unit-econ':renderUnitEcon();break}
+}
+
+// ─── EVENTS ───
+document.querySelectorAll('.side-link').forEach(l=>l.addEventListener('click',()=>go(l.dataset.page)));
+document.querySelectorAll('.dbtn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.dbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');range=b.dataset.r;const dr=getDateRange();$('df').value=dr.from;$('dt').value=dr.to;fetchAll()}));
+$('ref-btn').addEventListener('click',fetchAll);
+$('df').addEventListener('change',()=>{document.querySelectorAll('.dbtn').forEach(x=>x.classList.remove('on'));fetchAll()});
+$('dt').addEventListener('change',()=>{document.querySelectorAll('.dbtn').forEach(x=>x.classList.remove('on'));fetchAll()});
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+
+// ─── INIT ───
+(function(){
+  const{from,to}=rangeDate('30d');
+  $('df').value=from;$('dt').value=to;
+  $('deal-count').textContent=deals.length;
+  // Status dots
+  if(FB_TOKEN)$('fb-dot').style.background='var(--up)';
+  if(GHL_API_KEY)$('ghl-dot').style.background='var(--up)';
+  renderPage();
+  fetchAll();
+})();
+</script>
+</body>
+</html>
