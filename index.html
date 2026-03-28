@@ -16,1064 +16,134 @@
 <title>Exit Planning for Service Business Owners | The Arena Partners</title>
 <meta name="description" content="Plan your service business exit with The Arena's Transferable Exit System™. Free training, valuation calculator, and assessment for owners doing $5M-$50M.">
 <link rel="canonical" href="https://thearenapartners.com/">
-<!-- Open Graph -->
+
 <meta property="og:type" content="website">
 <meta property="og:title" content="Exit Planning for Service Business Owners | The Arena Partners">
 <meta property="og:description" content="Free training, valuation calculator, and exit assessment for service business owners doing $5M-$50M. The Transferable Exit System™.">
 <meta property="og:url" content="https://thearenapartners.com/">
 <meta property="og:image" content="https://thearenapartners.com/jean-hero.webp">
 <meta property="og:site_name" content="The Arena Partners">
-<!-- Twitter Card -->
+
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Exit Planning for Service Business Owners | The Arena Partners">
 <meta name="twitter:description" content="Free training, valuation calculator, and exit assessment for service business owners doing $5M-$50M.">
 <meta name="twitter:image" content="https://thearenapartners.com/jean-hero.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg-primary: #0a0a0a;
-    --bg-secondary: #111111;
-    --bg-card: #161616;
-    --bg-elevated: #1a1a1a;
-    --gold: #c9a84c;
-    --gold-light: #e3c96e;
-    --gold-dark: #a8872e;
-    --gold-glow: rgba(201, 168, 76, 0.15);
-    --text-primary: #f5f0e8;
-    --text-secondary: #d4cfc8;
-    --text-muted: #a09a94;
-    --accent-red: #c44b3f;
-    --white: #ffffff;
-    --border: rgba(201, 168, 76, 0.12);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; overflow-x: hidden; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    max-width: 100vw;
-  }
-
-  /* ===================== GRAIN OVERLAY ===================== */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  /* ===================== ANNOUNCEMENT BAR ===================== */
-  .announcement-bar {
-    background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
-    padding: 10px 20px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--bg-primary);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-  }
-
-  .announcement-bar span {
-    /* pulse animation removed for accessibility */
-  }
-
-  /* ===================== NAV ===================== */
-  nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 24px 40px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .nav-logo span {
-    color: var(--gold);
-  }
-
-  /* ===================== HERO ===================== */
-  .hero {
-    position: relative;
-    padding: 80px 20px 60px;
-    text-align: center;
-    max-width: 960px;
-    margin: 0 auto;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .hero-eyebrow {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 28px;
-    padding: 8px 20px;
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    background: rgba(201, 168, 76, 0.05);
-    animation: fadeInDown 0.8s ease-out;
-  }
-
-  .hero-eyebrow .dot {
-    width: 6px;
-    height: 6px;
-    background: var(--gold);
-    border-radius: 50%;
-    animation: blink 1.5s ease-in-out infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  .hero h1 {
-    position: relative;
-    z-index: 1;
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(36px, 5.5vw, 62px);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 24px;
-    animation: fadeInUp 0.8s ease-out 0.15s both;
-  }
-
-  .hero h1 .highlight {
-    color: var(--gold);
-    position: relative;
-  }
-
-  .hero h1 .highlight::after {
-    content: '';
-    position: absolute;
-    bottom: 2px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--gold);
-    opacity: 0.4;
-  }
-
-  .hero-sub {
-    position: relative;
-    z-index: 1;
-    font-size: 19px;
-    line-height: 1.7;
-    color: var(--text-secondary);
-    max-width: 640px;
-    margin: 0 auto 40px;
-    animation: fadeInUp 0.8s ease-out 0.3s both;
-  }
-
-  .hero-sub strong {
-    color: var(--text-primary);
-    font-weight: 600;
-  }
-
-  /* ===================== VSL VIDEO CONTAINER ===================== */
-  .vsl-container {
-    position: relative;
-    z-index: 1;
-    max-width: 840px;
-    margin: 0 auto 40px;
-    animation: fadeInUp 0.8s ease-out 0.45s both;
-  }
-
-  .vsl-wrapper {
-    position: relative;
-    padding-bottom: 56.25%;
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    box-shadow: 0 0 80px rgba(201, 168, 76, 0.08), 0 20px 60px rgba(0,0,0,0.5);
-    cursor: pointer;
-  }
-
-  .vsl-wrapper .vsl-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(rgba(10,10,10,0.3), rgba(10,10,10,0.4)), url('jean-hero.webp') center 30% / cover no-repeat;
-    transition: all 0.3s ease;
-  }
-
-  .vsl-wrapper:hover .vsl-placeholder {
-    background: linear-gradient(rgba(10,10,10,0.2), rgba(10,10,10,0.3)), url('jean-hero.webp') center 30% / cover no-repeat;
-  }
-
-  .play-btn {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 40px rgba(201, 168, 76, 0.3);
-  }
-
-  .vsl-wrapper:hover .play-btn {
-    transform: scale(1.08);
-    box-shadow: 0 0 60px rgba(201, 168, 76, 0.45);
-  }
-
-  .play-btn svg {
-    width: 28px;
-    height: 28px;
-    margin-left: 4px;
-    fill: var(--bg-primary);
-  }
-
-  .vsl-placeholder .vsl-text {
-    font-size: 14px;
-    color: var(--gold);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 600;
-    text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7), 0 2px 4px rgba(0,0,0,0.8);
-  }
-
-  .vsl-duration {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 50px;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-
-  .vsl-duration svg {
-    width: 14px;
-    height: 14px;
-    stroke: var(--text-muted);
-    fill: none;
-  }
-
-  /* ===================== CAPACITY BADGE ===================== */
-  .capacity-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(10,10,10,.85);
-    border: 1px solid var(--gold);
-    border-radius: 6px;
-    padding: 12px 22px;
-    margin-bottom: 18px;
-  }
-  .capacity-badge .cb-label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--gold);
-    font-weight: 600;
-  }
-  .capacity-badge .cb-divider {
-    width: 1px;
-    height: 28px;
-    background: rgba(201,168,76,.3);
-  }
-  .capacity-badge .cb-month {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .capacity-badge .cb-count {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1;
-  }
-  .capacity-badge .cb-unit {
-    font-size: 10px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  /* ===================== CTA SECTION ===================== */
-  .cta-section {
-    text-align: center;
-    margin-bottom: 20px;
-    animation: fadeInUp 0.8s ease-out 0.6s both;
-    position: relative;
-    z-index: 1;
-  }
-
-  .cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    padding: 18px 48px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    color: var(--bg-primary);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 30px rgba(201, 168, 76, 0.25);
-  }
-
-  .cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 40px rgba(201, 168, 76, 0.4);
-  }
-
-  .cta-btn svg {
-    width: 18px;
-    height: 18px;
-    fill: var(--bg-primary);
-    transition: transform 0.3s ease;
-  }
-
-  .cta-btn:hover svg {
-    transform: translateX(3px);
-  }
-
-  .cta-note {
-    margin-top: 14px;
-    font-size: 13px;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-
-  .cta-note svg {
-    width: 13px;
-    height: 13px;
-    stroke: var(--text-muted);
-    fill: none;
-  }
-
-  /* ===================== CREDIBILITY BAR ===================== */
-  .credibility-bar {
-    padding: 50px 20px;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-    background: var(--bg-secondary);
-  }
-
-  .credibility-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 30px;
-  }
-
-  .credibility-logos {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-    flex-wrap: wrap;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .cred-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-muted);
-    opacity: 0.5;
-    letter-spacing: 1px;
-    transition: opacity 0.3s;
-  }
-
-  .cred-logo:hover { opacity: 0.8; }
-
-  /* ===================== PROBLEM SECTION ===================== */
-  .problem-section {
-    padding: 90px 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .section-eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 20px;
-  }
-
-  .problem-section h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 4vw, 42px);
-    font-weight: 700;
-    line-height: 1.25;
-    margin-bottom: 36px;
-  }
-
-  .problem-section h2 em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .problem-list {
-    text-align: left;
-    max-width: 620px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .problem-item {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    padding: 20px 24px;
-    background: var(--bg-card);
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    transition: border-color 0.3s;
-  }
-
-  .problem-item:hover {
-    border-color: rgba(201, 168, 76, 0.3);
-  }
-
-  .problem-icon {
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(201, 168, 76, 0.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    margin-top: 2px;
-  }
-
-  .problem-item p {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--text-secondary);
-  }
-
-  .problem-item p strong {
-    color: var(--text-primary);
-    font-weight: 600;
-  }
-
-  /* ===================== TESTIMONIALS ===================== */
-  .testimonials {
-    padding: 90px 20px;
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .testimonials-header {
-    text-align: center;
-    margin-bottom: 60px;
-  }
-
-  .testimonials-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 4vw, 40px);
-    font-weight: 700;
-  }
-
-  .testimonial-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-
-  .testimonial-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 32px;
-    transition: all 0.3s ease;
-    position: relative;
-  }
-
-  .testimonial-card:hover {
-    border-color: rgba(201, 168, 76, 0.3);
-    transform: translateY(-3px);
-  }
-
-  .testimonial-card::before {
-    content: '\201C';
-    position: absolute;
-    top: 16px;
-    right: 24px;
-    font-family: 'Playfair Display', serif;
-    font-size: 60px;
-    color: var(--gold);
-    opacity: 0.15;
-    line-height: 1;
-  }
-
-  .testimonial-stars {
-    display: flex;
-    gap: 3px;
-    margin-bottom: 16px;
-  }
-
-  .testimonial-stars svg {
-    width: 14px;
-    height: 14px;
-    fill: var(--gold);
-  }
-
-  .testimonial-text {
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--text-secondary);
-    margin-bottom: 24px;
-    font-style: italic;
-  }
-
-  .testimonial-author {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .testimonial-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--bg-primary);
-    flex-shrink: 0;
-  }
-
-  .testimonial-name {
-    font-weight: 600;
-    font-size: 15px;
-    color: var(--text-primary);
-  }
-
-  .testimonial-role {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 2px;
-    letter-spacing: 0.5px;
-  }
-
-  .testimonial-revenue {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--gold);
-    margin-top: 3px;
-    letter-spacing: 0.5px;
-  }
-
-  /* ===================== STATS BAR ===================== */
-  .stats-bar {
-    padding: 60px 20px;
-    display: flex;
-    justify-content: center;
-    gap: 80px;
-    flex-wrap: wrap;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .stat {
-    text-align: center;
-  }
-
-  .stat-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 44px;
-    font-weight: 800;
-    color: var(--gold);
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-
-  .stat-label {
-    font-size: 13px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  /* ===================== BOTTOM CTA ===================== */
-  .bottom-cta {
-    padding: 90px 20px;
-    text-align: center;
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .bottom-cta::before {
-    content: '';
-    position: absolute;
-    bottom: -200px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 500px;
-    background: radial-gradient(circle, var(--gold-glow) 0%, transparent 60%);
-    pointer-events: none;
-  }
-
-  .bottom-cta h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .bottom-cta p {
-    font-size: 17px;
-    color: var(--text-secondary);
-    max-width: 540px;
-    margin: 0 auto 40px;
-    line-height: 1.7;
-    position: relative;
-    z-index: 1;
-  }
-
-  .bottom-cta .cta-btn {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ===================== MODAL ===================== */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 10000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    backdrop-filter: blur(8px);
-  }
-
-  .modal-overlay.active {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-  }
-
-  .modal {
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 48px 40px;
-    max-width: 460px;
-    width: 100%;
-    position: relative;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-    animation: slideUp 0.4s ease;
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 24px;
-    line-height: 1;
-    padding: 4px;
-    transition: color 0.2s;
-  }
-
-  .modal-close:hover { color: var(--text-primary); }
-
-  .modal h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    text-align: center;
-  }
-
-  .modal .modal-sub {
-    font-size: 14px;
-    color: var(--text-secondary);
-    text-align: center;
-    margin-bottom: 32px;
-    line-height: 1.6;
-  }
-
-  .form-group {
-    margin-bottom: 16px;
-  }
-
-  .form-group label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-  }
-
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    padding: 14px 16px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-primary);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    transition: border-color 0.2s;
-    outline: none;
-  }
-
-  .form-group input::placeholder {
-    color: var(--text-muted);
-  }
-
-  .form-group input:focus,
-  .form-group select:focus {
-    border-color: var(--gold);
-  }
-
-  .form-group select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6560' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    cursor: pointer;
-  }
-
-  .form-group select option {
-    background: var(--bg-primary);
-    color: var(--text-primary);
-  }
-
-  .modal .cta-btn {
-    width: 100%;
-    justify-content: center;
-    margin-top: 8px;
-    padding: 16px;
-  }
-
-  .modal-trust {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 16px;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  .modal-trust svg {
-    width: 12px;
-    height: 12px;
-    stroke: var(--text-muted);
-    fill: none;
-  }
-
-  /* ===================== FOOTER ===================== */
-  footer {
-    padding: 50px 20px 40px;
-    text-align: center;
-    border-top: 1px solid var(--border);
-  }
-
-  .footer-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
-
-  .footer-logo span { color: var(--gold); }
-
-  .footer-address {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-bottom: 20px;
-    line-height: 1.6;
-  }
-
-  .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin-bottom: 24px;
-  }
-
-  .footer-links a {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-decoration: none;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
-  }
-
-  .footer-links a:hover { color: var(--gold); }
-
-  .footer-disclaimer {
-    font-size: 11px;
-    color: var(--text-muted);
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.7;
-    opacity: 0.7;
-  }
-
-  /* ===================== ANIMATIONS ===================== */
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  /* ===================== RESPONSIVE ===================== */
-  @media (max-width: 768px) {
-    .hero { padding: 50px 16px 40px; }
-    .hero::before { width: 100%; max-width: 400px; }
-    .stats-bar { gap: 24px; flex-wrap: wrap; justify-content: center; }
-    .stat-number { font-size: 32px; }
-    .credibility-logos { gap: 20px; flex-wrap: wrap; }
-    .cred-logo { font-size: 14px; }
-    .testimonial-grid { grid-template-columns: 1fr; }
-    .modal { padding: 36px 20px; max-width: 95vw; }
-    .modal-overlay { padding: 16px; }
-    nav { padding: 18px 16px; }
-    .problem-section, .testimonials, .bottom-cta { padding: 50px 16px; }
-    .vsl-container { margin: 0 -4px; }
-    .problem-grid { grid-template-columns: 1fr; }
-    section { overflow-x: hidden; }
-  }
-
-  @media (max-width: 480px) {
-    .cta-btn { padding: 16px 28px; font-size: 14px; width: 100%; text-align: center; justify-content: center; }
-    .hero-sub { font-size: 15px; }
-    .hero h1 { font-size: 28px; }
-    .stats-bar { gap: 20px; }
-    .stat-number { font-size: 28px; }
-    .stat-label { font-size: 11px; }
-    .modal { padding: 28px 16px; }
-    .modal h2 { font-size: 22px; }
-    .modal select, .modal input { font-size: 16px; } /* prevents iOS zoom */
-  }
-</style>
+<style>:root{--bg-primary:#0a0a0a;--bg-secondary:#111111;--bg-card:#161616;--bg-elevated:#1a1a1a;--gold:#c9a84c;--gold-light:#e3c96e;--gold-dark:#a8872e;--gold-glow:rgba(201,168,76,0.15);--text-primary:#f5f0e8;--text-secondary:#d4cfc8;--text-muted:#a09a94;--accent-red:#c44b3f;--white:#ffffff;--border:rgba(201,168,76,0.12)}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;overflow-x:hidden}body{font-family:'DM Sans',sans-serif;background:var(--bg-primary);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased;max-width:100vw}body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}.announcement-bar{background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-dark));padding:10px 20px;text-align:center;font-size:13px;font-weight:600;color:var(--bg-primary);letter-spacing:1.5px;text-transform:uppercase}.announcement-bar span{}nav{display:flex;justify-content:center;align-items:center;padding:24px 40px;border-bottom:1px solid var(--border)}.nav-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:2px;text-transform:uppercase}.nav-logo span{color:var(--gold)}.hero{position:relative;padding:80px 20px 60px;text-align:center;max-width:960px;margin:0 auto}.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,var(--gold-glow) 0%,transparent 70%);pointer-events:none;z-index:0}.hero-eyebrow{position:relative;z-index:1;display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:28px;padding:8px 20px;border:1px solid var(--border);border-radius:100px;background:rgba(201,168,76,0.05);animation:fadeInDown 0.8s ease-out}.hero-eyebrow .dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:blink 1.5s ease-in-out infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}.hero h1{position:relative;z-index:1;font-family:'Playfair Display',serif;font-size:clamp(36px,5.5vw,62px);font-weight:800;line-height:1.1;margin-bottom:24px;animation:fadeInUp 0.8s ease-out 0.15s both}.hero h1 .highlight{color:var(--gold);position:relative}.hero h1 .highlight::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:3px;background:var(--gold);opacity:0.4}.hero-sub{position:relative;z-index:1;font-size:19px;line-height:1.7;color:var(--text-secondary);max-width:640px;margin:0 auto 40px;animation:fadeInUp 0.8s ease-out 0.3s both}.hero-sub strong{color:var(--text-primary);font-weight:600}.vsl-container{position:relative;z-index:1;max-width:840px;margin:0 auto 40px;animation:fadeInUp 0.8s ease-out 0.45s both}.vsl-wrapper{position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden;background:var(--bg-card);border:1px solid var(--border);box-shadow:0 0 80px rgba(201,168,76,0.08),0 20px 60px rgba(0,0,0,0.5);cursor:pointer}.vsl-wrapper .vsl-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(rgba(10,10,10,0.3),rgba(10,10,10,0.4)),url('jean-hero.webp') center 30% / cover no-repeat;transition:all 0.3s ease}.vsl-wrapper:hover .vsl-placeholder{background:linear-gradient(rgba(10,10,10,0.2),rgba(10,10,10,0.3)),url('jean-hero.webp') center 30% / cover no-repeat}.play-btn{width:80px;height:80px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:all 0.3s ease;box-shadow:0 0 40px rgba(201,168,76,0.3)}.vsl-wrapper:hover .play-btn{transform:scale(1.08);box-shadow:0 0 60px rgba(201,168,76,0.45)}.play-btn svg{width:28px;height:28px;margin-left:4px;fill:var(--bg-primary)}.vsl-placeholder .vsl-text{font-size:14px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:600;text-shadow:0 0 6px rgba(0,0,0,0.9),0 0 12px rgba(0,0,0,0.7),0 2px 4px rgba(0,0,0,0.8)}.vsl-duration{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:50px;font-size:13px;color:var(--text-muted)}.vsl-duration svg{width:14px;height:14px;stroke:var(--text-muted);fill:none}.capacity-badge{display:inline-flex;align-items:center;gap:12px;background:rgba(10,10,10,.85);border:1px solid var(--gold);border-radius:6px;padding:12px 22px;margin-bottom:18px}.capacity-badge .cb-label{display:flex;align-items:center;gap:6px;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold);font-weight:600}.capacity-badge .cb-divider{width:1px;height:28px;background:rgba(201,168,76,.3)}.capacity-badge .cb-month{font-family:'Playfair Display',Georgia,serif;font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}.capacity-badge .cb-count{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-primary);line-height:1}.capacity-badge .cb-unit{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}.cta-section{text-align:center;margin-bottom:20px;animation:fadeInUp 0.8s ease-out 0.6s both;position:relative;z-index:1}.cta-btn{display:inline-flex;align-items:center;gap:12px;padding:18px 48px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--bg-primary);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:none;border-radius:6px;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 30px rgba(201,168,76,0.25)}.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(201,168,76,0.4)}.cta-btn svg{width:18px;height:18px;fill:var(--bg-primary);transition:transform 0.3s ease}.cta-btn:hover svg{transform:translateX(3px)}.cta-note{margin-top:14px;font-size:13px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;gap:6px}.cta-note svg{width:13px;height:13px;stroke:var(--text-muted);fill:none}.credibility-bar{padding:50px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center;background:var(--bg-secondary)}.credibility-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--text-muted);margin-bottom:30px}.credibility-logos{display:flex;align-items:center;justify-content:center;gap:50px;flex-wrap:wrap;max-width:800px;margin:0 auto}.cred-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text-muted);opacity:0.5;letter-spacing:1px;transition:opacity 0.3s}.cred-logo:hover{opacity:0.8}.problem-section{padding:90px 20px;max-width:800px;margin:0 auto;text-align:center}.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:20px}.problem-section h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,42px);font-weight:700;line-height:1.25;margin-bottom:36px}.problem-section h2 em{font-style:italic;color:var(--gold)}.problem-list{text-align:left;max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:20px}.problem-item{display:flex;gap:16px;align-items:flex-start;padding:20px 24px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);transition:border-color 0.3s}.problem-item:hover{border-color:rgba(201,168,76,0.3)}.problem-icon{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:center;font-size:16px;margin-top:2px}.problem-item p{font-size:16px;line-height:1.6;color:var(--text-secondary)}.problem-item p strong{color:var(--text-primary);font-weight:600}.testimonials{padding:90px 20px;background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.testimonials-header{text-align:center;margin-bottom:60px}.testimonials-header h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,40px);font-weight:700}.testimonial-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;max-width:1000px;margin:0 auto}.testimonial-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:32px;transition:all 0.3s ease;position:relative}.testimonial-card:hover{border-color:rgba(201,168,76,0.3);transform:translateY(-3px)}.testimonial-card::before{content:'\201C';position:absolute;top:16px;right:24px;font-family:'Playfair Display',serif;font-size:60px;color:var(--gold);opacity:0.15;line-height:1}.testimonial-stars{display:flex;gap:3px;margin-bottom:16px}.testimonial-stars svg{width:14px;height:14px;fill:var(--gold)}.testimonial-text{font-size:15px;line-height:1.7;color:var(--text-secondary);margin-bottom:24px;font-style:italic}.testimonial-author{display:flex;align-items:center;gap:14px}.testimonial-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dark),var(--gold));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--bg-primary);flex-shrink:0}.testimonial-name{font-weight:600;font-size:15px;color:var(--text-primary)}.testimonial-role{font-size:12px;color:var(--text-muted);margin-top:2px;letter-spacing:0.5px}.testimonial-revenue{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);margin-top:3px;letter-spacing:0.5px}.stats-bar{padding:60px 20px;display:flex;justify-content:center;gap:80px;flex-wrap:wrap;max-width:900px;margin:0 auto}.stat{text-align:center}.stat-number{font-family:'Playfair Display',serif;font-size:44px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:8px}.stat-label{font-size:13px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}.bottom-cta{padding:90px 20px;text-align:center;background:var(--bg-secondary);border-top:1px solid var(--border);position:relative;overflow:hidden}.bottom-cta::before{content:'';position:absolute;bottom:-200px;left:50%;transform:translateX(-50%);width:800px;height:500px;background:radial-gradient(circle,var(--gold-glow) 0%,transparent 60%);pointer-events:none}.bottom-cta h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.2;margin-bottom:20px;position:relative;z-index:1}.bottom-cta p{font-size:17px;color:var(--text-secondary);max-width:540px;margin:0 auto 40px;line-height:1.7;position:relative;z-index:1}.bottom-cta .cta-btn{position:relative;z-index:1}.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:10000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}.modal-overlay.active{display:flex;animation:fadeIn 0.3s ease}.modal{background:var(--bg-elevated);border:1px solid var(--border);border-radius:16px;padding:48px 40px;max-width:460px;width:100%;position:relative;box-shadow:0 40px 100px rgba(0,0,0,0.6);animation:slideUp 0.4s ease}.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:24px;line-height:1;padding:4px;transition:color 0.2s}.modal-close:hover{color:var(--text-primary)}.modal h3{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:8px;text-align:center}.modal .modal-sub{font-size:14px;color:var(--text-secondary);text-align:center;margin-bottom:32px;line-height:1.6}.form-group{margin-bottom:16px}.form-group label{display:block;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}.form-group input,.form-group select{width:100%;padding:14px 16px;background:var(--bg-primary);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:15px;transition:border-color 0.2s;outline:none}.form-group input::placeholder{color:var(--text-muted)}.form-group input:focus,.form-group select:focus{border-color:var(--gold)}.form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6560' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;cursor:pointer}.form-group select option{background:var(--bg-primary);color:var(--text-primary)}.modal .cta-btn{width:100%;justify-content:center;margin-top:8px;padding:16px}.modal-trust{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px;font-size:12px;color:var(--text-muted)}.modal-trust svg{width:12px;height:12px;stroke:var(--text-muted);fill:none}footer{padding:50px 20px 40px;text-align:center;border-top:1px solid var(--border)}.footer-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text-primary);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}.footer-logo span{color:var(--gold)}.footer-address{font-size:13px;color:var(--text-muted);margin-bottom:20px;line-height:1.6}.footer-links{display:flex;justify-content:center;gap:24px;margin-bottom:24px}.footer-links a{font-size:12px;color:var(--text-muted);text-decoration:none;letter-spacing:0.5px;transition:color 0.2s}.footer-links a:hover{color:var(--gold)}.footer-disclaimer{font-size:11px;color:var(--text-muted);max-width:700px;margin:0 auto;line-height:1.7;opacity:0.7}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}@keyframes fadeInDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(30px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}@media (max-width:768px){.hero{padding:50px 16px 40px}.hero::before{width:100%;max-width:400px}.stats-bar{gap:24px;flex-wrap:wrap;justify-content:center}.stat-number{font-size:32px}.credibility-logos{gap:20px;flex-wrap:wrap}.cred-logo{font-size:14px}.testimonial-grid{grid-template-columns:1fr}.modal{padding:36px 20px;max-width:95vw}.modal-overlay{padding:16px}nav{padding:18px 16px}.problem-section,.testimonials,.bottom-cta{padding:50px 16px}.vsl-container{margin:0 -4px}.problem-grid{grid-template-columns:1fr}section{overflow-x:hidden}}@media (max-width:480px){.cta-btn{padding:16px 28px;font-size:14px;width:100%;text-align:center;justify-content:center}.hero-sub{font-size:15px}.hero h1{font-size:28px}.stats-bar{gap:20px}.stat-number{font-size:28px}.stat-label{font-size:11px}.modal{padding:28px 16px}.modal h2{font-size:22px}.modal select,.modal input{font-size:16px}}</style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23C9A84C'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' font-family='Georgia' fill='%230A0A0A' font-weight='bold'%3EA%3C/text%3E%3C/svg%3E">
-<!-- Organization Schema -->
+
   <link rel="alternate" type="application/rss+xml" title="The Arena Partners Blog" href="/rss.xml">
-<!-- Schema.org: Organization -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "The Arena Partners",
-  "url": "https://thearenapartners.com",
-  "logo": "https://thearenapartners.com/jean-hero.webp",
-  "description": "Exit advisory for service business owners doing $5M-$50M in revenue. The Transferable Exit System™ helps owners 55+ maximize their exit value.",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "3555 Timmons Lane, Suite 1140",
-    "addressLocality": "Houston",
-    "addressRegion": "TX",
-    "postalCode": "77027",
-    "addressCountry": "US"
-  },
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "telephone": "+1-713-344-7420",
-    "contactType": "sales"
-  },
-  "founder": {
-    "@type": "Person",
-    "name": "Jean Louis Hardy",
-    "jobTitle": "Exit Advisor",
-    "description": "Helping service business owners 55+ maximize their exit value"
-  },
-  "sameAs": [
-    "https://www.linkedin.com/company/the-arena-partners",
-    "https://thearenapartners.substack.com"
-  ]
+
+<script type="application/ld+json">{
+"@context": "https://schema.org",
+"@type": "Organization",
+"name": "The Arena Partners",
+"url": "https://thearenapartners.com",
+"logo": "https://thearenapartners.com/jean-hero.webp",
+"description": "Exit advisory for service business owners doing $5M-$50M in revenue. The Transferable Exit System™ helps owners 55+ maximize their exit value.",
+"address": {
+"@type": "PostalAddress",
+"streetAddress": "3555 Timmons Lane, Suite 1140",
+"addressLocality": "Houston",
+"addressRegion": "TX",
+"postalCode": "77027",
+"addressCountry": "US"
+},
+"contactPoint": {
+"@type": "ContactPoint",
+"telephone": "+1-713-344-7420",
+"contactType": "sales"
+},
+"founder": {
+"@type": "Person",
+"name": "Jean Louis Hardy",
+"jobTitle": "Exit Advisor",
+"description": "Helping service business owners 55+ maximize their exit value"
+},
+"sameAs": [
+"https://www.linkedin.com/company/the-arena-partners",
+"https://thearenapartners.substack.com"
+]
+}</script>
+
+<script type="application/ld+json">{
+"@context": "https://schema.org",
+"@type": "WebSite",
+"name": "The Arena Partners",
+"url": "https://thearenapartners.com",
+"potentialAction": {
+"@type": "SearchAction",
+"target": "https://thearenapartners.com/blog/?q={search_term_string}",
+"query-input": "required name=search_term_string"
 }
-</script>
-<!-- Schema.org: WebSite with SearchAction -->
-<script type="application/ld+json">
+}</script>
+
+<script type="application/ld+json">{
+"@context": "https://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
 {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "The Arena Partners",
-  "url": "https://thearenapartners.com",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://thearenapartners.com/blog/?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
+"@type": "ListItem",
+"position": 1,
+"name": "Home",
+"item": "https://thearenapartners.com/"
 }
-</script>
-<!-- Schema.org: BreadcrumbList -->
-<script type="application/ld+json">
+]
+}</script>
+<script type="application/ld+json">{
+"@context": "https://schema.org",
+"@type": "FAQPage",
+"mainEntity": [
 {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://thearenapartners.com/"
-    }
-  ]
+"@type": "Question",
+"name": "What is The Arena Partners?",
+"acceptedAnswer": {
+"@type": "Answer",
+"text": "The Arena Partners is an exit advisory firm that helps service business owners (plumbing, HVAC, electrical, pest control, landscaping, roofing) prepare their companies for premium exits. We install systems, documentation, and management layers that make businesses transferable - so owners get 20-40% more when they sell."
 }
-</script>
-<script type="application/ld+json">
+},
 {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is The Arena Partners?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The Arena Partners is an exit advisory firm that helps service business owners (plumbing, HVAC, electrical, pest control, landscaping, roofing) prepare their companies for premium exits. We install systems, documentation, and management layers that make businesses transferable - so owners get 20-40% more when they sell."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How much is my service business worth?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Service business valuations typically range from 2x to 7x EBITDA depending on industry, size, owner dependency, and documentation. HVAC companies with SOPs sell for 5-7x while undocumented ones sell for 3-4x. Use our free industry-specific calculator to estimate your valuation range."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How long does exit preparation take?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Our Arena Operating System installs in 6 months. By months 8-9, owners take the Founder Absence Test - 2 to 4 weeks completely off. If revenue holds, that is proof of transferability and what buyers pay premium for."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What size businesses do you work with?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "We work with service business owners doing 5 million to 50 million in annual revenue who are thinking about exit within the next 1-5 years. Our ideal client is 55 or older, has built a strong business, and wants to maximize their exit value."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Why do service businesses sell for less than they should?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The number one reason is owner dependency. When the owner IS the business - making every decision, holding every relationship - buyers see risk. SBA data shows only 20 percent of listed businesses actually sell, and most sell for significantly less than expected. The solution is making the business transferable before going to market."
-      }
-    }
-  ]
+"@type": "Question",
+"name": "How much is my service business worth?",
+"acceptedAnswer": {
+"@type": "Answer",
+"text": "Service business valuations typically range from 2x to 7x EBITDA depending on industry, size, owner dependency, and documentation. HVAC companies with SOPs sell for 5-7x while undocumented ones sell for 3-4x. Use our free industry-specific calculator to estimate your valuation range."
 }
-</script>
+},
+{
+"@type": "Question",
+"name": "How long does exit preparation take?",
+"acceptedAnswer": {
+"@type": "Answer",
+"text": "Our Arena Operating System installs in 6 months. By months 8-9, owners take the Founder Absence Test - 2 to 4 weeks completely off. If revenue holds, that is proof of transferability and what buyers pay premium for."
+}
+},
+{
+"@type": "Question",
+"name": "What size businesses do you work with?",
+"acceptedAnswer": {
+"@type": "Answer",
+"text": "We work with service business owners doing 5 million to 50 million in annual revenue who are thinking about exit within the next 1-5 years. Our ideal client is 55 or older, has built a strong business, and wants to maximize their exit value."
+}
+},
+{
+"@type": "Question",
+"name": "Why do service businesses sell for less than they should?",
+"acceptedAnswer": {
+"@type": "Answer",
+"text": "The number one reason is owner dependency. When the owner IS the business - making every decision, holding every relationship - buyers see risk. SBA data shows only 20 percent of listed businesses actually sell, and most sell for significantly less than expected. The solution is making the business transferable before going to market."
+}
+}
+]
+}</script>
 </head>
 <body>
 
-<!-- ANNOUNCEMENT BAR -->
 <div class="announcement-bar">
   <span>🏆 You built something worth millions  -  now let's prove it to buyers</span>
 </div>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">The <span>Arena</span> Partners</div>
   <div style="display:flex;gap:20px;align-items:center;">
@@ -1081,7 +151,6 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-eyebrow">
     <span class="dot"></span>
@@ -1097,7 +166,6 @@
     See how service-based business owners at <strong>$5M–$50M in revenue</strong> are using the Transferable Exit System™ to package what they've built  -  and exit at the premium they've earned.
   </p>
 
-  <!-- VSL VIDEO -->
   <div class="vsl-container">
     <div class="vsl-wrapper" onclick="openModal()">
       <div class="vsl-placeholder">
@@ -1113,7 +181,6 @@
     </div>
   </div>
 
-  <!-- CTA -->
   <div class="cta-section">
     <button class="cta-btn" onclick="openModal()">
       Get Instant Access
@@ -1126,7 +193,6 @@
   </div>
 </section>
 
-<!-- CREDIBILITY BAR -->
 <section class="credibility-bar">
   <p class="credibility-label">Built for owners in</p>
   <div class="credibility-logos">
@@ -1138,7 +204,6 @@
   </div>
 </section>
 
-<!-- PROBLEM SECTION -->
 <section class="problem-section">
   <p class="section-eyebrow">The Gap</p>
   <h2>The Thing That Made You Successful<br>Is the <em>One Thing</em> to Change for the Exit</h2>
@@ -1163,7 +228,6 @@
   </div>
 </section>
 
-<!-- STATS BAR -->
 <section class="stats-bar">
   <div class="stat">
     <div class="stat-number">Top 20%</div>
@@ -1179,14 +243,29 @@
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
+<section style="background:#0a0a0a;padding:80px 24px;border-top:1px solid rgba(201,168,76,0.15);">
+<div style="max-width:800px;margin:0 auto;font-family:-apple-system,sans-serif;">
+<h2 style="font-family:Georgia,serif;font-size:32px;color:#f5f0e8;text-align:center;margin-bottom:12px;">Who This Is For</h2>
+<p style="text-align:center;color:rgba(245,240,232,0.5);font-size:14px;letter-spacing:2px;text-transform:uppercase;margin-bottom:40px;">The Arena is not for everyone</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;">
+<div>
+<h3 style="color:#c9a84c;font-size:18px;margin-bottom:16px;">This is for you if:</h3>
+<p style="color:rgba(245,240,232,0.7);font-size:16px;line-height:1.8;">You own a service business doing $5 million to $50 million in revenue. You have been running it for 15 to 30 years. You built something real and you know it. But you also know that if you get hit by a bus tomorrow, the business has a problem. You want to exit in the next 1 to 5 years and you want the number to reflect what you actually built. You are willing to invest 6 months of focused work to potentially add millions to your exit price.</p>
+</div>
+<div>
+<h3 style="color:rgba(245,240,232,0.5);font-size:18px;margin-bottom:16px;">This is not for you if:</h3>
+<p style="color:rgba(245,240,232,0.4);font-size:16px;line-height:1.8;">You are looking for a quick flip or a magic bullet. You are not willing to document your processes or invest in management development. You want someone to just sell your business as-is without doing the preparation work. The Arena is for owners who are honest about where the gaps are and ready to close them.</p>
+</div>
+</div>
+</div>
+</section>
+
 <section class="testimonials">
   <div class="testimonials-header">
     <p class="section-eyebrow">Real Results</p>
     <h2>What Business Owners Are Saying</h2>
   </div>
 
-  <!-- VIDEO TESTIMONIALS -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:1100px;margin:0 auto 40px;padding:0 20px;">
     <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;border:1px solid rgba(201,168,76,0.15);">
       <iframe src="https://www.youtube.com/embed/lGcvlKBcEfk" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen></iframe>
@@ -1205,7 +284,6 @@
     </div>
   </div>
 
-  <!-- LINKEDIN TEXT TESTIMONIALS -->
   <div class="testimonial-grid">
     <div class="testimonial-card">
       <div class="testimonial-stars">
@@ -1263,7 +341,6 @@
   </div>
 </section>
 
-<!-- BOTTOM CTA -->
 <section class="bottom-cta">
   <p class="section-eyebrow">Your Next Chapter</p>
   <h2>You've Done the Hard Part.<br>Let's Finish It Right.</h2>
@@ -1272,69 +349,116 @@
     Watch the Free Training Now
     <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
   </button>
-  <p class="cta-note" style="margin-top: 14px;">
+  <p class="cta-note" style="margin-top:14px;">
     <svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
     Instant access  -  no credit card required
   </p>
 </section>
 
-<!-- FREE INDUSTRY CALCULATORS -->
-<section style="background: var(--bg-secondary); padding: 80px 24px; border-top: 1px solid var(--border);">
-  <div style="max-width: 900px; margin: 0 auto; text-align: center;">
-    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px;">Free Industry Calculators</p>
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--text-primary); margin-bottom: 12px;">What's Your Service Business Actually Worth?</h2>
-    <p style="font-size: 16px; color: var(--text-muted); line-height: 1.7; margin-bottom: 40px;">Get an instant, industry-specific valuation based on real PE buyer multiples. No email required.</p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; text-align: left;">
-      <a href="https://thearenapartners.com/calculator.html" style="display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; text-decoration: none; transition: border-color 0.2s;">
-        <span style="font-size: 15px; font-weight: 600; color: var(--text-primary);">General Service Business Valuation Calculator</span>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">EBITDA-based valuation for any service company</p>
+<section style="background:var(--bg-secondary);padding:80px 24px;border-top:1px solid var(--border);">
+  <div style="max-width:900px;margin:0 auto;text-align:center;">
+    <p style="font-family:'JetBrains Mono', monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Free Industry Calculators</p>
+    <h2 style="font-family:'Playfair Display', serif;font-size:28px;color:var(--text-primary);margin-bottom:12px;">What's Your Service Business Actually Worth?</h2>
+    <p style="font-size:16px;color:var(--text-muted);line-height:1.7;margin-bottom:40px;">Get an instant, industry-specific valuation based on real PE buyer multiples. No email required.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:16px;text-align:left;">
+      <a href="https://thearenapartners.com/calculator.html" style="display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px;text-decoration:none;transition:border-color 0.2s;">
+        <span style="font-size:15px;font-weight:600;color:var(--text-primary);">General Service Business Valuation Calculator</span>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:6px;">EBITDA-based valuation for any service company</p>
       </a>
-      <a href="https://vivianashford.github.io/satellite-hvac/" style="display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; text-decoration: none; transition: border-color 0.2s;">
-        <span style="font-size: 15px; font-weight: 600; color: var(--text-primary);">HVAC Business Valuation Calculator</span>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Specialized multiples for heating & cooling companies</p>
+      <a href="https://vivianashford.github.io/satellite-hvac/" style="display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px;text-decoration:none;transition:border-color 0.2s;">
+        <span style="font-size:15px;font-weight:600;color:var(--text-primary);">HVAC Business Valuation Calculator</span>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:6px;">Specialized multiples for heating & cooling companies</p>
       </a>
-      <a href="https://vivianashford.github.io/satellite-plumbing/" style="display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; text-decoration: none; transition: border-color 0.2s;">
-        <span style="font-size: 15px; font-weight: 600; color: var(--text-primary);">Plumbing Business Valuation Calculator</span>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">What PE firms pay for plumbing companies in 2026</p>
+      <a href="https://vivianashford.github.io/satellite-plumbing/" style="display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px;text-decoration:none;transition:border-color 0.2s;">
+        <span style="font-size:15px;font-weight:600;color:var(--text-primary);">Plumbing Business Valuation Calculator</span>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:6px;">What PE firms pay for plumbing companies in 2026</p>
       </a>
-      <a href="https://vivianashford.github.io/satellite-electrical/" style="display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; text-decoration: none; transition: border-color 0.2s;">
-        <span style="font-size: 15px; font-weight: 600; color: var(--text-primary);">Electrical Business Valuation Calculator</span>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">IES, MYR Group buyer multiples for electrical contractors</p>
+      <a href="https://vivianashford.github.io/satellite-electrical/" style="display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px;text-decoration:none;transition:border-color 0.2s;">
+        <span style="font-size:15px;font-weight:600;color:var(--text-primary);">Electrical Business Valuation Calculator</span>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:6px;">IES, MYR Group buyer multiples for electrical contractors</p>
       </a>
-      <a href="https://vivianashford.github.io/satellite-pest-control/" style="display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; text-decoration: none; transition: border-color 0.2s;">
-        <span style="font-size: 15px; font-weight: 600; color: var(--text-primary);">Pest Control Business Valuation Calculator</span>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Recurring revenue multiples for pest control operators</p>
+      <a href="https://vivianashford.github.io/satellite-pest-control/" style="display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px;text-decoration:none;transition:border-color 0.2s;">
+        <span style="font-size:15px;font-weight:600;color:var(--text-primary);">Pest Control Business Valuation Calculator</span>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:6px;">Recurring revenue multiples for pest control operators</p>
       </a>
-      <a href="https://vivianashford.github.io/satellite-landscaping/" style="display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; text-decoration: none; transition: border-color 0.2s;">
-        <span style="font-size: 15px; font-weight: 600; color: var(--text-primary);">Landscaping Business Valuation Calculator</span>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Valuation guide for landscaping & lawn care companies</p>
+      <a href="https://vivianashford.github.io/satellite-landscaping/" style="display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px;text-decoration:none;transition:border-color 0.2s;">
+        <span style="font-size:15px;font-weight:600;color:var(--text-primary);">Landscaping Business Valuation Calculator</span>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:6px;">Valuation guide for landscaping & lawn care companies</p>
       </a>
-      <a href="https://vivianashford.github.io/satellite-roofing/" style="display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; text-decoration: none; transition: border-color 0.2s;">
-        <span style="font-size: 15px; font-weight: 600; color: var(--text-primary);">Roofing Business Valuation Calculator</span>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">What roofing companies sell for in today's PE market</p>
+      <a href="https://vivianashford.github.io/satellite-roofing/" style="display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px;text-decoration:none;transition:border-color 0.2s;">
+        <span style="font-size:15px;font-weight:600;color:var(--text-primary);">Roofing Business Valuation Calculator</span>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:6px;">What roofing companies sell for in today's PE market</p>
       </a>
     </div>
   </div>
 </section>
 
-<!-- E-E-A-T: ABOUT THE ADVISOR -->
-<section style="background: var(--bg-primary); padding: 60px 24px; border-top: 1px solid var(--border);">
-  <div style="max-width: 700px; margin: 0 auto; text-align: center;">
-    <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px;">Your Advisor</p>
-    <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; color: var(--text-primary); margin-bottom: 16px;">Jean Louis Hardy</h2>
-    <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px;">Exit advisor and founder of The Arena Partners. Jean helps service business owners 55+ with $5M-$50M in revenue maximize their exit value through the Transferable Exit System&trade;. His approach combines real PE buyer intelligence, EBITDA-based valuation methodology, and decades of operational experience to help owners exit on their terms - not their buyer's.</p>
-    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7;">Author of <a href="book.html" style="color: var(--gold); text-decoration: none;">TRANSFERABLE</a> &bull; Creator of the <a href="assessment.html" style="color: var(--gold); text-decoration: none;">Exit Risk Assessment</a> &bull; Houston, TX</p>
+<section style="background:var(--bg-primary);padding:60px 24px;border-top:1px solid var(--border);">
+  <div style="max-width:700px;margin:0 auto;text-align:center;">
+    <p style="font-family:'JetBrains Mono', monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Your Advisor</p>
+    <h2 style="font-family:'Playfair Display', serif;font-size:24px;color:var(--text-primary);margin-bottom:16px;">Jean Louis Hardy</h2>
+    <p style="font-size:15px;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">Exit advisor and founder of The Arena Partners. Jean helps service business owners 55+ with $5M-$50M in revenue maximize their exit value through the Transferable Exit System&trade;. His approach combines real PE buyer intelligence, EBITDA-based valuation methodology, and decades of operational experience to help owners exit on their terms - not their buyer's.</p>
+    <p style="font-size:13px;color:var(--text-muted);line-height:1.7;">Author of <a href="book.html" style="color:var(--gold);text-decoration:none;">TRANSFERABLE</a> &bull; Creator of the <a href="assessment.html" style="color:var(--gold);text-decoration:none;">Exit Risk Assessment</a> &bull; Houston, TX</p>
   </div>
 </section>
 
-<!-- FOOTER -->
+<section style="background:#f9f7f4;padding:80px 24px;border-top:1px solid #e5e0d8;">
+<div style="max-width:800px;margin:0 auto;">
+<h2 style="font-family:Georgia,serif;font-size:32px;color:#1a1a1a;margin-bottom:32px;text-align:center;">How The Arena Operating System Works</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px;font-family:-apple-system,sans-serif;">
+<div>
+<h3 style="font-size:20px;color:#1a1a1a;margin-bottom:12px;">Phase 1: Diagnostic (Weeks 1-2)</h3>
+<p style="font-size:16px;color:#555;line-height:1.7;">We audit your entire operation: revenue concentration, key-person dependencies, documentation gaps, and process bottlenecks. Most owners discover 3 to 5 critical risks they never knew existed. The diagnostic produces your Exit Risk Score and a prioritized roadmap of exactly what needs to change before you go to market.</p>
+</div>
+<div>
+<h3 style="font-size:20px;color:#1a1a1a;margin-bottom:12px;">Phase 2: Systems Installation (Months 1-4)</h3>
+<p style="font-size:16px;color:#555;line-height:1.7;">We install the management layer, standard operating procedures, financial dashboards, and reporting systems that make your business run without you. This is the work that separates a 3x EBITDA business from a 6x EBITDA business. Every process gets documented, every role gets defined, every decision gets a framework.</p>
+</div>
+<div>
+<h3 style="font-size:20px;color:#1a1a1a;margin-bottom:12px;">Phase 3: The Founder Absence Test (Months 5-6)</h3>
+<p style="font-size:16px;color:#555;line-height:1.7;">You step away for 2 to 4 weeks. Completely. No calls, no decisions, no checking in. If revenue holds and operations continue smoothly, that is proof of transferability. That is what private equity pays premium for. Most owners have never taken more than a week off in 20 years. This test changes everything about your valuation.</p>
+</div>
+<div>
+<h3 style="font-size:20px;color:#1a1a1a;margin-bottom:12px;">Phase 4: Market Positioning (Months 6-8)</h3>
+<p style="font-size:16px;color:#555;line-height:1.7;">With a transferable business and documented proof, we position you for premium offers. Service businesses with SOPs, management layers, and founder independence sell for 20 to 40 percent more than comparable businesses without them. We connect you with qualified buyers who understand the value of what you have built.</p>
+</div>
+</div>
+</div>
+</section>
 
-<!-- NEWSLETTER SIGNUP -->
-<section style="background: #ffffff; padding: 80px 24px; text-align: center; border-top: 1px solid #e5e0d8;">
-  <div style="max-width: 600px; margin: 0 auto;">
-    <h2 style="font-family: Georgia, serif; font-size: 32px; color: #1a1a1a; margin-bottom: 16px;">📬 The Weekly Market Brief</h2>
-    <p style="font-family: -apple-system, sans-serif; font-size: 16px; color: #555; line-height: 1.7; margin-bottom: 24px;">Every week: the M&amp;A deals that matter, valuation trends, and one actionable insight for service business owners planning their exit. Join 500+ owners who read it.</p>
-    <iframe src="https://thearenapartners.substack.com/embed" width="100%" height="150" style="border:none; background:#ffffff; max-width:480px;" frameborder="0" scrolling="no"></iframe>
+<section style="background:#ffffff;padding:80px 24px;border-top:1px solid #e5e0d8;">
+<div style="max-width:800px;margin:0 auto;">
+<h2 style="font-family:Georgia,serif;font-size:32px;color:#1a1a1a;margin-bottom:24px;text-align:center;">Frequently Asked Questions</h2>
+<div style="font-family:-apple-system,sans-serif;max-width:680px;margin:0 auto;">
+<div style="border-bottom:1px solid #e5e0d8;padding:24px 0;">
+<h3 style="font-size:18px;color:#1a1a1a;margin-bottom:8px;">What types of service businesses do you work with?</h3>
+<p style="font-size:16px;color:#555;line-height:1.7;">We specialize in service businesses doing $5 million to $50 million in annual revenue including plumbing, HVAC, electrical, pest control, landscaping, roofing, and other trades. The common thread is owner-operated businesses with strong revenue but high founder dependency.</p>
+</div>
+<div style="border-bottom:1px solid #e5e0d8;padding:24px 0;">
+<h3 style="font-size:18px;color:#1a1a1a;margin-bottom:8px;">How much more will my business be worth after working with The Arena?</h3>
+<p style="font-size:16px;color:#555;line-height:1.7;">Service businesses typically trade at 3x to 4x EBITDA without systems. With documented SOPs, a management layer, and proven transferability, that range moves to 5x to 7x. For a business doing $2 million in EBITDA, that is the difference between a $6 million exit and a $14 million exit.</p>
+</div>
+<div style="border-bottom:1px solid #e5e0d8;padding:24px 0;">
+<h3 style="font-size:18px;color:#1a1a1a;margin-bottom:8px;">I am not ready to sell yet. Is it too early to start?</h3>
+<p style="font-size:16px;color:#555;line-height:1.7;">The best time to prepare is 2 to 3 years before you want to exit. The systems we install give you your life back now. Owners who go through the program report working 30 to 40 percent fewer hours while revenue stays flat or grows. Even if you are 5 years from selling, the operational improvements pay immediate dividends.</p>
+</div>
+<div style="border-bottom:1px solid #e5e0d8;padding:24px 0;">
+<h3 style="font-size:18px;color:#1a1a1a;margin-bottom:8px;">What happens on the first diagnostic call?</h3>
+<p style="font-size:16px;color:#555;line-height:1.7;">A 45-minute conversation where we map your business against our Exit Readiness framework. We look at revenue concentration, customer dependency, team structure, documentation status, and financial hygiene. You leave with a clear picture of where you stand and what the gap is between your current valuation and your potential valuation. No pitch, no pressure. Just clarity.</p>
+</div>
+<div style="padding:24px 0;">
+<h3 style="font-size:18px;color:#1a1a1a;margin-bottom:8px;">Why do most service businesses sell for less than they should?</h3>
+<p style="font-size:16px;color:#555;line-height:1.7;">Owner dependency. When the founder is the business, making every decision, holding every relationship, buyers see risk. SBA data shows only 20 percent of listed businesses actually sell, and most sell for significantly less than asking price. Remove that risk and the premium follows.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section style="background:#ffffff;padding:80px 24px;text-align:center;border-top:1px solid #e5e0d8;">
+  <div style="max-width:600px;margin:0 auto;">
+    <h2 style="font-family:Georgia, serif;font-size:32px;color:#1a1a1a;margin-bottom:16px;">📬 The Weekly Market Brief</h2>
+    <p style="font-family:-apple-system, sans-serif;font-size:16px;color:#555;line-height:1.7;margin-bottom:24px;">Every week: the M&amp;A deals that matter, valuation trends, and one actionable insight for service business owners planning their exit. Join 500+ owners who read it.</p>
+    <iframe src="https://thearenapartners.substack.com/embed" width="100%" height="150" style="border:none;background:#ffffff;max-width:480px;" frameborder="0" scrolling="no"></iframe>
   </div>
 </section>
 
@@ -1363,7 +487,6 @@
   </p>
 </footer>
 
-<!-- OPT-IN MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">&#10005;</button>
@@ -1375,7 +498,7 @@
       <input type="email" id="email" placeholder="you@company.com" autocomplete="email" inputmode="email" required />
     </div>
     <div class="form-group">
-      <label>First Name <span style="color: var(--text-muted); font-weight: 400; text-transform: none; letter-spacing: 0;">(optional)</span></label>
+      <label>First Name <span style="color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
       <input type="text" id="firstName" placeholder="Jean" autocomplete="given-name" />
     </div>
 
@@ -1391,268 +514,9 @@
   </div>
 </div>
 
-<script>
-  function openModal() {
-    document.getElementById('modal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
+<script src="app.js" defer></script>
 
-  function closeModal() {
-    document.getElementById('modal').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  function submitForm() {
-    var firstName = document.getElementById('firstName').value || '';
-    var lastName = '';
-    var phone = '';
-    var email = document.getElementById('email').value;
-    var revenue = '';
-    var goal = '';
-
-    if (!email) {
-      alert('Please enter your email address.');
-      return;
-    }
-
-    // Disable button while submitting
-    var btn = document.querySelector('.modal .cta-btn');
-    var arenaSignature = '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,sans-serif;max-width:520px;border-collapse:collapse;margin-top:30px;"><tr><td colspan="2" style="padding:0 0 18px 0;"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="border-top:2px solid #C9A84C;font-size:1px;line-height:1px;">&nbsp;</td></tr></table></td></tr><tr><td style="vertical-align:top;padding-right:18px;width:80px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="width:72px;height:72px;background-color:#C9A84C;border-radius:6px;text-align:center;vertical-align:middle;font-family:Georgia,serif;font-size:28px;font-weight:bold;color:#0A0A0A;">JH</td></tr></table></td><td style="vertical-align:top;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A1A1A;line-height:22px;padding-bottom:2px;">Jean Hardy</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#C9A84C;line-height:16px;padding-bottom:8px;letter-spacing:0.5px;">Co-Founder &amp; Operations Lead</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#1A1A1A;line-height:18px;padding-bottom:10px;">The Arena Partners</td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="border-top:1px solid #E5E0D8;font-size:1px;line-height:1px;padding-bottom:10px;">&nbsp;</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6B655E;line-height:20px;"><span style="color:#9A9590;">E:</span>&nbsp;&nbsp;<a href="mailto:support@thearenapartners.com" style="color:#1A1A1A;text-decoration:none;">support@thearenapartners.com</a></td></tr><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6B655E;line-height:20px;"><span style="color:#9A9590;">P:</span>&nbsp;&nbsp;<a href="tel:7133447420" style="color:#1A1A1A;text-decoration:none;">713-344-7420</a></td></tr><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6B655E;line-height:20px;"><span style="color:#9A9590;">W:</span>&nbsp;&nbsp;<a href="https://thearenapartners.com" style="color:#1A1A1A;text-decoration:none;">thearenapartners.com</a></td></tr><tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6B655E;line-height:20px;"><span style="color:#9A9590;">A:</span>&nbsp;&nbsp;<span style="color:#1A1A1A;">3555 Timmons Ln, Ste 1140, Houston, TX 77027</span></td></tr></table></td></tr><tr><td colspan="2" style="padding-top:16px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#C9A84C;border-radius:4px;"><a href="https://api.leadconnectorhq.com/widget/booking/52NbvBqsD5pdRT7Y3vxn" style="display:inline-block;padding:9px 22px;font-family:Arial,sans-serif;font-size:11px;font-weight:bold;color:#0A0A0A;text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;">Book a Diagnostic Call</a></td></tr></table></td></tr><tr><td colspan="2" style="padding-top:14px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Georgia,serif;font-size:11px;color:#9A9590;font-style:italic;line-height:16px;">The more valuable you are to your business, the less valuable your business is.</td></tr></table></td></tr><tr><td colspan="2" style="padding-top:14px;"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="border-top:1px solid #E5E0D8;font-size:1px;line-height:1px;">&nbsp;</td></tr></table></td></tr><tr><td colspan="2" style="padding-top:10px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Arial,sans-serif;font-size:11px;line-height:16px;padding-right:14px;"><a href="https://www.linkedin.com/in/jeanlouishardy/" style="color:#C9A84C;text-decoration:none;">LinkedIn</a></td><td style="font-family:Arial,sans-serif;font-size:11px;color:#E5E0D8;padding-right:14px;">|</td><td style="font-family:Arial,sans-serif;font-size:11px;line-height:16px;"><a href="https://www.instagram.com/jlouishardy/" style="color:#C9A84C;text-decoration:none;">Instagram</a></td></tr></table></td></tr></table>';
-
-    var origText = btn.innerHTML;
-    btn.innerHTML = 'Submitting...';
-    btn.disabled = true;
-
-    var revenueLabels = {
-      under5: 'Under $5M', '5to10': '$5M-$10M', '10to25': '$10M-$25M',
-      '25to50': '$25M-$50M', over50: '$50M+'
-    };
-    var goalLabels = {
-      exit: 'Exit / Sell', scale: 'Scale & Reduce Dependency',
-      succession: 'Succession / Transition', explore: 'Exploring Options'
-    };
-
-    // GHL API via Cloudflare Worker proxy (token is server-side)
-    var WORKER = 'https://arena-api.jean-475.workers.dev';
-    var ghlHeaders = {
-      'Authorization': 'Bearer proxy',
-      'Version': '2021-07-28',
-      'Content-Type': 'application/json'
-    };
-
-    fetch(WORKER + '/api/ghl/contacts/upsert', {
-      method: 'POST',
-      headers: ghlHeaders,
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        phone: phone,
-        email: email,
-        locationId: 'LSvdgiiT7ManCRx9CCwE',
-        source: 'Arena VSL Page',
-        tags: ['vsl-lead', window.ArenaUTM ? window.ArenaUTM.getSourceTag() : 'source-organic']
-      })
-    })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-      var contactId = data.contact ? data.contact.id : (data.contactId || null);
-      if (!contactId) return;
-
-      // Create opportunity in "Arena Lead Pipe" -> "New Lead" stage
-      fetch(WORKER + '/api/ghl/opportunities/', {
-        method: 'POST',
-        headers: ghlHeaders,
-        body: JSON.stringify({
-          pipelineId: 'PdlZRdFi8hty46vcVyx8',
-          locationId: 'LSvdgiiT7ManCRx9CCwE',
-          name: firstName + ' ' + lastName + ' - VSL Lead',
-          pipelineStageId: 'a72f7c97-f805-4f37-bf8c-8d65816a6870',
-          contactId: contactId,
-          status: 'open',
-          source: 'Arena VSL Page'
-        })
-      }).catch(function(err) { console.error('Opportunity error:', err); });
-
-      // Send confirmation email to the lead via GHL
-      var leadEmailHtml = '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0a0a0a;color:#f5f0e8;padding:40px;">' +
-        '<div style="text-align:center;margin-bottom:30px;">' +
-        '<h1 style="font-family:Georgia,serif;color:#c9a84c;font-size:28px;margin:0;">The Arena Partners</h1>' +
-        '</div>' +
-        '<p style="font-size:18px;line-height:1.6;">Hey ' + firstName + ',</p>' +
-        '<p style="font-size:16px;line-height:1.7;color:#9a9590;">Your access to the <strong style="color:#f5f0e8;">Transferable Exit System\u2122</strong> training is ready.</p>' +
-        '<p style="font-size:16px;line-height:1.7;color:#9a9590;">In this training, you\'ll learn how service-based business owners at $5M-$50M in revenue are removing owner dependency and building businesses that buyers pay full price for.</p>' +
-        '<div style="text-align:center;margin:35px 0;">' +
-        '<a href="https://thearenapartners.com/watch.html" style="display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#c9a84c,#e3c96e);color:#0a0a0a;font-weight:700;text-decoration:none;border-radius:6px;font-size:16px;letter-spacing:1px;">WATCH THE TRAINING NOW</a>' +
-        '</div>' +
-        '<p style="font-size:16px;line-height:1.7;color:#9a9590;">If you have questions or want to discuss your situation directly, reply to this email.</p>' +
-        '</div>' + arenaSignature;
-
-      fetch(WORKER + '/api/ghl/conversations/messages', {
-        method: 'POST',
-        headers: ghlHeaders,
-        body: JSON.stringify({
-          type: 'Email',
-          contactId: contactId,
-          subject: 'Your Free Training: The Transferable Exit System\u2122',
-          html: leadEmailHtml,
-          emailFrom: 'The Arena Partners <support@thearenapartners.com>'
-        })
-      }).catch(function(err) { console.error('Lead email error:', err); });
-
-      // Send SMS to the lead with training link (delay 10s to let GHL process contact)
-      if (phone) {
-        setTimeout(function() {
-          fetch(WORKER + '/api/ghl/conversations/messages', {
-            method: 'POST',
-            headers: ghlHeaders,
-            body: JSON.stringify({
-              type: 'SMS',
-              contactId: contactId,
-              message: 'Jean Louis Hardy here. Really glad you took the step to learn about how to get the most out of your business. I\'ll send you a few messages leading up to our training - reply STOP anytime if that\'s not for you. Here\'s your training video: https://thearenapartners.com/watch.html'
-            })
-          }).catch(function(err) { console.error('Lead SMS error:', err); });
-        }, 10000);
-      }
-
-      // Send notification to Jean via GHL note + email with LinkedIn outreach info
-      var leadNote = 'NEW VSL LEAD\nName: ' + firstName + ' ' + lastName + '\nPhone: ' + phone + '\nEmail: ' + email + '\nRevenue: ' + (revenueLabels[revenue] || 'N/A') + '\nGoal: ' + (goalLabels[goal] || 'N/A') + '\nSource: Arena VSL Page\nTime: ' + new Date().toLocaleString('en-US', {timeZone: 'America/Chicago'}) + '\n\nLINKEDIN OUTREACH:\nSearch: ' + firstName + ' ' + lastName + '\nMessage: Hi ' + firstName + ', I saw you checked out our training on exit strategy. Looking forward to connecting. - Jean';
-
-      fetch(WORKER + '/api/ghl/contacts/' + contactId + '/notes', {
-        method: 'POST',
-        headers: ghlHeaders,
-        body: JSON.stringify({ body: leadNote })
-      }).catch(function(err) { console.error('Note error:', err); });
-
-      // Send Jean an email notification with lead details + LinkedIn info
-      var jeanNotifyHtml = '<div style="font-family:Arial,sans-serif;max-width:600px;padding:30px;background:#0a0a0a;color:#f5f0e8;">' +
-        '<h2 style="color:#c9a84c;margin-top:0;">New VSL Lead</h2>' +
-        '<div style="background:#161616;border:1px solid rgba(201,168,76,0.15);border-radius:8px;padding:20px;margin:16px 0;">' +
-        '<p style="margin:6px 0;"><strong style="color:#c9a84c;">Name:</strong> ' + firstName + ' ' + lastName + '</p>' +
-        '<p style="margin:6px 0;"><strong style="color:#c9a84c;">Email:</strong> ' + email + '</p>' +
-        '<p style="margin:6px 0;"><strong style="color:#c9a84c;">Phone:</strong> ' + phone + '</p>' +
-        '<p style="margin:6px 0;"><strong style="color:#c9a84c;">Revenue:</strong> ' + (revenueLabels[revenue] || 'N/A') + '</p>' +
-        '<p style="margin:6px 0;"><strong style="color:#c9a84c;">Goal:</strong> ' + (goalLabels[goal] || 'N/A') + '</p>' +
-        '</div>' +
-        '<div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.15);border-radius:8px;padding:16px;margin:16px 0;">' +
-        '<p style="color:#c9a84c;font-weight:700;margin-top:0;">LinkedIn Outreach (copy-paste):</p>' +
-        '<p style="color:#9a9590;">Search: <strong style="color:#f5f0e8;">' + firstName + ' ' + lastName + '</strong></p>' +
-        '<p style="color:#9a9590;margin:0;">Hi ' + firstName + ', I saw you checked out our training on exit strategy. Looking forward to connecting. - Jean</p>' +
-        '</div>' +
-        '<p style="color:#6b6560;font-size:11px;margin-top:20px;">Arena Follow-Up System</p></div>';
-
-      // Create a temp contact for Jean to send email (or use existing)
-      fetch(WORKER + '/api/ghl/contacts/upsert', {
-        method: 'POST',
-        headers: ghlHeaders,
-        body: JSON.stringify({
-          firstName: 'Jean',
-          lastName: 'Hardy',
-          email: 'jean@eng2.ca',
-          locationId: 'LSvdgiiT7ManCRx9CCwE',
-          tags: ['internal-notify'],
-          source: 'System'
-        })
-      }).then(function(r) { return r.json(); })
-      .then(function(d) {
-        var jeanContactId = d.contact ? d.contact.id : d.contactId;
-        if (jeanContactId) {
-          fetch(WORKER + '/api/ghl/conversations/messages', {
-            method: 'POST',
-            headers: ghlHeaders,
-            body: JSON.stringify({
-              type: 'Email',
-              contactId: jeanContactId,
-              subject: 'New VSL Lead: ' + firstName + ' ' + lastName + ' (' + (revenueLabels[revenue] || 'N/A') + ')',
-              emailFrom: 'The Arena Partners <support@thearenapartners.com>',
-              html: jeanNotifyHtml
-            })
-          });
-        }
-      }).catch(function(err) { console.error('Jean notify error:', err); });
-    })
-    .catch(function(err) { console.error('GHL error:', err); });
-
-    // 3. Redirect to training page - fires regardless of API success
-    setTimeout(function() {
-      var watchUrl = 'https://thearenapartners.com/watch.html?email=' + encodeURIComponent(email) + '&name=' + encodeURIComponent(firstName);
-      window.location.href = watchUrl;
-    }, 1500);
-  }
-
-  // Close modal on overlay click
-  document.getElementById('modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModal();
-  });
-</script>
-
-
-<!-- ===================== GA4 ANALYTICS ===================== -->
-<!-- Replace GA_MEASUREMENT_ID with your actual ID from analytics.google.com -->
-<script>
-(function() {
-  var GA_MEASUREMENT_ID = 'G-SDMM90P63D';
-
-  // Load gtag.js
-  var s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
-  document.head.appendChild(s);
-
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { window.dataLayer.push(arguments); }
-  window.gtag = gtag;
-  gtag('js', new Date());
-  gtag('config', GA_MEASUREMENT_ID, { send_page_view: true });
-
-  // ── Scroll Depth Tracking ────────────────────────────────
-  var scrollMilestones = { 25: false, 50: false, 75: false, 100: false };
-  function onScroll() {
-    var scrolled = window.scrollY || window.pageYOffset;
-    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    if (docHeight <= 0) return;
-    var pct = Math.round((scrolled / docHeight) * 100);
-    [25, 50, 75, 100].forEach(function(m) {
-      if (pct >= m && !scrollMilestones[m]) {
-        scrollMilestones[m] = true;
-        gtag('event', 'scroll_depth', { depth_threshold: m, page: 'landing' });
-      }
-    });
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  // ── Outbound Click Tracking ──────────────────────────────
-  document.addEventListener('click', function(e) {
-    var a = e.target.closest('a');
-    if (!a) return;
-    var href = a.href || '';
-    if (href && !href.includes(location.hostname)) {
-      gtag('event', 'outbound_click', { link_url: href, link_text: (a.textContent || '').trim().slice(0, 100) });
-    }
-  });
-
-  // ── VSL Play Event (openModal hook) ─────────────────────
-  var _origOpenModal = window.openModal;
-  window.openModal = function() {
-    gtag('event', 'vsl_play', { event_category: 'video', event_label: 'landing_page_vsl' });
-    if (typeof _origOpenModal === 'function') _origOpenModal.apply(this, arguments);
-  };
-
-  // ── Form Submission Tracking ─────────────────────────────
-  var _origSubmitForm = window.submitForm;
-  window.submitForm = function() {
-    var email = (document.getElementById('email') || {}).value || '';
-    var revenue = (document.getElementById('revenue') || {}).value || '';
-    gtag('event', 'optin_submit', { event_category: 'lead', event_label: 'vsl_optin', revenue_range: revenue, has_email: !!email });
-    if (typeof _origSubmitForm === 'function') return _origSubmitForm.apply(this, arguments);
-  };
-})();
-</script>
-<!-- ===================== END GA4 ===================== -->
+<script src="analytics.js" defer></script>
 
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
 </body>
