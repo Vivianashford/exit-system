@@ -1034,7 +1034,7 @@ function renderClientTable() {
       '<div class="detail-item"><div class="detail-label">Tags</div><div class="detail-value" style="font-size:11px;">' + (c.tags || []).join(', ') + '</div></div>' +
       '<div class="detail-item"><div class="detail-label">Created</div><div class="detail-value">' + (c.dateAdded ? new Date(c.dateAdded).toLocaleDateString() : '-') + '</div></div>' +
       '<div class="detail-item"><div class="detail-label">Opportunity</div><div class="detail-value">' + (row.opp.name || '-') + '</div></div>' +
-      '<div class="detail-item"><div class="detail-label">GHL Link</div><div class="detail-value"><a href="https://app.gohighlevel.com/v2/location/' + LOCATION_ID + '/contacts/' + c.id + '" target="_blank" style="color:var(--gold);text-decoration:none;">Open in GHL &rarr;</a></div></div>' +
+      '<div class="detail-item"><div class="detail-label">GHL Link</div><div class="detail-value"><a href="https://app.gohighlevel.com/v2/location/' + LOCATION_ID + '/contacts/' + c.id + '" target="_blank" rel="noopener noreferrer" style="color:var(--gold);text-decoration:none;">Open in GHL &rarr;</a></div></div>' +
       '</div></td></tr>';
   });
 

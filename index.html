@@ -79,12 +79,7 @@
   }
 
   .announcement-bar span {
-    animation: pulse-text 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-text {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+    /* pulse animation removed for accessibility */
   }
 
   /* ===================== NAV ===================== */
@@ -953,33 +948,7 @@
 </style>
 <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="69bc915a7111acf96566970c"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23C9A84C'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' font-family='Georgia' fill='%230A0A0A' font-weight='bold'%3EA%3C/text%3E%3C/svg%3E">
-<meta name="description" content="See how service-based business owners at $5M-$50M are adding $1-2M to their exit price.">
-<meta property="og:title" content="The Arena Partners - The Transferable Exit System">
-<meta property="og:description" content="See how service-based business owners at $5M-$50M are adding $1-2M to their exit price.">
-<meta property="og:image" content="https://thearenapartners.com/book-cover.png">
-<meta property="og:url" content="https://thearenapartners.com/index.html">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="The Arena Partners">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Arena Partners - The Transferable Exit System">
-<meta name="twitter:description" content="See how service-based business owners at $5M-$50M are adding $1-2M to their exit price.">
-<meta name="twitter:image" content="https://thearenapartners.com/book-cover.png">
-
 <!-- Organization Schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "The Arena Partners",
-  "url": "https://thearenapartners.com",
-  "description": "Exit advisory for business owners ready to scale and transition",
-  "founder": {
-    "@type": "Person",
-    "name": "Jean Louis Hardy"
-  },
-  "sameAs": []
-}
-</script>
   <link rel="alternate" type="application/rss+xml" title="The Arena Partners Blog" href="/rss.xml">
 <!-- Schema.org: Organization -->
 <script type="application/ld+json">
@@ -1344,44 +1313,15 @@
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">&#10005;</button>
     <h3>Get Instant Access</h3>
-    <p class="modal-sub">Enter your details below to watch the free Transferable Exit System&trade; training.</p>
+    <p class="modal-sub">Enter your email to watch the free Transferable Exit System&trade; training right now.</p>
 
     <div class="form-group">
-      <label>First Name</label>
-      <input type="text" id="firstName" placeholder="Jean" />
-    </div>
-    <div class="form-group">
-      <label>Last Name</label>
-      <input type="text" id="lastName" placeholder="Hardy" />
-    </div>
-    <div class="form-group">
-      <label>Phone Number</label>
-      <input type="tel" id="phone" placeholder="(555) 123-4567" />
-    </div>
-    <div class="form-group">
       <label>Email Address</label>
-      <input type="email" id="email" placeholder="you@company.com" />
+      <input type="email" id="email" placeholder="you@company.com" autocomplete="email" inputmode="email" required />
     </div>
     <div class="form-group">
-      <label>Annual Revenue</label>
-      <select id="revenue">
-        <option value="" disabled selected>Select your range...</option>
-        <option value="under5">Under $5M</option>
-        <option value="5to10">$5M – $10M</option>
-        <option value="10to25">$10M – $25M</option>
-        <option value="25to50">$25M – $50M</option>
-        <option value="over50">$50M+</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Primary Goal</label>
-      <select id="goal">
-        <option value="" disabled selected>What are you preparing for?</option>
-        <option value="exit">Exit / Sell the Business</option>
-        <option value="scale">Scale & Reduce Owner Dependency</option>
-        <option value="succession">Succession / Transition</option>
-        <option value="explore">Just Exploring Options</option>
-      </select>
+      <label>First Name <span style="color: var(--text-muted); font-weight: 400; text-transform: none; letter-spacing: 0;">(optional)</span></label>
+      <input type="text" id="firstName" placeholder="Jean" autocomplete="given-name" />
     </div>
 
     <button class="cta-btn" onclick="submitForm()">
@@ -1408,15 +1348,15 @@
   }
 
   function submitForm() {
-    var firstName = document.getElementById('firstName').value;
-    var lastName = document.getElementById('lastName').value;
-    var phone = document.getElementById('phone').value;
+    var firstName = document.getElementById('firstName').value || '';
+    var lastName = '';
+    var phone = '';
     var email = document.getElementById('email').value;
-    var revenue = document.getElementById('revenue').value;
-    var goal = document.getElementById('goal').value;
+    var revenue = '';
+    var goal = '';
 
-    if (!firstName || !lastName || !email || !phone) {
-      alert('Please fill in all fields.');
+    if (!email) {
+      alert('Please enter your email address.');
       return;
     }
 
