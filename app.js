@@ -9,12 +9,20 @@ document.body.style.overflow = '';
 function submitForm() {
 var firstName = document.getElementById('firstName').value || '';
 var lastName = '';
-var phone = '';
+var phone = document.getElementById('phone').value || '';
 var email = document.getElementById('email').value;
 var revenue = '';
 var goal = '';
+if (!firstName) {
+alert('Please enter your first name.');
+return;
+}
 if (!email) {
 alert('Please enter your email address.');
+return;
+}
+if (!phone) {
+alert('Please enter your phone number so we can send you the training link.');
 return;
 }
 var btn = document.querySelector('.modal .cta-btn');
@@ -97,7 +105,7 @@ headers: ghlHeaders,
 body: JSON.stringify({
 type: 'SMS',
 contactId: contactId,
-message: 'Jean Louis Hardy here. Really glad you took the step to learn about how to get the most out of your business. I\'ll send you a few messages leading up to our training - reply STOP anytime if that\'s not for you. Here\'s your training video: https://thearenapartners.com/watch.html'
+message: 'Hey ' + firstName + ', it\'s Jean from The Arena Partners. Here\'s your training link so you don\'t lose it: https://thearenapartners.com/watch.html - Watch it when you\'re ready. I\'ll follow up with a few insights after. - Jean'
 })
 }).catch(function(err) { console.error('Lead SMS error:', err); });
 }, 10000);
