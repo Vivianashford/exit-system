@@ -954,7 +954,7 @@ async function submitNDA() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          body: `NDA Signed electronically\nSigned by: ${name}\nCompany: ${company}\nTitle: ${title}\nEmail: ${email}\nTimestamp: ${signedAt}\nIP captured via browser`
+          body: `NDA Signed electronically\nSigned by: ${name}\nCompany: ${company}\nTitle: ${title}\nEmail: ${email}\nTimestamp: ${signedAt}\nIP captured via browser\n\nSigned PDF will be attached in a follow-up note once uploaded.`
         })
       });
 
@@ -980,6 +980,8 @@ async function submitNDA() {
         try {
           const ghlForm = new FormData();
           ghlForm.append('file', new Blob([pdfBlob2], {type:'application/pdf'}), pdfFileName);
+          ghlForm.append('hosted', 'false');
+          ghlForm.append('fileProcessingType', 'static');
           ghlForm.append('locationId', LOCATION);
           const ghlResp = await fetch(`${GHL_BASE}/medias/upload-file`, {
             method: 'POST',
@@ -1008,6 +1010,19 @@ async function submitNDA() {
           } catch(r2Err) { console.error('R2 backup upload error:', r2Err); }
         }
       } catch(uploadErr) { console.error('PDF upload error:', uploadErr); }
+
+      // Add note with PDF download link to contact
+      if (pdfDownloadUrl && resolvedContactId) {
+        try {
+          await fetch(`${GHL_BASE}/contacts/${resolvedContactId}/notes`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Version': '2021-07-28', 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              body: `📎 SIGNED NDA - PDF ATTACHED\nDownload: ${pdfDownloadUrl}\nFile: ${pdfFileName}\nSigned: ${new Date().toLocaleString('en-US', {timeZone:'America/Chicago'})}`
+            })
+          });
+        } catch(noteErr) { console.error('PDF note error:', noteErr); }
+      }
 
       const pdfButtonHtml = pdfDownloadUrl
         ? `<p style="margin:24px 0;text-align:center;"><a href="${pdfDownloadUrl}" style="display:inline-block;padding:14px 30px;background:#c9a84c;color:#0a0a0a;font-weight:bold;text-decoration:none;border-radius:6px;font-size:14px;">Download Your Signed NDA (PDF)</a></p>`

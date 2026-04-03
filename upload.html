@@ -1298,7 +1298,9 @@ async function submitAll() {
   var totalFiles = 0;
   var categorySubmitData = [];
 
-  // Upload files - GHL primary, R2 backup
+  var allFileLinks = []; // Track uploaded file URLs for contact notes
+
+  // Upload files - GHL media primary, R2 backup
   for (var cat in uploadedFiles) {
     var files = uploadedFiles[cat];
     if (!files || files.length === 0) continue;
@@ -1311,11 +1313,14 @@ async function submitAll() {
     for (var i = 0; i < files.length; i++) {
       try {
         var uploaded = false;
+        var fileUrl = '';
 
-        // PRIMARY: Upload to GHL media (visible in dashboard)
+        // PRIMARY: Upload to GHL media library (permanent CDN URL)
         try {
           var ghlForm = new FormData();
           ghlForm.append('file', files[i]);
+          ghlForm.append('hosted', 'false');
+          ghlForm.append('fileProcessingType', 'static');
           ghlForm.append('locationId', LOCATION_ID);
           var ghlUpResp = await fetch(GHL_API + '/medias/upload-file', {
             method: 'POST',
@@ -1325,7 +1330,11 @@ async function submitAll() {
             },
             body: ghlForm
           });
-          if (ghlUpResp.ok) uploaded = true;
+          if (ghlUpResp.ok) {
+            var ghlUpData = await ghlUpResp.json();
+            fileUrl = ghlUpData.url || '';
+            uploaded = true;
+          }
         } catch (ghlErr) { console.error('GHL upload error:', ghlErr); }
 
         // BACKUP: Upload to R2 via Worker (if GHL failed)
@@ -1336,11 +1345,16 @@ async function submitAll() {
             r2Form.append('category', cat);
             r2Form.append('contactId', cid);
             r2Form.append('file', files[i]);
-            await fetch(WORKER_URL + '/upload', {
-              method: 'POST',
-              body: r2Form
-            });
+            var r2Resp = await fetch(WORKER_URL + '/upload', { method: 'POST', body: r2Form });
+            if (r2Resp.ok) {
+              var r2Data = await r2Resp.json();
+              fileUrl = r2Data.url || '';
+            }
           } catch (r2Err) { console.error('R2 backup error:', r2Err); }
+        }
+
+        if (fileUrl) {
+          allFileLinks.push({ category: CATEGORIES[cat].name, name: files[i].name, url: fileUrl });
         }
 
         totalFiles++;
@@ -1349,6 +1363,22 @@ async function submitAll() {
         totalFiles++;
       }
     }
+  }
+
+  // Add a note to the contact with all file download links
+  if (cid && allFileLinks.length > 0) {
+    try {
+      var noteLines = ['DOCUMENTS UPLOADED VIA PORTAL', 'Company: ' + company, 'Contact: ' + name, 'Time: ' + new Date().toLocaleString('en-US', {timeZone:'America/Chicago'}), '', '--- Files ---'];
+      for (var f = 0; f < allFileLinks.length; f++) {
+        noteLines.push(allFileLinks[f].category + ': ' + allFileLinks[f].name);
+        noteLines.push('  Download: ' + allFileLinks[f].url);
+      }
+      await fetch(GHL_API + '/contacts/' + cid + '/notes', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + GHL_TOKEN, 'Version': GHL_VERSION, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ body: noteLines.join('\n') })
+      });
+    } catch (noteErr) { console.error('Note with links error:', noteErr); }
   }
 
   // Update GHL contact directly (fallback if worker not deployed)
