@@ -644,6 +644,7 @@ const LOCATION_ID = 'LSvdgiiT7ManCRx9CCwE';
 const CF_COMPANY_INFO_STATUS = '34Hw5yMzDL7XoXe4z2zK';
 const JEAN_EMAIL = 'jhardy@trekonecapital.com';
 const MAKE_WEBHOOK = 'https://hook.us2.make.com/uyicpl36ebwkc06yn74qslsl0e0iayu6';
+const DRIVE_WEBHOOK = 'https://hook.us2.make.com/bdf4dc2r0yk4i3isdedmhb4vtps764a6';
 </script>
 
 <!-- HEADER -->
@@ -1315,7 +1316,7 @@ async function submitAll() {
       try {
         var fileUrl = '';
 
-        // Upload through Worker - handles GHL folder + media + R2 backup + contact note
+        // Upload to Google Drive via Make.com (cloud-based, no local dependency)
         var uploadForm = new FormData();
         uploadForm.append('file', files[i]);
         uploadForm.append('contactName', name);
@@ -1323,11 +1324,14 @@ async function submitAll() {
         uploadForm.append('category', CATEGORIES[cat].name);
         uploadForm.append('contactId', cid);
         uploadForm.append('contactEmail', email);
+        uploadForm.append('fileName', files[i].name);
 
-        var resp = await fetch(WORKER_URL + '/api/upload-to-contact', { method: 'POST', body: uploadForm });
+        var resp = await fetch(DRIVE_WEBHOOK, { method: 'POST', body: uploadForm });
         if (resp.ok) {
-          var respData = await resp.json();
-          fileUrl = respData.fileUrl || '';
+          try {
+            var respData = await resp.json();
+            fileUrl = respData.webViewLink || respData.fileUrl || respData.url || '';
+          } catch(e) { fileUrl = 'uploaded'; }
         }
 
         if (fileUrl) {
