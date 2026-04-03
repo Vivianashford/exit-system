@@ -901,6 +901,7 @@ async function submitNDA() {
     const WORKER_URL = 'https://arena-api.jean-475.workers.dev';
     const GHL_BASE   = WORKER_URL + '/api/ghl';
     const LOCATION   = 'LSvdgiiT7ManCRx9CCwE';
+    const MAKE_WEBHOOK = 'https://hook.us2.make.com/uyicpl36ebwkc06yn74qslsl0e0iayu6';
     const token      = 'proxy'; // Token is server-side on Worker now
 
     let resolvedContactId = contactId;
@@ -1010,6 +1011,22 @@ async function submitNDA() {
           } catch(r2Err) { console.error('R2 backup upload error:', r2Err); }
         }
       } catch(uploadErr) { console.error('PDF upload error:', uploadErr); }
+
+      // Send signed NDA to Make.com for GHL Documents tab
+      if (pdfResult && pdfResult.blob) {
+        try {
+          const makeForm = new FormData();
+          makeForm.append('file', new Blob([pdfResult.blob], {type:'application/pdf'}), pdfFileName);
+          makeForm.append('contactEmail', email);
+          makeForm.append('contactName', name);
+          makeForm.append('companyName', company);
+          makeForm.append('contactId', resolvedContactId);
+          makeForm.append('category', 'NDA');
+          makeForm.append('fileName', pdfFileName);
+          makeForm.append('fileUrl', pdfDownloadUrl || '');
+          await fetch(MAKE_WEBHOOK, { method: 'POST', body: makeForm }).catch(e => console.error('Make NDA error:', e));
+        } catch(makeErr) { console.error('Make NDA send error:', makeErr); }
+      }
 
       // Add note with PDF download link to contact
       if (pdfDownloadUrl && resolvedContactId) {

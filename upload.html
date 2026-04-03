@@ -643,6 +643,7 @@ const GHL_VERSION = '2021-07-28';
 const LOCATION_ID = 'LSvdgiiT7ManCRx9CCwE';
 const CF_COMPANY_INFO_STATUS = '34Hw5yMzDL7XoXe4z2zK';
 const JEAN_EMAIL = 'jhardy@trekonecapital.com';
+const MAKE_WEBHOOK = 'https://hook.us2.make.com/uyicpl36ebwkc06yn74qslsl0e0iayu6';
 </script>
 
 <!-- HEADER -->
@@ -1366,6 +1367,34 @@ async function submitAll() {
         totalFiles++;
       }
     }
+  }
+
+  // Send each file to Make.com for GHL Documents tab attachment
+  for (var m = 0; m < allFileLinks.length; m++) {
+    try {
+      // Re-upload file to Make webhook with contact metadata
+      var matchCat = allFileLinks[m].category;
+      var matchName = allFileLinks[m].name;
+      // Find the original file
+      for (var mCat in uploadedFiles) {
+        var mFiles = uploadedFiles[mCat];
+        if (!mFiles) continue;
+        for (var mf = 0; mf < mFiles.length; mf++) {
+          if (mFiles[mf].name === matchName && CATEGORIES[mCat].name === matchCat) {
+            var makeForm = new FormData();
+            makeForm.append('file', mFiles[mf]);
+            makeForm.append('contactEmail', email);
+            makeForm.append('contactName', name);
+            makeForm.append('companyName', company);
+            makeForm.append('contactId', cid);
+            makeForm.append('category', matchCat);
+            makeForm.append('fileName', company + ' - ' + matchCat + ' - ' + mFiles[mf].name);
+            makeForm.append('fileUrl', allFileLinks[m].url || '');
+            await fetch(MAKE_WEBHOOK, { method: 'POST', body: makeForm }).catch(function(e) { console.error('Make webhook error:', e); });
+          }
+        }
+      }
+    } catch (makeErr) { console.error('Make send error:', makeErr); }
   }
 
   // Add a note to the contact with all file download links
