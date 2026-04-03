@@ -976,20 +976,8 @@ async function submitNDA() {
         const pdfBlob2 = pdfResult ? pdfResult.blob : null;
         if (!pdfBlob2) throw new Error('No PDF generated');
 
-        // Upload to R2 (permanent storage)
-        const r2Form = new FormData();
-        r2Form.append('file', new Blob([pdfBlob2], {type:'application/pdf'}), pdfFileName);
-        r2Form.append('company', company);
-        r2Form.append('category', 'nda');
-        r2Form.append('contactId', resolvedContactId);
-        const r2Resp = await fetch(WORKER_URL + '/upload', { method: 'POST', body: r2Form });
-        if (r2Resp.ok) {
-          const r2Data = await r2Resp.json();
-          pdfDownloadUrl = r2Data.url || '';
-        }
-
-        // Also upload to GHL media (for email attachment)
-        if (!pdfDownloadUrl) {
+        // PRIMARY: Upload to GHL media (attached to contact, visible in dashboard)
+        try {
           const ghlForm = new FormData();
           ghlForm.append('file', new Blob([pdfBlob2], {type:'application/pdf'}), pdfFileName);
           ghlForm.append('locationId', LOCATION);
@@ -1002,6 +990,22 @@ async function submitNDA() {
             const ghlData = await ghlResp.json();
             pdfDownloadUrl = ghlData.url || '';
           }
+        } catch(ghlErr) { console.error('GHL upload error:', ghlErr); }
+
+        // BACKUP: Upload to R2 storage (fallback if GHL upload failed)
+        if (!pdfDownloadUrl) {
+          try {
+            const r2Form = new FormData();
+            r2Form.append('file', new Blob([pdfBlob2], {type:'application/pdf'}), pdfFileName);
+            r2Form.append('company', company);
+            r2Form.append('category', 'nda');
+            r2Form.append('contactId', resolvedContactId);
+            const r2Resp = await fetch(WORKER_URL + '/upload', { method: 'POST', body: r2Form });
+            if (r2Resp.ok) {
+              const r2Data = await r2Resp.json();
+              pdfDownloadUrl = r2Data.url || '';
+            }
+          } catch(r2Err) { console.error('R2 backup upload error:', r2Err); }
         }
       } catch(uploadErr) { console.error('PDF upload error:', uploadErr); }
 

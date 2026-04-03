@@ -1298,7 +1298,7 @@ async function submitAll() {
   var totalFiles = 0;
   var categorySubmitData = [];
 
-  // Upload files to worker (or simulate if worker not deployed)
+  // Upload files - GHL primary, R2 backup
   for (var cat in uploadedFiles) {
     var files = uploadedFiles[cat];
     if (!files || files.length === 0) continue;
@@ -1310,19 +1310,39 @@ async function submitAll() {
 
     for (var i = 0; i < files.length; i++) {
       try {
-        var formData = new FormData();
-        formData.append('company', company);
-        formData.append('category', cat);
-        formData.append('contactId', cid);
-        formData.append('file', files[i]);
+        var uploaded = false;
 
-        // Try uploading to worker
-        if (WORKER_URL && !WORKER_URL.includes('your-domain')) {
-          await fetch(WORKER_URL + '/upload', {
+        // PRIMARY: Upload to GHL media (visible in dashboard)
+        try {
+          var ghlForm = new FormData();
+          ghlForm.append('file', files[i]);
+          ghlForm.append('locationId', LOCATION_ID);
+          var ghlUpResp = await fetch(GHL_API + '/medias/upload-file', {
             method: 'POST',
-            body: formData
+            headers: {
+              'Authorization': 'Bearer ' + GHL_TOKEN,
+              'Version': GHL_VERSION
+            },
+            body: ghlForm
           });
+          if (ghlUpResp.ok) uploaded = true;
+        } catch (ghlErr) { console.error('GHL upload error:', ghlErr); }
+
+        // BACKUP: Upload to R2 via Worker (if GHL failed)
+        if (!uploaded && WORKER_URL && !WORKER_URL.includes('your-domain')) {
+          try {
+            var r2Form = new FormData();
+            r2Form.append('company', company);
+            r2Form.append('category', cat);
+            r2Form.append('contactId', cid);
+            r2Form.append('file', files[i]);
+            await fetch(WORKER_URL + '/upload', {
+              method: 'POST',
+              body: r2Form
+            });
+          } catch (r2Err) { console.error('R2 backup error:', r2Err); }
         }
+
         totalFiles++;
       } catch (err) {
         console.error('Upload error:', err);
