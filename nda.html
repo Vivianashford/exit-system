@@ -903,6 +903,8 @@ async function submitNDA() {
     const token      = 'proxy'; // Token is server-side on Worker now
 
     let resolvedContactId = contactId;
+    let pdfDownloadUrl = '';
+    let pdfResult = null;
 
     _step = 'upsert';
     // Step 1: Upsert contact to get/create contact ID
@@ -963,8 +965,6 @@ async function submitNDA() {
       _step = 'generate-pdf';
       // Step 4: Generate PDF ONCE and use for upload + download
       const firstName = name.split(' ')[0];
-      let pdfDownloadUrl = '';
-      let pdfResult = null;
       const pdfFileName = `NDA - The Arena Partners x ${company}.pdf`;
 
       try {
