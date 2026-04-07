@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dual Completion SWD Well — Simultaneous Injection & Oil Recovery</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+background: #0a0e14;
+color: #c5cdd9;
+font-family: 'IBM Plex Sans', sans-serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+.page {
+max-width: 1100px;
+margin: 0 auto;
+padding: 40px 24px 60px;
+}
+
+h1 {
+font-family: 'IBM Plex Mono', monospace;
+font-size: 22px;
+font-weight: 700;
+color: #e2e8f0;
+text-transform: uppercase;
+letter-spacing: 2px;
+margin-bottom: 4px;
+}
+
+.subtitle {
+font-size: 13px;
+color: #6b7a8d;
+font-family: 'IBM Plex Mono', monospace;
+letter-spacing: 1px;
+margin-bottom: 32px;
+}
+
+.schematic-container {
+position: relative;
+width: 100%;
+background: linear-gradient(180deg, #0d1219 0%, #111820 100%);
+border: 1px solid #1e2a3a;
+border-radius: 8px;
+overflow: hidden;
+}
+
+svg {
+width: 100%;
+height: auto;
+display: block;
+}
+
+.legend {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+gap: 16px;
+margin-top: 24px;
+}
+
+.legend-item {
+background: #111820;
+border: 1px solid #1e2a3a;
+border-radius: 6px;
+padding: 14px 16px;
+display: flex;
+align-items: flex-start;
+gap: 12px;
+}
+
+.legend-color {
+width: 14px;
+height: 14px;
+border-radius: 3px;
+flex-shrink: 0;
+margin-top: 3px;
+}
+
+.legend-label {
+font-family: 'IBM Plex Mono', monospace;
+font-size: 11px;
+font-weight: 600;
+color: #e2e8f0;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+
+.legend-desc {
+font-size: 12px;
+color: #6b7a8d;
+margin-top: 2px;
+line-height: 1.5;
+}
+
+.notes {
+margin-top: 24px;
+background: #111820;
+border: 1px solid #1e2a3a;
+border-left: 3px solid #f59e0b;
+border-radius: 6px;
+padding: 16px 20px;
+}
+
+.notes-title {
+font-family: 'IBM Plex Mono', monospace;
+font-size: 12px;
+font-weight: 700;
+color: #f59e0b;
+text-transform: uppercase;
+letter-spacing: 1px;
+margin-bottom: 8px;
+}
+
+.notes p {
+font-size: 13px;
+color: #8899aa;
+line-height: 1.7;
+margin-bottom: 6px;
+}
+
+.notes strong { color: #c5cdd9; }
+
+/* Animations */
+@keyframes flowDown {
+0% { stroke-dashoffset: 0; }
+100% { stroke-dashoffset: -40; }
+}
+
+@keyframes flowUp {
+0% { stroke-dashoffset: 0; }
+100% { stroke-dashoffset: 40; }
+}
+
+.flow-down {
+stroke-dasharray: 12 8;
+animation: flowDown 1.5s linear infinite;
+}
+
+.flow-up {
+stroke-dasharray: 12 8;
+animation: flowUp 1.5s linear infinite;
+}
+
+@keyframes pulse {
+0%, 100% { opacity: 0.6; }
+50% { opacity: 1; }
+}
+
+.pulse { animation: pulse 2s ease-in-out infinite; }
+</style>
+
+</head>
+<body>
+<div class="page">
+  <h1>Dual Completion SWD Well</h1>
+  <p class="subtitle">Simultaneous Injection & Oil Recovery Schematic</p>
+
+  <div class="schematic-container">
+    <svg viewBox="0 0 900 1050" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3d2b1a"/>
+          <stop offset="100%" stop-color="#2a1e12"/>
+        </linearGradient>
+        <linearGradient id="casing" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#4a5568"/>
+          <stop offset="50%" stop-color="#718096"/>
+          <stop offset="100%" stop-color="#4a5568"/>
+        </linearGradient>
+        <linearGradient id="oilGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a7a1a"/>
+          <stop offset="100%" stop-color="#0f5e0f"/>
+        </linearGradient>
+        <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1e3a5f"/>
+          <stop offset="100%" stop-color="#142d4c"/>
+        </linearGradient>
+        <pattern id="rockHatch" patternUnits="userSpaceOnUse" width="12" height="12">
+          <rect width="12" height="12" fill="#1a1208"/>
+          <line x1="0" y1="6" x2="12" y2="6" stroke="#2a1e12" stroke-width="0.5"/>
+          <line x1="6" y1="0" x2="6" y2="12" stroke="#2a1e12" stroke-width="0.3"/>
+        </pattern>
+        <pattern id="oilDots" patternUnits="userSpaceOnUse" width="8" height="8">
+          <rect width="8" height="8" fill="none"/>
+          <circle cx="4" cy="4" r="1" fill="rgba(34,197,94,0.3)"/>
+        </pattern>
+      </defs>
+
+      <!-- ========== SURFACE LEVEL ========== -->
+      <!-- Sky -->
+      <rect x="0" y="0" width="900" height="160" fill="#0d1219"/>
+
+      <!-- Ground surface -->
+      <rect x="0" y="160" width="900" height="890" fill="url(#ground)"/>
+      <line x1="0" y1="160" x2="900" y2="160" stroke="#5a4030" stroke-width="3"/>
+      <text x="20" y="175" fill="#8a7060" font-family="IBM Plex Mono" font-size="10" letter-spacing="1">GROUND SURFACE</text>
+
+      <!-- ========== SURFACE EQUIPMENT — LEFT (INJECTION) ========== -->
+      <!-- Truck -->
+      <rect x="40" y="95" width="90" height="50" rx="4" fill="#2d3748" stroke="#4a5568" stroke-width="1.5"/>
+      <rect x="35" y="115" width="20" height="30" rx="3" fill="#2d3748" stroke="#4a5568" stroke-width="1.5"/>
+      <circle cx="55" cy="148" r="8" fill="#1a202c" stroke="#4a5568" stroke-width="1.5"/>
+      <circle cx="85" cy="148" r="8" fill="#1a202c" stroke="#4a5568" stroke-width="1.5"/>
+      <circle cx="115" cy="148" r="8" fill="#1a202c" stroke="#4a5568" stroke-width="1.5"/>
+      <text x="60" y="112" fill="#cbd5e0" font-family="IBM Plex Mono" font-size="8" font-weight="600">WASTE</text>
+      <text x="56" y="122" fill="#cbd5e0" font-family="IBM Plex Mono" font-size="8" font-weight="600">TRUCK</text>
+
+      <!-- Receiving Tank -->
+      <rect x="170" y="80" width="80" height="70" rx="3" fill="#1e2a3a" stroke="#3b82f6" stroke-width="1.5"/>
+      <rect x="175" y="100" width="70" height="40" rx="2" fill="rgba(59,130,246,0.15)"/>
+      <text x="182" y="96" fill="#60a5fa" font-family="IBM Plex Mono" font-size="8" font-weight="600">RECEIVING</text>
+      <text x="192" y="130" fill="#60a5fa" font-family="IBM Plex Mono" font-size="8" font-weight="600">TANK</text>
+
+      <!-- Arrow truck to tank -->
+      <line x1="130" y1="125" x2="168" y2="125" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+
+      <!-- Frac Pump -->
+      <rect x="290" y="80" width="100" height="70" rx="3" fill="#1e2a3a" stroke="#ef4444" stroke-width="2"/>
+      <text x="305" y="105" fill="#f87171" font-family="IBM Plex Mono" font-size="10" font-weight="700">FRAC</text>
+      <text x="305" y="118" fill="#f87171" font-family="IBM Plex Mono" font-size="10" font-weight="700">PUMP</text>
+      <text x="300" y="138" fill="#6b7a8d" font-family="IBM Plex Mono" font-size="8">HIGH PSI ↓</text>
+
+      <!-- Arrow tank to pump -->
+      <line x1="250" y1="115" x2="288" y2="115" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+
+      <!-- Pipe from pump down to wellhead -->
+      <line x1="340" y1="150" x2="340" y2="160" stroke="#ef4444" stroke-width="3"/>
+
+      <!-- ========== SURFACE EQUIPMENT — RIGHT (PRODUCTION) ========== -->
+      <!-- Production pump/drive at surface -->
+      <rect x="530" y="80" width="100" height="70" rx="3" fill="#1e2a3a" stroke="#22c55e" stroke-width="2"/>
+      <text x="541" y="105" fill="#4ade80" font-family="IBM Plex Mono" font-size="10" font-weight="700">PUMP</text>
+      <text x="541" y="118" fill="#4ade80" font-family="IBM Plex Mono" font-size="10" font-weight="700">JACK</text>
+      <text x="537" y="138" fill="#6b7a8d" font-family="IBM Plex Mono" font-size="8">OIL UP ↑</text>
+
+      <!-- Oil separator -->
+      <rect x="670" y="80" width="90" height="70" rx="3" fill="#1e2a3a" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="680" y="100" fill="#fbbf24" font-family="IBM Plex Mono" font-size="8" font-weight="600">OIL/WATER</text>
+      <text x="680" y="112" fill="#fbbf24" font-family="IBM Plex Mono" font-size="8" font-weight="600">SEPARATOR</text>
+      <text x="692" y="138" fill="#6b7a8d" font-family="IBM Plex Mono" font-size="7">→ OIL SALES</text>
+
+      <!-- Arrow pump to separator -->
+      <line x1="630" y1="115" x2="668" y2="115" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+      <!-- Oil storage tank -->
+      <rect x="800" y="80" width="70" height="70" rx="3" fill="#1e2a3a" stroke="#f59e0b" stroke-width="1.5"/>
+      <rect x="805" y="100" width="60" height="40" rx="2" fill="rgba(245,158,11,0.15)"/>
+      <text x="817" y="96" fill="#fbbf24" font-family="IBM Plex Mono" font-size="8" font-weight="600">OIL</text>
+      <text x="810" y="130" fill="#fbbf24" font-family="IBM Plex Mono" font-size="7">STORAGE</text>
+
+      <line x1="760" y1="115" x2="798" y2="115" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+
+      <!-- Pipe from wellhead up to production pump -->
+      <line x1="580" y1="160" x2="580" y2="150" stroke="#22c55e" stroke-width="3"/>
+
+      <!-- ========== WELLHEAD ========== -->
+      <rect x="310" y="145" width="300" height="30" rx="4" fill="#2d3748" stroke="#718096" stroke-width="2"/>
+      <text x="400" y="165" fill="#e2e8f0" font-family="IBM Plex Mono" font-size="11" font-weight="700" text-anchor="middle">DUAL COMPLETION WELLHEAD</text>
+      <text x="560" y="165" fill="#e2e8f0" font-family="IBM Plex Mono" font-size="11" font-weight="700">│</text>
+
+      <!-- ========== SURFACE CASING ========== -->
+      <rect x="330" y="175" width="260" height="140" rx="2" fill="none" stroke="#718096" stroke-width="3"/>
+      <text x="360" y="200" fill="#718096" font-family="IBM Plex Mono" font-size="9" font-weight="600">SURFACE CASING</text>
+      <text x="360" y="212" fill="#4a5568" font-family="IBM Plex Mono" font-size="8">Cemented to surface</text>
+      <text x="360" y="224" fill="#4a5568" font-family="IBM Plex Mono" font-size="8">Protects fresh water</text>
+
+      <!-- Fresh water zone -->
+      <rect x="0" y="175" width="328" height="140" fill="rgba(59,130,246,0.04)"/>
+      <rect x="592" y="175" width="308" height="140" fill="rgba(59,130,246,0.04)"/>
+      <text x="20" y="250" fill="#2563eb" font-family="IBM Plex Mono" font-size="9" opacity="0.6">FRESH WATER ZONE</text>
+      <line x1="0" y1="315" x2="328" y2="315" stroke="#2563eb" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.4"/>
+      <line x1="592" y1="315" x2="900" y2="315" stroke="#2563eb" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.4"/>
+
+      <!-- ========== PRODUCTION CASING ========== -->
+      <rect x="345" y="315" width="230" height="580" rx="2" fill="none" stroke="url(#casing)" stroke-width="4"/>
+
+      <!-- ========== INJECTION TUBING STRING (LEFT) ========== -->
+      <!-- Red injection tubing -->
+      <rect x="370" y="175" width="30" height="620" fill="none" stroke="#ef4444" stroke-width="2.5"/>
+      <text x="355" y="350" fill="#f87171" font-family="IBM Plex Mono" font-size="9" font-weight="600" transform="rotate(-90, 355, 350)">INJECTION TUBING</text>
+
+      <!-- Animated flow down -->
+      <line x1="385" y1="190" x2="385" y2="780" stroke="#ef4444" stroke-width="1.5" class="flow-down" opacity="0.7"/>
+
+      <!-- ========== PRODUCTION TUBING STRING (RIGHT) ========== -->
+      <!-- Green production tubing -->
+      <rect x="520" y="175" width="30" height="450" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+      <text x="565" y="400" fill="#4ade80" font-family="IBM Plex Mono" font-size="9" font-weight="600" transform="rotate(90, 565, 400)">PRODUCTION TUBING</text>
+
+      <!-- Animated flow up -->
+      <line x1="535" y1="610" x2="535" y2="190" stroke="#22c55e" stroke-width="1.5" class="flow-up" opacity="0.7"/>
+
+      <!-- ========== ESP / DOWNHOLE PUMP ========== -->
+      <rect x="510" y="590" width="50" height="40" rx="3" fill="#065f46" stroke="#22c55e" stroke-width="2"/>
+      <text x="517" y="610" fill="#4ade80" font-family="IBM Plex Mono" font-size="7" font-weight="700">ESP</text>
+      <text x="515" y="622" fill="#4ade80" font-family="IBM Plex Mono" font-size="6">PUMP</text>
+      <text x="460" y="615" fill="#4ade80" font-family="IBM Plex Mono" font-size="8" text-anchor="end">← Pulls oil up</text>
+
+      <!-- ========== OIL ACCUMULATION ZONE ========== -->
+      <rect x="347" y="500" width="226" height="150" fill="rgba(34,197,94,0.08)" stroke="none"/>
+      <rect x="347" y="500" width="226" height="150" fill="url(#oilDots)"/>
+      <rect x="347" y="500" width="226" height="150" fill="none" stroke="#22c55e" stroke-width="1" stroke-dasharray="6 4" opacity="0.5"/>
+
+      <text x="610" y="555" fill="#4ade80" font-family="IBM Plex Mono" font-size="10" font-weight="700">OIL</text>
+      <text x="610" y="568" fill="#4ade80" font-family="IBM Plex Mono" font-size="10" font-weight="700">ACCUMULATION</text>
+      <text x="610" y="581" fill="#4ade80" font-family="IBM Plex Mono" font-size="10" font-weight="700">ZONE</text>
+      <text x="610" y="598" fill="#6b7a8d" font-family="IBM Plex Mono" font-size="8">100,000s of bbls</text>
+      <text x="610" y="610" fill="#6b7a8d" font-family="IBM Plex Mono" font-size="8">of trapped oil</text>
+
+      <!-- ========== UPPER PACKER ========== -->
+      <rect x="355" y="650" width="210" height="20" rx="2" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+      <text x="460" y="664" fill="#0a0e14" font-family="IBM Plex Mono" font-size="9" font-weight="700" text-anchor="middle">PACKER — ZONE ISOLATION</text>
+
+      <!-- Label -->
+      <text x="610" y="665" fill="#f59e0b" font-family="IBM Plex Mono" font-size="9" font-weight="600">← Seals production</text>
+      <text x="610" y="677" fill="#f59e0b" font-family="IBM Plex Mono" font-size="9" font-weight="600">   from injection</text>
+
+      <!-- ========== ANNULAR SPACE LABELS ========== -->
+      <text x="440" y="440" fill="#4a5568" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">ANNULUS</text>
+
+      <!-- ========== BELOW PACKER — INJECTION ZONE ========== -->
+      <rect x="347" y="670" width="226" height="225" fill="rgba(59,130,246,0.06)"/>
+
+      <!-- Injection perforations -->
+      <g opacity="0.8">
+        <line x1="345" y1="760" x2="330" y2="755" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="345" y1="770" x2="328" y2="765" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="345" y1="780" x2="330" y2="775" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="345" y1="790" x2="332" y2="785" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="345" y1="800" x2="330" y2="795" stroke="#ef4444" stroke-width="1.5"/>
+
+        <line x1="575" y1="760" x2="590" y2="755" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="575" y1="770" x2="592" y2="765" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="575" y1="780" x2="590" y2="775" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="575" y1="790" x2="588" y2="785" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="575" y1="800" x2="590" y2="795" stroke="#ef4444" stroke-width="1.5"/>
+      </g>
+
+      <text x="270" y="785" fill="#f87171" font-family="IBM Plex Mono" font-size="9" font-weight="600" text-anchor="end">INJECTION</text>
+      <text x="270" y="797" fill="#f87171" font-family="IBM Plex Mono" font-size="9" font-weight="600" text-anchor="end">PERFS →</text>
+
+      <!-- Disposal formation label -->
+      <rect x="610" y="730" width="160" height="60" rx="4" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="620" y="750" fill="#f87171" font-family="IBM Plex Mono" font-size="10" font-weight="700">DISPOSAL</text>
+      <text x="620" y="763" fill="#f87171" font-family="IBM Plex Mono" font-size="10" font-weight="700">FORMATION</text>
+      <text x="620" y="780" fill="#6b7a8d" font-family="IBM Plex Mono" font-size="8">Waste injected here</text>
+
+      <!-- Waste spreading into formation -->
+      <line x1="590" y1="770" x2="608" y2="760" stroke="#ef4444" stroke-width="1" class="pulse"/>
+      <line x1="590" y1="780" x2="608" y2="770" stroke="#ef4444" stroke-width="1" class="pulse"/>
+      <line x1="590" y1="790" x2="608" y2="780" stroke="#ef4444" stroke-width="1" class="pulse"/>
+
+      <!-- ========== BOTTOM OF WELL ========== -->
+      <rect x="360" y="893" width="200" height="6" rx="3" fill="#4a5568"/>
+      <text x="460" y="920" fill="#4a5568" font-family="IBM Plex Mono" font-size="9" text-anchor="middle">TOTAL DEPTH</text>
+
+      <!-- ========== DEPTH MARKERS ========== -->
+      <g fill="#3a4a5a" font-family="IBM Plex Mono" font-size="8">
+        <line x1="0" y1="315" x2="10" y2="315" stroke="#3a4a5a" stroke-width="1"/>
+        <text x="12" y="318">~500 ft — Base of fresh water</text>
+
+        <line x1="0" y1="500" x2="10" y2="500" stroke="#3a4a5a" stroke-width="1"/>
+        <text x="12" y="503">Oil accumulation top</text>
+
+        <line x1="0" y1="650" x2="10" y2="650" stroke="#3a4a5a" stroke-width="1"/>
+        <text x="12" y="653">Packer set depth</text>
+
+        <line x1="0" y1="760" x2="10" y2="760" stroke="#3a4a5a" stroke-width="1"/>
+        <text x="12" y="763">Injection perforations</text>
+      </g>
+
+      <!-- ========== FLOW DIRECTION LABELS ========== -->
+      <g class="pulse">
+        <rect x="150" y="460" width="140" height="50" rx="4" fill="rgba(239,68,68,0.1)" stroke="#ef4444" stroke-width="1"/>
+        <text x="170" y="480" fill="#f87171" font-family="IBM Plex Mono" font-size="10" font-weight="700">WASTE ↓ DOWN</text>
+        <text x="165" y="498" fill="#6b7a8d" font-family="IBM Plex Mono" font-size="8">Frac pump pushing</text>
+      </g>
+
+      <g class="pulse">
+        <rect x="620" y="420" width="150" height="50" rx="4" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1"/>
+        <text x="645" y="440" fill="#4ade80" font-family="IBM Plex Mono" font-size="10" font-weight="700">OIL ↑ UP</text>
+        <text x="635" y="458" fill="#6b7a8d" font-family="IBM Plex Mono" font-size="8">ESP pulling oil out</text>
+      </g>
+
+      <!-- Arrowhead markers -->
+      <defs>
+        <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#60a5fa"/>
+        </marker>
+        <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#22c55e"/>
+        </marker>
+        <marker id="arrowAmber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#f59e0b"/>
+        </marker>
+      </defs>
+
+      <!-- ========== TITLE BLOCK ========== -->
+      <rect x="0" y="950" width="900" height="100" fill="#0d1219" stroke="#1e2a3a" stroke-width="1"/>
+      <text x="450" y="980" fill="#e2e8f0" font-family="IBM Plex Mono" font-size="12" font-weight="700" text-anchor="middle">DUAL COMPLETION SWD WELL — SIMULTANEOUS INJECTION & OIL RECOVERY</text>
+      <text x="450" y="1000" fill="#6b7a8d" font-family="IBM Plex Mono" font-size="9" text-anchor="middle">TX RRC Statewide Rules 9 & 46 · 16 TAC §3.9 & §3.46 · Dual Completion per RRC Technical Review Guidelines</text>
+      <text x="450" y="1020" fill="#4a5568" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">SCHEMATIC — NOT TO SCALE · FOR PLANNING PURPOSES ONLY</text>
+    </svg>
+  </div>
+
+  <!-- Legend -->
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-color" style="background:#ef4444;"></div>
+      <div>
+        <div class="legend-label">Injection String (RED)</div>
+        <div class="legend-desc">Frac pump pushes waste DOWN through dedicated tubing, through the packer, into disposal formation perforations.</div>
+      </div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#22c55e;"></div>
+      <div>
+        <div class="legend-label">Production String (GREEN)</div>
+        <div class="legend-desc">ESP or rod pump pulls accumulated oil UP through second tubing string to surface separator & storage.</div>
+      </div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#f59e0b;"></div>
+      <div>
+        <div class="legend-label">Packer — Zone Isolation</div>
+        <div class="legend-desc">Mechanical seal between production zone (oil above) and injection zone (disposal below). This is the key piece.</div>
+      </div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#718096;"></div>
+      <div>
+        <div class="legend-label">Casing & Wellhead</div>
+        <div class="legend-desc">Existing production casing and dual-completion wellhead. Surface casing cemented to protect fresh water per RRC Rule 13.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+
+  <div class="notes">
+    <div class="notes-title">RRC Permit Requirements</div>
+    <p><strong>Statewide Rules 9 & 46</strong> require injected fluids remain confined to the authorized interval.</p>
+    <p><strong>Dual completion</strong> must be indicated on Form W-2/G-1 completion report.</p>
+    <p><strong>Recommended strategy:</strong> Apply to expand the "authorized injection interval" to include both the oil zone and disposal zone — this simplifies MIT requirements and regulatory oversight.</p>
+    <p><strong>Mechanical Integrity Test (MIT)</strong> required. Max pressure: ½ psi per foot to top of injection interval.</p>
+    <p><strong>Contact:</strong> RRC UIC Technical Permitting Section — UIC@rrc.texas.gov</p>
+  </div>
+</div>
+</body>
+</html>
