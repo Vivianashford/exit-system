@@ -630,7 +630,7 @@ body::after {
 // ============================================================
 // CONFIGURATION
 // ============================================================
-const DRIVE_SCRIPT_URL = ''; // Paste your Google Apps Script Web App URL here
+const DRIVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxz2Tuv4XNyaq3uMDUqvi9C7HrP5FUa2XqAwZSDMkD5d6ZAX8XxdtByIRRAOP6iP8CSQA/exec';
 const GHL_API = 'https://services.leadconnectorhq.com';
 const GHL_TOKEN = 'pit-8db4722a-0d8f-41c0-8cc0-1d17de5bff3d';
 const GHL_VERSION = '2021-07-28';
@@ -1288,12 +1288,12 @@ async function submitAll() {
             mode: 'no-cors',
             headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({
-              company: company,
-              category: cat,
-              contactId: cid,
+              companyName: company,
+              contactName: name,
+              category: CATEGORIES[cat] ? CATEGORIES[cat].name : cat,
               fileName: files[i].name,
               fileType: files[i].type || 'application/octet-stream',
-              fileContent: b64
+              fileData: b64
             })
           });
         }
